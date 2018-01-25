@@ -2,6 +2,7 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
+import invariant from 'invariant'
 
 import requestToApi from './requestToApi'
 import type { DefaultProps, Props, ReturnedData } from './types'
@@ -49,7 +50,12 @@ class Fetch extends React.Component<Props, void> {
     resultOnly: false,
   }
 
-  componentWillReceiveProps(nextProps: Props) {
+  componentWillMount(): void {
+    this._validateProps(this.props)
+  }
+
+  componentWillReceiveProps(nextProps: Props): void {
+    this._validateProps(nextProps)
     if (
       nextProps.path !== this.props.path ||
       nextProps.refetch !== this.props.refetch
@@ -65,7 +71,7 @@ class Fetch extends React.Component<Props, void> {
     }
   }
 
-  componentWillUnmount() {
+  componentWillUnmount(): void {
     this._isUnmounted = true
   }
 
@@ -96,8 +102,9 @@ class Fetch extends React.Component<Props, void> {
       }
     } catch (error) {
       if (!this.unmounted) {
-        console.log(
-          `%c Route "${path}" resolved with:`,
+        invariant(
+          !error,
+          `%c Route "${path}" resolved with: %e`,
           'color: #F2345A',
           error,
         )
@@ -141,6 +148,15 @@ class Fetch extends React.Component<Props, void> {
       this._isLoaded = true
       this._returnData(result)
     }
+  }
+
+  _validateProps = (props: Props): void => {
+    invariant(props.path, 'You must provide a path prop to <Fetch>')
+
+    invariant(
+      props.children && props.onFetch && props.render,
+      'You must provide at least one of the following to <Fetch>: children, onFetch prop, render prop',
+    )
   }
 
   render() {
