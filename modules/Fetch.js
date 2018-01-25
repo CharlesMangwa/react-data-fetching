@@ -13,6 +13,7 @@ class Fetch extends React.Component<Props, void> {
 
   static propTypes = {
     children: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
+    error: PropTypes.element,
     loader: PropTypes.element,
     onFetch: PropTypes.func,
     params: PropTypes.shape({
@@ -36,6 +37,7 @@ class Fetch extends React.Component<Props, void> {
 
   static defaultProps: DefaultProps = {
     children: undefined,
+    error: undefined,
     loader: undefined,
     onFetch: undefined,
     params: {
@@ -65,17 +67,6 @@ class Fetch extends React.Component<Props, void> {
 
   componentWillUnmount() {
     this._isUnmounted = true
-  }
-
-  shouldComponentUpdate = (nextProps: Props): boolean => {
-    if (this.props.children !== nextProps.children) return true
-    if (this.props.onFetch !== nextProps.onFetch) return true
-    if (this.props.params !== nextProps.params) return true
-    if (this.props.path !== nextProps.path) return true
-    if (this.props.refetch !== nextProps.refetch) return true
-    if (this.props.render !== nextProps.render) return true
-    if (this._isLoaded) return true
-    return false
   }
 
   _fetchData = async (props: Props): Promise<any> => {
@@ -122,6 +113,12 @@ class Fetch extends React.Component<Props, void> {
   }
 
   _returnData = (result: ReturnedData): void => {
+    if (result.error && this.props.error) {
+      this.props.error({
+        error: result.error,
+        status: result.status,
+      })
+    }
     if (this.props.onFetch) {
       if (this.props.resultOnly) {
         this.props.onFetch(result.data)

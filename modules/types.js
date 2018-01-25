@@ -11,6 +11,7 @@ export type Method =
   | 'TRACE'
 
 export type DefaultProps = {
+  error: ?(Object) => React$Element<any>,
   loader: ?() => React$Element<any>,
   params: {
     method: Method,
@@ -22,6 +23,7 @@ export type DefaultProps = {
 
 export type Props = {
   children?: (?Object) => React$Element<any>,
+  error?: (Object) => React$Element<any>,
   headers?: Object,
   loader?: () => React$Element<any>,
   onFetch?: (?Object) => void,
