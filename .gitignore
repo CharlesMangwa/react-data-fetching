@@ -7,7 +7,6 @@ cjs
 esm
 umd
 
-
 # NODE
 node_modules
 npm-debug.log
