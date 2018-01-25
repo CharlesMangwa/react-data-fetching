@@ -13,9 +13,9 @@ class Fetch extends React.Component<Props, void> {
 
   static propTypes = {
     children: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
-    onLoad: PropTypes.element,
     onError: PropTypes.func,
     onFetch: PropTypes.func,
+    onLoad: PropTypes.element,
     params: PropTypes.shape({
       method: PropTypes.oneOf([
         'DELETE',
@@ -36,10 +36,17 @@ class Fetch extends React.Component<Props, void> {
   }
 
   static defaultProps: DefaultProps = {
+    children: undefined,
+    onError: undefined,
+    onFetch: undefined,
+    onLoad: undefined,
     params: {
       method: 'GET',
       body: {},
     },
+    refetch: false,
+    render: undefined,
+    resultOnly: false,
   }
 
   componentWillReceiveProps(nextProps: Props) {
