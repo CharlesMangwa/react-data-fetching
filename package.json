@@ -15,6 +15,7 @@
   "unpkg": "umd/react-data-fetcher.js",
   "scripts": {
     "build": "node ./scripts/build.js",
+    "clean": "git clean -fdX .",
     "flow": "flow --show-all-errors",
     "lint": "eslint .",
     "test:ci": "jest --verbose --coverage && cat ./__tests__/__coverage__/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
