@@ -1,5 +1,5 @@
 # TESTS
-__tests__/__coverage__
+modules/__tests__/__coverage__
 coverage
 
 # BUILD
