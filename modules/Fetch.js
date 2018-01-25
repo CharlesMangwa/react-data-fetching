@@ -13,8 +13,8 @@ class Fetch extends React.Component<Props, void> {
 
   static propTypes = {
     children: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
-    error: PropTypes.element,
-    loader: PropTypes.element,
+    onLoad: PropTypes.element,
+    onError: PropTypes.func,
     onFetch: PropTypes.func,
     params: PropTypes.shape({
       method: PropTypes.oneOf([
@@ -36,17 +36,10 @@ class Fetch extends React.Component<Props, void> {
   }
 
   static defaultProps: DefaultProps = {
-    children: undefined,
-    error: undefined,
-    loader: undefined,
-    onFetch: undefined,
     params: {
       method: 'GET',
       body: {},
     },
-    refetch: false,
-    render: undefined,
-    resultOnly: false,
   }
 
   componentWillReceiveProps(nextProps: Props) {
@@ -113,8 +106,8 @@ class Fetch extends React.Component<Props, void> {
   }
 
   _returnData = (result: ReturnedData): void => {
-    if (result.error && this.props.error) {
-      this.props.error({
+    if (result.error && this.props.onError) {
+      this.props.onError({
         error: result.error,
         status: result.status,
       })
@@ -145,7 +138,7 @@ class Fetch extends React.Component<Props, void> {
 
   render() {
     if (!this._isLoaded) {
-      return this.props.loader ? this.props.loader() : null
+      return this.props.onLoad ? this.props.onLoad() : null
     }
     return null
   }

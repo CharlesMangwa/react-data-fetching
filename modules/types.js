@@ -11,22 +11,18 @@ export type Method =
   | 'TRACE'
 
 export type DefaultProps = {
-  error: ?(Object) => React$Element<any>,
-  loader: ?() => React$Element<any>,
   params: {
     method: Method,
     body: Object,
   },
-  refetch: boolean,
-  resultOnly: boolean,
 }
 
 export type Props = {
   children?: (?Object) => React$Element<any>,
-  error?: (Object) => React$Element<any>,
   headers?: Object,
-  loader?: () => React$Element<any>,
-  onFetch?: (?Object) => void,
+  onError?: (Object) => React$Element<any> | (Object) => void,
+  onLoad?: () => React$Element<any> | () => void,
+  onFetch?: (?Object) => void | (?Object) => void,
   path: string,
   params?: Object,
   refetch?: boolean,
