@@ -16,7 +16,7 @@ class Fetch extends React.Component<Props, void> {
     children: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
     onError: PropTypes.func,
     onFetch: PropTypes.func,
-    onLoad: PropTypes.element,
+    onLoad: PropTypes.func,
     params: PropTypes.shape({
       method: PropTypes.oneOf([
         'DELETE',
@@ -138,8 +138,10 @@ class Fetch extends React.Component<Props, void> {
     }
     if (this.props.children) {
       if (this.props.resultOnly) {
-        this.props.children(result.data)
-      } else this.props.children(result)
+        React.Children.only(this.props.children(result.data))
+      } else {
+        React.Children.only(this.props.children(result))
+      }
     }
   }
 
@@ -154,7 +156,7 @@ class Fetch extends React.Component<Props, void> {
     invariant(props.path, 'You must provide a path prop to <Fetch>')
 
     invariant(
-      props.children && props.onFetch && props.render,
+      props.children || props.onFetch || props.render,
       'You must provide at least one of the following to <Fetch>: children, onFetch prop, render prop',
     )
   }

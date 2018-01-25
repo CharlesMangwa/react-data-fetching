@@ -31,7 +31,7 @@ jobs:
           name: Running Flow
           command: yarn flow
 
-      #- run:
-      #    name: Running Tests
-      #    command: yarn test-ci
+      - run:
+         name: Running Tests
+         command: yarn test:ci
 
