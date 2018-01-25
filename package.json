@@ -1,0 +1,83 @@
+{
+  "name": "react-data-fetcher",
+  "version": "0.0.1",
+  "description": "🎣 A component-driven way to fetch data in React",
+  "repository": "CharlesMangwa/react-data-fetcher",
+  "license": "MIT",
+  "author": "Charles Mangwa",
+  "files": [
+    "cjs",
+    "esm",
+    "umd"
+  ],
+  "main": "cjs/react-data-fetcher.js",
+  "module": "esm/react-data-fetcher.js",
+  "unpkg": "umd/react-data-fetcher.js",
+  "scripts": {
+    "build": "node ./scripts/build.js",
+    "flow": "flow --show-all-errors",
+    "lint": "eslint .",
+    "prepack": "node ./scripts/build.js"
+  },
+  "babel": {
+    "presets": [
+      [
+        "env",
+        {
+          "loose": true
+        }
+      ],
+      "es2015",
+      "stage-1",
+      "react",
+      "flow"
+    ]
+  },
+  "peerDependencies": {
+    "react": ">=15 || ^16"
+  },
+  "dependencies": {
+    "prop-types": "^15.6.0",
+    "react": "^16.1.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "6",
+    "babel-eslint": "^8.0.2",
+    "babel-plugin-dev-expression": "^0.2.1",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-plugin-transform-react-remove-prop-types": "^0.4.10",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-flow": "^6.23.0",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-1": "^6.24.1",
+    "eslint": "^4.12.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-babel": "^4.1.2",
+    "eslint-plugin-flowtype": "^2.39.1",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jsx-a11y": "^6.0.2",
+    "eslint-plugin-react": "^7.5.1",
+    "flow-bin": "^0.59.0",
+    "gzip-size": "^4.1.0",
+    "pascal-case": "^2.0.1",
+    "path": "^0.12.7",
+    "pretty-bytes": "^4.0.2",
+    "react-test-renderer": "^16.1.1",
+    "rimraf": "^2.6.2",
+    "rollup": "^0.52.0",
+    "rollup-plugin-babel": "^3.0.2",
+    "rollup-plugin-commonjs": "^8.2.6",
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-plugin-replace": "^2.0.0",
+    "rollup-plugin-uglify": "^2.0.1"
+  },
+  "keywords": [
+    "react",
+    "native",
+    "data",
+    "fetch",
+    "api",
+    "component"
+  ]
+}

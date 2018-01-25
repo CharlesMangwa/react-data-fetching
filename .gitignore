@@ -1,0 +1,17 @@
+# TESTS
+__tests__/__coverage__
+coverage
+
+# BUILD
+cjs
+esm
+umd
+
+
+# NODE
+node_modules
+npm-debug.log
+yarn-error.log
+
+# OS
+.DS_Store
