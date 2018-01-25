@@ -18,7 +18,7 @@
     "clean": "git clean -fdX .",
     "flow": "flow --show-all-errors",
     "lint": "eslint .",
-    "test:ci": "jest --verbose --coverage && cat ./__tests__/__coverage__/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+    "test:ci": "jest --verbose --coverage && cat ./modules/__tests__/__coverage__/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "prepack": "node ./scripts/build.js"
   },
   "babel": {
@@ -35,7 +35,7 @@
     ]
   },
   "jest": {
-    "coverageDirectory": "./__tests__/__coverage__",
+    "coverageDirectory": "./modules/__tests__/__coverage__",
     "coveragePathIgnorePatterns": [
       "/node_modules/"
     ],
@@ -43,7 +43,7 @@
       "lcov"
     ],
     "rootDir": ".",
-    "testRegex": "./__tests__/.*.test.js$"
+    "testRegex": "./modules/__tests__/.*.test.js$"
   },
   "peerDependencies": {
     "react": ">=15 || ^16"

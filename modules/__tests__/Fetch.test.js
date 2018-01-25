@@ -1,6 +1,6 @@
 import React from 'react'
 import TestRenderer from 'react-test-renderer'
-import Fetch from '../modules/Fetch'
+import Fetch from '../Fetch'
 
 describe('A <Fetch>', () => {
   it('renders correctly', () => {
