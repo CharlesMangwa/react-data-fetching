@@ -1,5 +1,3 @@
-/* eslint import/no-extraneous-dependencies: 0 */
-
 const fs = require('fs')
 const gzipSize = require('gzip-size')
 const pascalCase = require('pascal-case')

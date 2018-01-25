@@ -37,8 +37,7 @@
     "react": ">=15 || ^16"
   },
   "dependencies": {
-    "prop-types": "^15.6.0",
-    "react": "^16.1.1"
+    "prop-types": "^15.6.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -63,6 +62,7 @@
     "pascal-case": "^2.0.1",
     "path": "^0.12.7",
     "pretty-bytes": "^4.0.2",
+    "react": "^16.2.0",
     "react-test-renderer": "^16.1.1",
     "rimraf": "^2.6.2",
     "rollup": "^0.52.0",

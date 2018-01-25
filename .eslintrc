@@ -23,6 +23,7 @@
   },
   "rules": {
     "function-paren-newline": 0,
+    "import/no-extraneous-dependencies": 0,
     "no-console": 0,
     "no-nested-ternary": 0,
     "no-underscore-dangle": 0,
