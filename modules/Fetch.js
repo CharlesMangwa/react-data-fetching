@@ -13,8 +13,10 @@ import {
 } from './types'
 
 class Fetch extends Component<Props> {
-  _isUnmounted: boolean = false
+  _data: ?ReturnedData = undefined
+  _didCallOnLoad: boolean = false
   _isLoaded: boolean = false
+  _isUnmounted: boolean = false
 
   static propTypes = {
     children: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
@@ -50,11 +52,13 @@ class Fetch extends Component<Props> {
 
   componentWillMount() {
     this._validateProps(this.props)
+    if (this.props.onLoad && !this._didCallOnLoad) {
+      this._didCallOnLoad = true
+      this.props.onLoad()
+    }
   }
 
   componentDidMount() {
-    if (this.props.onLoad)
-      this.props.onLoad()
     if (this.props.path === 'redux') {
       this._handleData({
         data: this.context.rdfStore,
@@ -66,8 +70,10 @@ class Fetch extends Component<Props> {
 
   componentWillReceiveProps(nextProps: Props, nextContext: Context) {
     this._validateProps(nextProps)
-    if (this.props.onLoad)
+    if (this.props.onLoad && !this._didCallOnLoad) {
+      this._didCallOnLoad = true
       this.props.onLoad()
+    }
     if (this.props.path === 'redux') {
       this._handleData({
         data: this.context.rdfStore,
@@ -95,6 +101,7 @@ class Fetch extends Component<Props> {
     if (this.props.refetch !== nextProps.refetch) return true
     if (this.props.render !== nextProps.render) return true
     if (this._isLoaded) return true
+    if (this._data) return true
     return false
   }
 
@@ -141,26 +148,19 @@ class Fetch extends Component<Props> {
 
   _returnData = (result: ReturnedData): void => {
     if (this.props.onFetch) {
-      if (this.props.resultOnly)
-        this.props.onFetch(result.data)
-      else this.props.onFetch(result)
+      this.props.resultOnly
+        ? this.props.onFetch(result.data)
+        : this.props.onFetch(result)
     }
-    if (this.props.render) {
-      if (this.props.resultOnly)
-        this.props.render(result.data)
-      else this.props.render(result)
-    }
-    if (this.props.children) {
-      if (this.props.resultOnly)
-        this.props.children(result.data)
-      else this.props.children(result)
-    }
-    this.forceUpdate()
+    if (!this._isUnmounted) this.forceUpdate()
   }
 
   _handleData = (result: ReturnedData): void => {
     if (!this._isUnmounted) {
       this._isLoaded = true
+      this.props.resultOnly
+        ? this._data = result.data
+        : this._data = result
       this._returnData(result)
     }
   }
@@ -176,8 +176,20 @@ class Fetch extends Component<Props> {
   }
 
   render() {
-    if (!this._isLoaded && this.props.loader)
+    if (!this._isLoaded && !this._isUnmounted && this.props.loader)
       return this.props.loader()
+    if (this._isLoaded && !this._isUnmounted) {
+      if (this.props.render) {
+        return this.props.resultOnly
+          ? this.props.render(this._data)
+          : this.props.render(this._data)
+      }
+      if (this.props.children) {
+        return this.props.resultOnly
+          ? this.props.children(this._data)
+          : this.props.children(this._data)
+      }
+    }
     return null
   }
 }

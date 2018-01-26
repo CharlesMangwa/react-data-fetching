@@ -5,11 +5,7 @@
     "plugin:flowtype/recommended",
     "plugin:react/recommended"
   ],
-  "plugins": [
-    "babel",
-    "react",
-    "flowtype"
-  ],
+  "plugins": ["babel", "react", "flowtype"],
   "env": {
     "browser": true,
     "node": true
@@ -29,8 +25,8 @@
     "no-console": 0,
     "no-nested-ternary": 0,
     "no-underscore-dangle": 0,
+    "no-unused-expressions": ["error", { "allowTernary": true }],
     "react/sort-comp": 0,
     "semi": [2, "never"]
   }
 }
-
