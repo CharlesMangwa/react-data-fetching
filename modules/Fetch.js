@@ -28,6 +28,12 @@ class Fetch extends Component<Props> {
     resultOnly: PropTypes.bool,
   }
 
+  static contextTypes = {
+    rdfApi: PropTypes.string,
+    rdfHeaders: PropTypes.object,
+    rdfStore: PropTypes.object,
+  }
+
   static defaultProps = {
     children: undefined,
     onError: undefined,

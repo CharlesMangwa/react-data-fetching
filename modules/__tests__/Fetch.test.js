@@ -5,7 +5,7 @@ import Fetch from '../Fetch'
 describe('A <Fetch>', () => {
   it('renders correctly', () => {
     const component = TestRenderer.create(
-      <Fetch path="/news/featured">{() => null}</Fetch>,
+      <Fetch path="https://api.github.com/users/octocat">{() => null}</Fetch>,
     )
     const tree = component.toJSON()
     expect(tree).toMatchSnapshot()

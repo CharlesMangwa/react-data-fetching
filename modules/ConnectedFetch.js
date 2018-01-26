@@ -10,16 +10,27 @@ import { type ProviderProps, type Store, storeShape } from './types'
 
 export const createConnectedFetch = (): Class<*> => {
   class ConnectedFetch extends Component<ProviderProps> {
-    rdfApi: string
-    rdfHeaders: ?Object
-    rdfStore: ?Store
+    rdfApi: string = this.props.api
+    rdfHeaders: ?Object = this.props.headers
+    rdfStore: ?Store = this.props.store || this.context.store
+
     static defaultProps = { headers: {}, store: undefined }
 
-    constructor(props: ProviderProps, context: any) {
-      super(props, context)
-      this.rdfApi = props.api
-      this.rdfHeaders = props.headers
-      this.rdfStore = props.store || context.store
+    static propTypes = {
+      api: PropTypes.string.isRequired,
+      headers: PropTypes.object,
+      children: PropTypes.element.isRequired,
+      store: storeShape,
+    }
+
+    static contextTypes = {
+      store: storeShape,
+    }
+
+    static childContextTypes = {
+      rdfApi: PropTypes.string.isRequired,
+      rdfHeaders: PropTypes.object.isRequired,
+      rdfStore: PropTypes.object.isRequired,
     }
 
     getChildContext() {
@@ -54,19 +65,6 @@ export const createConnectedFetch = (): Class<*> => {
         '<ConnectedFetch> does not support changing `store` on the fly.',
       )
     }
-  }
-
-  ConnectedFetch.propTypes = {
-    api: PropTypes.string.isRequired,
-    headers: PropTypes.object,
-    children: PropTypes.element.isRequired,
-    store: storeShape,
-  }
-
-  ConnectedFetch.childContextTypes = {
-    rdfApi: PropTypes.string.isRequired,
-    rdfHeaders: PropTypes.object.isRequired,
-    rdfStore: storeShape.isRequired,
   }
 
   return ConnectedFetch
