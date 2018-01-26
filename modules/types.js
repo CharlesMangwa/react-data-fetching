@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 // FLOW
 export type Context = {
   rdfApi: string,
+  rdfHeaders: Object,
   rdfStore: Object,
 }
 
@@ -56,6 +57,7 @@ export type Store = {
 export type ProviderProps = {
   api: string,
   children: React$Element<any>,
+  headers?: Object,
   store?: Store,
 }
 

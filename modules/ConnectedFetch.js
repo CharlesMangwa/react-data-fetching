@@ -1,5 +1,6 @@
 /* @flow */
 /* eslint react/no-typos: 0 */
+/* eslint react/forbid-prop-types: 0 */
 
 import { Children, Component } from 'react'
 import PropTypes from 'prop-types'
@@ -10,18 +11,21 @@ import { type ProviderProps, type Store, storeShape } from './types'
 export const createConnectedFetch = (): Class<*> => {
   class ConnectedFetch extends Component<ProviderProps> {
     rdfApi: string
+    rdfHeaders: ?Object
     rdfStore: ?Store
-    static defaultProps = { store: undefined }
+    static defaultProps = { headers: {}, store: undefined }
 
     constructor(props: ProviderProps, context: any) {
       super(props, context)
       this.rdfApi = props.api
-      this.rdfStore = context.store || props.store
+      this.rdfHeaders = props.headers
+      this.rdfStore = props.store || context.store
     }
 
     getChildContext() {
       return {
         rdfApi: this.rdfApi || '',
+        rdfHeaders: this.rdfHeaders,
         rdfStore: this.rdfStore && this.rdfStore.getState(),
       }
     }
@@ -38,11 +42,15 @@ export const createConnectedFetch = (): Class<*> => {
       nextProps: ProviderProps,
     ): void => {
       invariant(
-        this.api === nextProps.api,
+        this.rdfApi === nextProps.api,
         '<ConnectedFetch> does not support changing `api` on the fly.',
       )
       invariant(
-        this.store === nextProps.store,
+        this.rdfHeaders === nextProps.headers,
+        '<ConnectedFetch> does not support changing `headers` on the fly.',
+      )
+      invariant(
+        this.rdfStore === nextProps.store,
         '<ConnectedFetch> does not support changing `store` on the fly.',
       )
     }
@@ -50,12 +58,14 @@ export const createConnectedFetch = (): Class<*> => {
 
   ConnectedFetch.propTypes = {
     api: PropTypes.string.isRequired,
-    store: storeShape,
+    headers: PropTypes.object,
     children: PropTypes.element.isRequired,
+    store: storeShape,
   }
 
   ConnectedFetch.childContextTypes = {
     rdfApi: PropTypes.string.isRequired,
+    rdfHeaders: PropTypes.object.isRequired,
     rdfStore: storeShape.isRequired,
   }
 

@@ -86,7 +86,7 @@ class Fetch extends Component<Props> {
         `${context.rdfApi}path`,
         method,
         body,
-        headers,
+        { ...context.rdfHeaders, ...headers },
       )
       if (!this.unmounted && !apiResponse.error) {
         this._handleData({
