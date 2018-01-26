@@ -1,5 +1,13 @@
 /* @flow */
 
+import PropTypes from 'prop-types'
+
+// FLOW
+export type Context = {
+  rdfApi: string,
+  rdfStore: Object,
+}
+
 export type Method =
   'DELETE'
   | 'FORM_DATA'
@@ -33,6 +41,39 @@ export type Props = {
 export type ReturnedData = {
   data?: Object,
   error?: Object | string,
-  loaded: boolean,
   status?: boolean,
+  store?: Object,
 }
+
+export type Store = {
+  subscribe: Function,
+  dispatch: Function,
+  getState: () => Object,
+}
+
+export type ProviderProps = {
+  api: string,
+  children: React$Element<any>,
+  store: Store,
+}
+
+// PROPTYPES
+export const paramsShape = PropTypes.shape({
+  method: PropTypes.oneOf([
+    'DELETE',
+    'FORM_DATA',
+    'GET',
+    'HEAD',
+    'PATCH',
+    'POST',
+    'PUT',
+    'TRACE',
+  ]),
+  body: PropTypes.object,
+})
+
+export const storeShape = PropTypes.shape({
+  subscribe: PropTypes.func.isRequired,
+  dispatch: PropTypes.func.isRequired,
+  getState: PropTypes.func.isRequired,
+})

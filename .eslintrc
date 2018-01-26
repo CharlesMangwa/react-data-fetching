@@ -22,6 +22,7 @@
     }
   },
   "rules": {
+    "brace-style": ["error", "stroustrup"],
     "function-paren-newline": 0,
     "import/no-extraneous-dependencies": 0,
     "no-console": 0,

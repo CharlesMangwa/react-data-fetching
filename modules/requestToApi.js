@@ -38,7 +38,8 @@ const requestToApi = (
         result: request.json(),
       }
       resolve(response)
-    } catch (errors) {
+    }
+    catch (errors) {
       reject(errors)
     }
   })

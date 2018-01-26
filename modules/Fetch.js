@@ -1,14 +1,18 @@
 /* @flow */
 
-import React from 'react'
+import { Children, Component } from 'react'
 import PropTypes from 'prop-types'
 import invariant from 'invariant'
 
 import requestToApi from './requestToApi'
-import type { DefaultProps, Props, ReturnedData } from './types'
+import {
+  type Context,
+  type Props,
+  type ReturnedData,
+  paramsShape,
+} from './types'
 
-class Fetch extends React.Component<Props, void> {
-  props: Props
+class Fetch extends Component<Props> {
   _isUnmounted: boolean = false
   _isLoaded: boolean = false
 
@@ -17,26 +21,14 @@ class Fetch extends React.Component<Props, void> {
     onError: PropTypes.func,
     onFetch: PropTypes.func,
     onLoad: PropTypes.func,
-    params: PropTypes.shape({
-      method: PropTypes.oneOf([
-        'DELETE',
-        'FORM_DATA',
-        'GET',
-        'HEAD',
-        'PATCH',
-        'POST',
-        'PUT',
-        'TRACE',
-      ]),
-      body: PropTypes.object,
-    }),
+    params: paramsShape,
     path: PropTypes.string.isRequired,
     refetch: PropTypes.bool,
     render: PropTypes.func,
     resultOnly: PropTypes.bool,
   }
 
-  static defaultProps: DefaultProps = {
+  static defaultProps = {
     children: undefined,
     onError: undefined,
     onFetch: undefined,
@@ -54,20 +46,13 @@ class Fetch extends React.Component<Props, void> {
     this._validateProps(this.props)
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  componentWillReceiveProps(nextProps: Props, nextContext: Context): void {
     this._validateProps(nextProps)
     if (
       nextProps.path !== this.props.path ||
       nextProps.refetch !== this.props.refetch
     ) {
-      this._handleData({
-        data: undefined,
-        error: undefined,
-        isOK: undefined,
-        loaded: false,
-        status: false,
-      })
-      this._fetchData(nextProps)
+      this._fetchData(nextProps, nextContext)
     }
   }
 
@@ -75,32 +60,34 @@ class Fetch extends React.Component<Props, void> {
     this._isUnmounted = true
   }
 
-  _fetchData = async (props: Props): Promise<any> => {
+  _fetchData = async (props: Props, context: Context): Promise<any> => {
     const { headers, path, params } = props
     const body = params && params.body ? params.body : {}
     const method = params && params.method ? params.method : 'GET'
 
     try {
-      const apiResponse = await requestToApi(path, method, body, headers)
+      const apiResponse = await requestToApi(
+        `${context.rdfApi}path`,
+        method,
+        body,
+        headers,
+      )
       if (!this.unmounted && !apiResponse.error) {
         this._handleData({
           data: apiResponse.result,
-          error: undefined,
           isOK: apiResponse.isOK,
-          loaded: true,
           response: apiResponse.response,
           status: apiResponse.status,
-        })
-      } else if (!this.unmounted && apiResponse.error) {
-        this._handleData({
-          data: undefined,
-          error: apiResponse,
-          isOK: false,
-          loaded: true,
-          status: false,
+          store: context.rdfStore,
         })
       }
-    } catch (error) {
+      else if (!this.unmounted && apiResponse.error) {
+        this._handleData({
+          error: apiResponse,
+        })
+      }
+    }
+    catch (error) {
       if (!this.unmounted) {
         invariant(
           !error,
@@ -109,11 +96,7 @@ class Fetch extends React.Component<Props, void> {
           error,
         )
         this._handleData({
-          data: undefined,
           error: 'Something went wrong during the request 😯…',
-          isOK: false,
-          loaded: true,
-          status: false,
         })
       }
     }
@@ -129,18 +112,21 @@ class Fetch extends React.Component<Props, void> {
     if (this.props.onFetch) {
       if (this.props.resultOnly) {
         this.props.onFetch(result.data)
-      } else this.props.onFetch(result)
+      }
+      else this.props.onFetch(result)
     }
     if (this.props.render) {
       if (this.props.resultOnly) {
         this.props.render(result.data)
-      } else this.props.render(result)
+      }
+      else this.props.render(result)
     }
     if (this.props.children) {
       if (this.props.resultOnly) {
-        React.Children.only(this.props.children(result.data))
-      } else {
-        React.Children.only(this.props.children(result))
+        Children.only(this.props.children(result.data))
+      }
+      else {
+        Children.only(this.props.children(result))
       }
     }
   }
@@ -153,11 +139,12 @@ class Fetch extends React.Component<Props, void> {
   }
 
   _validateProps = (props: Props): void => {
-    invariant(props.path, 'You must provide a path prop to <Fetch>')
+    invariant(props.path, 'You must provide a `path` to <Fetch>')
 
     invariant(
       props.children || props.onFetch || props.render,
-      'You must provide at least one of the following to <Fetch>: children, onFetch prop, render prop',
+      'You must provide at least one of the following ' +
+        'to <Fetch>: children, `onFetch`, `render`',
     )
   }
 

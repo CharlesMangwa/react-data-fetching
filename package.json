@@ -17,8 +17,10 @@
     "build": "node ./scripts/build.js",
     "clean": "git clean -fdX .",
     "flow": "flow --show-all-errors",
+    "jest": "jest --verbose --coverage",
     "lint": "eslint .",
-    "test:ci": "jest --verbose --coverage && cat ./modules/__tests__/__coverage__/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+    "test": "yarn lint && yarn flow && yarn jest",
+    "test:ci": "yarn jest && cat ./modules/__tests__/__coverage__/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "prepack": "node ./scripts/build.js"
   },
   "babel": {
@@ -70,8 +72,8 @@
     "eslint-plugin-flowtype": "^2.39.1",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jsx-a11y": "^6.0.2",
-    "eslint-plugin-react": "^7.5.1",
-    "flow-bin": "^0.59.0",
+    "eslint-plugin-react": "7.6.0",
+    "flow-bin": "^0.64.0",
     "gzip-size": "^4.1.0",
     "jest": "^22.1.4",
     "pascal-case": "^2.0.1",
