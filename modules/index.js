@@ -1,5 +1,5 @@
 import Fetch from './Fetch'
 
 export default Fetch
-export ConnectedFetch from './ConnectedFetch'
-export requestToApi from './requestToApi'
+export { default as ConnectedFetch } from './ConnectedFetch'
+export { default as requestToApi } from './requestToApi'

@@ -83,7 +83,7 @@ class Fetch extends Component<Props> {
 
     try {
       const apiResponse = await requestToApi(
-        `${context.rdfApi}path`,
+        `${context.rdfApi || ''}${path}`,
         method,
         body,
         { ...context.rdfHeaders, ...headers },
@@ -109,8 +109,7 @@ class Fetch extends Component<Props> {
       if (!this.unmounted) {
         invariant(
           !error,
-          `%c Route "${path}" resolved with: %e`,
-          'color: #F2345A',
+          `Route "${path}" resolved with: %s`,
           error,
         )
         this._handleData({

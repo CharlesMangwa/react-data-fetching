@@ -31,11 +31,11 @@ const requestToApi = (
             ? undefined
             : method === 'FORM_DATA' ? formData : JSON.stringify({ ...body }),
       })
-      const response = await {
+      const response = {
         isOK: request.ok,
         response: request,
         status: request.status,
-        result: request.json(),
+        result: await request.json(),
       }
       resolve(response)
     }
