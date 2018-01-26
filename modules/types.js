@@ -29,8 +29,8 @@ export type DefaultProps = {
 export type Props = {
   children?: (?Object) => React$Element<any>,
   headers?: Object,
-  onError?: (Object) => React$Element<any> | (Object) => void,
-  onLoad?: () => React$Element<any> | () => void,
+  loader?: () => React$Element<any>,
+  onLoad?: Function,
   onFetch?: (?Object) => void | (?Object) => void,
   path: string,
   params?: Object,

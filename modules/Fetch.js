@@ -18,7 +18,7 @@ class Fetch extends Component<Props> {
 
   static propTypes = {
     children: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
-    onError: PropTypes.func,
+    loader: PropTypes.func,
     onFetch: PropTypes.func,
     onLoad: PropTypes.func,
     params: paramsShape,
@@ -36,7 +36,7 @@ class Fetch extends Component<Props> {
 
   static defaultProps = {
     children: undefined,
-    onError: undefined,
+    loader: undefined,
     onFetch: undefined,
     onLoad: undefined,
     params: {
@@ -53,6 +53,8 @@ class Fetch extends Component<Props> {
   }
 
   componentDidMount() {
+    if (this.props.onLoad)
+      this.props.onLoad()
     if (this.props.path === 'redux') {
       this._handleData({
         data: this.context.rdfStore,
@@ -64,6 +66,8 @@ class Fetch extends Component<Props> {
 
   componentWillReceiveProps(nextProps: Props, nextContext: Context) {
     this._validateProps(nextProps)
+    if (this.props.onLoad)
+      this.props.onLoad()
     if (this.props.path === 'redux') {
       this._handleData({
         data: this.context.rdfStore,
@@ -73,13 +77,25 @@ class Fetch extends Component<Props> {
     else if (
       nextProps.path !== this.props.path ||
       nextProps.refetch !== this.props.refetch
-    ) {
+    )
       this._fetchData(nextProps, nextContext)
-    }
   }
 
   componentWillUnmount() {
     this._isUnmounted = true
+  }
+
+  shouldComponentUpdate = (nextProps: Props): boolean => {
+    if (this.props.children !== nextProps.children) return true
+    if (this.props.loader !== nextProps.loader) return true
+    if (this.props.onFetch !== nextProps.onFetch) return true
+    if (this.props.onLoad !== nextProps.onFetch) return true
+    if (this.props.path !== nextProps.path) return true
+    if (this.props.params !== nextProps.params) return true
+    if (this.props.refetch !== nextProps.refetch) return true
+    if (this.props.render !== nextProps.render) return true
+    if (this._isLoaded) return true
+    return false
   }
 
   _fetchData = async (props: Props, context: Context): Promise<*> => {
@@ -113,38 +129,33 @@ class Fetch extends Component<Props> {
     }
     catch (error) {
       if (!this.unmounted) {
-        invariant(!error, `Route "${path}" resolved with: %s`, error)
         this._handleData({
           error: 'Something went wrong during the request 😲...',
           isOK: false,
           store: context.rdfStore,
         })
+        invariant(!error, `Route "${path}" resolved with: %s`, error)
       }
     }
   }
 
   _returnData = (result: ReturnedData): void => {
-    if (result.error && this.props.onError) {
-      this.props.onError(result)
-    }
     if (this.props.onFetch) {
-      if (this.props.resultOnly) {
+      if (this.props.resultOnly)
         this.props.onFetch(result.data)
-      }
       else this.props.onFetch(result)
     }
     if (this.props.render) {
-      if (this.props.resultOnly) {
+      if (this.props.resultOnly)
         this.props.render(result.data)
-      }
       else this.props.render(result)
     }
     if (this.props.children) {
-      if (this.props.resultOnly) {
+      if (this.props.resultOnly)
         this.props.children(result.data)
-      }
       else this.props.children(result)
     }
+    this.forceUpdate()
   }
 
   _handleData = (result: ReturnedData): void => {
@@ -165,9 +176,8 @@ class Fetch extends Component<Props> {
   }
 
   render() {
-    if (!this._isLoaded) {
-      return this.props.onLoad ? this.props.onLoad() : null
-    }
+    if (!this._isLoaded && this.props.loader)
+      return this.props.loader()
     return null
   }
 }

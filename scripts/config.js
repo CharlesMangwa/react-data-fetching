@@ -42,9 +42,8 @@ const getPlugins = (env) => {
     }),
   )
 
-  if (env === 'production') {
+  if (env === 'production')
     plugins.push(uglify())
-  }
 
   return plugins
 }
