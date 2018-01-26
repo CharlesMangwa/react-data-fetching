@@ -1,6 +1,6 @@
 /* @flow */
 
-import { Children, Component } from 'react'
+import { Component } from 'react'
 import PropTypes from 'prop-types'
 import invariant from 'invariant'
 
@@ -107,11 +107,7 @@ class Fetch extends Component<Props> {
     }
     catch (error) {
       if (!this.unmounted) {
-        invariant(
-          !error,
-          `Route "${path}" resolved with: %s`,
-          error,
-        )
+        invariant(!error, `Route "${path}" resolved with: %s`, error)
         this._handleData({
           error: 'Something went wrong during the request 😲...',
           isOK: false,
@@ -139,11 +135,9 @@ class Fetch extends Component<Props> {
     }
     if (this.props.children) {
       if (this.props.resultOnly) {
-        Children.only(this.props.children(result.data))
+        this.props.children(result.data)
       }
-      else {
-        Children.only(this.props.children(result))
-      }
+      else this.props.children(result)
     }
   }
 
