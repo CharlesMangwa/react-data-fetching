@@ -42,13 +42,29 @@ class Fetch extends Component<Props> {
     resultOnly: false,
   }
 
-  componentWillMount(): void {
+  componentWillMount() {
     this._validateProps(this.props)
   }
 
-  componentWillReceiveProps(nextProps: Props, nextContext: Context): void {
+  componentDidMount() {
+    if (this.props.path === 'redux') {
+      this._handleData({
+        data: this.context.rdfStore,
+        isOK: true,
+      })
+    }
+    else this._fetchData(this.props, this.context)
+  }
+
+  componentWillReceiveProps(nextProps: Props, nextContext: Context) {
     this._validateProps(nextProps)
-    if (
+    if (this.props.path === 'redux') {
+      this._handleData({
+        data: this.context.rdfStore,
+        isOK: true,
+      })
+    }
+    else if (
       nextProps.path !== this.props.path ||
       nextProps.refetch !== this.props.refetch
     ) {
@@ -56,11 +72,11 @@ class Fetch extends Component<Props> {
     }
   }
 
-  componentWillUnmount(): void {
+  componentWillUnmount() {
     this._isUnmounted = true
   }
 
-  _fetchData = async (props: Props, context: Context): Promise<any> => {
+  _fetchData = async (props: Props, context: Context): Promise<*> => {
     const { headers, path, params } = props
     const body = params && params.body ? params.body : {}
     const method = params && params.method ? params.method : 'GET'
@@ -84,6 +100,8 @@ class Fetch extends Component<Props> {
       else if (!this.unmounted && apiResponse.error) {
         this._handleData({
           error: apiResponse,
+          isOK: false,
+          store: context.rdfStore,
         })
       }
     }
@@ -96,7 +114,9 @@ class Fetch extends Component<Props> {
           error,
         )
         this._handleData({
-          error: 'Something went wrong during the request 😯…',
+          error: 'Something went wrong during the request 😲...',
+          isOK: false,
+          store: context.rdfStore,
         })
       }
     }
@@ -104,10 +124,7 @@ class Fetch extends Component<Props> {
 
   _returnData = (result: ReturnedData): void => {
     if (result.error && this.props.onError) {
-      this.props.onError({
-        error: result.error,
-        status: result.status,
-      })
+      this.props.onError(result)
     }
     if (this.props.onFetch) {
       if (this.props.resultOnly) {
