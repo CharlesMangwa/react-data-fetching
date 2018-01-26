@@ -56,7 +56,7 @@ export type Store = {
 export type ProviderProps = {
   api: string,
   children: React$Element<any>,
-  store: Store,
+  store?: Store,
 }
 
 // PROPTYPES

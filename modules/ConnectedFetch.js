@@ -7,20 +7,21 @@ import invariant from 'invariant'
 
 import { type ProviderProps, type Store, storeShape } from './types'
 
-export const createFetchProvider = (): Class<*> => {
-  class FetchProvider extends Component<ProviderProps> {
+export const createConnectedFetch = (): Class<*> => {
+  class ConnectedFetch extends Component<ProviderProps> {
     rdfApi: string
-    rdfStore: Store
+    rdfStore: ?Store
+    static defaultProps = { store: undefined }
 
     constructor(props: ProviderProps, context: any) {
       super(props, context)
       this.rdfApi = props.api
-      this.rdfStore = props.store
+      this.rdfStore = context.store || props.store
     }
 
     getChildContext() {
       return {
-        rdfApi: this.rdfApi,
+        rdfApi: this.rdfApi || '',
         rdfStore: this.rdfStore && this.rdfStore.getState(),
       }
     }
@@ -33,32 +34,32 @@ export const createFetchProvider = (): Class<*> => {
   }
 
   if (process.env.NODE_ENV !== 'production') {
-    FetchProvider.prototype.componentWillReceiveProps = (
+    ConnectedFetch.prototype.componentWillReceiveProps = (
       nextProps: ProviderProps,
     ): void => {
       invariant(
         this.api === nextProps.api,
-        '<FetchProvider> does not support changing `api` on the fly.',
+        '<ConnectedFetch> does not support changing `api` on the fly.',
       )
       invariant(
         this.store === nextProps.store,
-        '<FetchProvider> does not support changing `store` on the fly.',
+        '<ConnectedFetch> does not support changing `store` on the fly.',
       )
     }
   }
 
-  FetchProvider.propTypes = {
+  ConnectedFetch.propTypes = {
     api: PropTypes.string.isRequired,
-    store: storeShape.isRequired,
+    store: storeShape,
     children: PropTypes.element.isRequired,
   }
 
-  FetchProvider.childContextTypes = {
+  ConnectedFetch.childContextTypes = {
     rdfApi: PropTypes.string.isRequired,
     rdfStore: storeShape.isRequired,
   }
 
-  return FetchProvider
+  return ConnectedFetch
 }
 
-export default createFetchProvider()
+export default createConnectedFetch()
