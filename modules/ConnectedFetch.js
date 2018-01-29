@@ -1,6 +1,4 @@
 /* @flow */
-/* eslint react/no-typos: 0 */
-/* eslint react/forbid-prop-types: 0 */
 
 import { Children, Component } from 'react'
 import PropTypes from 'prop-types'

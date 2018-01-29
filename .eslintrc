@@ -26,6 +26,8 @@
     "no-nested-ternary": 0,
     "no-underscore-dangle": 0,
     "no-unused-expressions": ["error", { "allowTernary": true }],
+    "react/forbid-prop-types": 0,
+    "react/no-typos": 0,
     "react/sort-comp": 0,
     "semi": [2, "never"]
   }
