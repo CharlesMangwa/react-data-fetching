@@ -21,6 +21,7 @@ class Fetch extends Component<Props> {
   static propTypes = {
     children: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
     loader: PropTypes.func,
+    onError: PropTypes.func,
     onFetch: PropTypes.func,
     onLoad: PropTypes.func,
     params: paramsShape,
@@ -39,6 +40,7 @@ class Fetch extends Component<Props> {
   static defaultProps = {
     children: undefined,
     loader: undefined,
+    onError: undefined,
     onFetch: undefined,
     onLoad: undefined,
     params: {
@@ -117,25 +119,24 @@ class Fetch extends Component<Props> {
         body,
         { ...context.rdfHeaders, ...headers },
       )
-      if (!this.unmounted && !apiResponse.error) {
-        this._handleData({
-          data: apiResponse.result,
-          isOK: apiResponse.isOK,
-          response: apiResponse.response,
-          status: apiResponse.status,
-          store: context.rdfStore,
-        })
-      }
-      else if (!this.unmounted && apiResponse.error) {
-        this._handleData({
-          error: apiResponse,
-          isOK: false,
-          store: context.rdfStore,
-        })
+      if (!this._isUnmounted) {
+        apiResponse.isOK
+          ? this._handleData({
+            data: apiResponse.result,
+            isOK: apiResponse.isOK,
+            response: apiResponse.response,
+            status: apiResponse.status,
+            store: context.rdfStore,
+          })
+          : this._handleData({
+            error: apiResponse,
+            isOK: apiResponse.isOK,
+            store: context.rdfStore,
+          })
       }
     }
     catch (error) {
-      if (!this.unmounted) {
+      if (!this._isUnmounted) {
         this._handleData({
           error: 'Something went wrong during the request 😲...',
           isOK: false,
@@ -152,15 +153,19 @@ class Fetch extends Component<Props> {
         ? this.props.onFetch(result.data)
         : this.props.onFetch(result)
     }
+    if (result.error && this.props.onError)
+      this.props.onError(result)
     if (!this._isUnmounted) this.forceUpdate()
   }
 
   _handleData = (result: ReturnedData): void => {
     if (!this._isUnmounted) {
       this._isLoaded = true
-      this.props.resultOnly
-        ? this._data = result.data
-        : this._data = result
+      if (!result.error) {
+        this.props.resultOnly
+          ? this._data = result.data
+          : this._data = result
+      }
       this._returnData(result)
     }
   }
@@ -185,9 +190,11 @@ class Fetch extends Component<Props> {
           : this.props.render(this._data)
       }
       if (this.props.children) {
-        return this.props.resultOnly
-          ? this.props.children(this._data)
-          : this.props.children(this._data)
+        return typeof this.props.children === 'function'
+          ? this.props.resultOnly
+            ? this.props.children(this._data)
+            : this.props.children(this._data)
+          : this.props.children
       }
     }
     return null

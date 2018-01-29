@@ -30,6 +30,7 @@ export type Props = {
   children?: (?Object) => React$Element<any>,
   headers?: Object,
   loader?: () => React$Element<any>,
+  onError?: (Object) => void,
   onLoad?: Function,
   onFetch?: (?Object) => void | (?Object) => void,
   path: string,
