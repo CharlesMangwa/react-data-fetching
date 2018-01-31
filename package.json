@@ -16,7 +16,7 @@
   "scripts": {
     "build": "node ./scripts/build.js",
     "clean": "git clean -fdX .",
-    "flow": "flow --show-all-errors",
+    "flow": "glow --show-all-errors",
     "jest": "jest --verbose --coverage",
     "lint": "eslint .",
     "test": "yarn lint && yarn flow && yarn jest",
@@ -74,6 +74,7 @@
     "eslint-plugin-jsx-a11y": "^6.0.2",
     "eslint-plugin-react": "7.6.0",
     "flow-bin": "^0.64.0",
+    "glow": "^1.0.2",
     "gzip-size": "^4.1.0",
     "jest": "^22.1.4",
     "pascal-case": "^2.0.1",

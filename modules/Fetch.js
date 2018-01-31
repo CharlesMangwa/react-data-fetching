@@ -22,8 +22,8 @@ class Fetch extends Component<Props> {
     children: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
     loader: PropTypes.func,
     onError: PropTypes.func,
-    onFetch: PropTypes.func,
     onLoad: PropTypes.func,
+    onSuccess: PropTypes.func,
     params: paramsShape,
     path: PropTypes.string.isRequired,
     refetch: PropTypes.bool,
@@ -41,8 +41,8 @@ class Fetch extends Component<Props> {
     children: undefined,
     loader: undefined,
     onError: undefined,
-    onFetch: undefined,
     onLoad: undefined,
+    onSuccess: undefined,
     params: {
       method: 'GET',
       body: {},
@@ -96,8 +96,9 @@ class Fetch extends Component<Props> {
   shouldComponentUpdate = (nextProps: Props): boolean => {
     if (this.props.children !== nextProps.children) return true
     if (this.props.loader !== nextProps.loader) return true
-    if (this.props.onFetch !== nextProps.onFetch) return true
-    if (this.props.onLoad !== nextProps.onFetch) return true
+    if (this.props.onError !== nextProps.onError) return true
+    if (this.props.onLoad !== nextProps.onLoad) return true
+    if (this.props.onSuccess !== nextProps.onSuccess) return true
     if (this.props.path !== nextProps.path) return true
     if (this.props.params !== nextProps.params) return true
     if (this.props.refetch !== nextProps.refetch) return true
@@ -148,10 +149,10 @@ class Fetch extends Component<Props> {
   }
 
   _returnData = (result: ReturnedData): void => {
-    if (this.props.onFetch) {
+    if (this.props.onSuccess) {
       this.props.resultOnly
-        ? this.props.onFetch(result.data)
-        : this.props.onFetch(result)
+        ? this.props.onSuccess(result && result.data)
+        : this.props.onSuccess(result)
     }
     if (result.error && this.props.onError)
       this.props.onError(result)
@@ -174,9 +175,9 @@ class Fetch extends Component<Props> {
     invariant(props.path, 'You must provide a `path` to <Fetch>')
 
     invariant(
-      props.children || props.onFetch || props.render,
+      props.children || props.onSuccess || props.render,
       'You must provide at least one of the following ' +
-        'to <Fetch>: children, `onFetch`, `render`',
+        'to <Fetch>: children, `onSuccess`, `render`',
     )
   }
 
