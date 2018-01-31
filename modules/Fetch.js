@@ -9,7 +9,7 @@ import {
   type Context,
   type Props,
   type ReturnedData,
-  paramsShape,
+  methodShape,
 } from './types'
 
 class Fetch extends Component<Props> {
@@ -19,12 +19,14 @@ class Fetch extends Component<Props> {
   _isUnmounted: boolean = false
 
   static propTypes = {
+    body: PropTypes.object,
     children: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
+    method: methodShape,
     loader: PropTypes.func,
     onError: PropTypes.func,
     onLoad: PropTypes.func,
     onSuccess: PropTypes.func,
-    params: paramsShape,
+    params: PropTypes.object,
     path: PropTypes.string.isRequired,
     refetch: PropTypes.bool,
     render: PropTypes.func,
@@ -38,15 +40,14 @@ class Fetch extends Component<Props> {
   }
 
   static defaultProps = {
+    body: {},
     children: undefined,
     loader: undefined,
+    method: 'GET',
     onError: undefined,
     onLoad: undefined,
     onSuccess: undefined,
-    params: {
-      method: 'GET',
-      body: {},
-    },
+    params: {},
     refetch: false,
     render: undefined,
     resultOnly: false,
@@ -109,16 +110,12 @@ class Fetch extends Component<Props> {
   }
 
   _fetchData = async (props: Props, context: Context): Promise<*> => {
-    const { headers, path, params } = props
-    const body = params && params.body ? params.body : {}
-    const method = params && params.method ? params.method : 'GET'
-
     try {
       const apiResponse = await requestToApi(
-        `${context.rdfApi || ''}${path}`,
-        method,
-        body,
-        { ...context.rdfHeaders, ...headers },
+        `${context.rdfApi || ''}${props.path}`,
+        props.method,
+        { ...props.body },
+        { ...context.rdfHeaders, ...props.headers },
       )
       if (!this._isUnmounted) {
         apiResponse.isOK
@@ -143,7 +140,7 @@ class Fetch extends Component<Props> {
           isOK: false,
           store: context.rdfStore,
         })
-        invariant(!error, `Route "${path}" resolved with: %s`, error)
+        invariant(!error, `Route "${props.path}" resolved with: %s`, error)
       }
     }
   }

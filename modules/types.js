@@ -20,21 +20,22 @@ export type Method =
   | 'TRACE'
 
 export type DefaultProps = {
-  params: {
-    method: Method,
-    body: Object,
-  },
+  body: Object,
+  method: Method,
+  params: Object,
 }
 
 export type Props = {
+  body?: Object,
   children?: (?Object) => React$Element<any>,
   headers?: Object,
   loader?: () => React$Element<any>,
   onError?: (?Object) => void,
   onLoad?: () => void,
   onSuccess?: (?Object) => void,
-  path: string,
+  method: Method,
   params?: Object,
+  path: string,
   refetch?: boolean,
   render?: (?Object) => React$Element<any>,
   resultOnly?: boolean,
@@ -63,19 +64,16 @@ export type ProviderProps = {
 }
 
 // PROPTYPES
-export const paramsShape = PropTypes.shape({
-  method: PropTypes.oneOf([
-    'DELETE',
-    'FORM_DATA',
-    'GET',
-    'HEAD',
-    'PATCH',
-    'POST',
-    'PUT',
-    'TRACE',
-  ]),
-  body: PropTypes.object,
-})
+export const methodShape = PropTypes.oneOf([
+  'DELETE',
+  'FORM_DATA',
+  'GET',
+  'HEAD',
+  'PATCH',
+  'POST',
+  'PUT',
+  'TRACE',
+])
 
 export const storeShape = PropTypes.shape({
   getState: PropTypes.func.isRequired,
