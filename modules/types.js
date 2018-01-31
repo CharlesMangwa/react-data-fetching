@@ -39,6 +39,7 @@ export type Props = {
   refetch?: boolean,
   render?: (?Object) => React$Element<any>,
   resultOnly?: boolean,
+  url?: string,
 }
 
 export type ReturnedData = {

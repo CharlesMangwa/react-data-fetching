@@ -27,10 +27,11 @@ class Fetch extends Component<Props> {
     onLoad: PropTypes.func,
     onSuccess: PropTypes.func,
     params: PropTypes.object,
-    path: PropTypes.string.isRequired,
+    path: PropTypes.string,
     refetch: PropTypes.bool,
     render: PropTypes.func,
     resultOnly: PropTypes.bool,
+    url: PropTypes.string,
   }
 
   static contextTypes = {
@@ -48,13 +49,15 @@ class Fetch extends Component<Props> {
     onLoad: undefined,
     onSuccess: undefined,
     params: {},
+    path: undefined,
     refetch: false,
     render: undefined,
     resultOnly: false,
+    url: undefined,
   }
 
   componentWillMount() {
-    this._validateProps(this.props)
+    this._validateProps(this.props, this.context)
     if (this.props.onLoad && !this._didCallOnLoad) {
       this._didCallOnLoad = true
       this.props.onLoad()
@@ -62,7 +65,7 @@ class Fetch extends Component<Props> {
   }
 
   componentDidMount() {
-    if (this.props.path === 'redux') {
+    if (this.props.path === 'redux' || this.props.url === 'redux') {
       this._handleData({
         data: this.context.rdfStore,
         isOK: true,
@@ -72,12 +75,12 @@ class Fetch extends Component<Props> {
   }
 
   componentWillReceiveProps(nextProps: Props, nextContext: Context) {
-    this._validateProps(nextProps)
+    this._validateProps(nextProps, nextContext)
     if (this.props.onLoad && !this._didCallOnLoad) {
       this._didCallOnLoad = true
       this.props.onLoad()
     }
-    if (this.props.path === 'redux') {
+    if (this.props.path === 'redux' || this.props.url === 'redux') {
       this._handleData({
         data: this.context.rdfStore,
         isOK: true,
@@ -110,9 +113,15 @@ class Fetch extends Component<Props> {
   }
 
   _fetchData = async (props: Props, context: Context): Promise<*> => {
+    let route: ?string
+
+    if (props.path)
+      route = `${context.rdfApi || ''}${props.path}`
+    else route = props.url
+
     try {
       const apiResponse = await requestToApi(
-        `${context.rdfApi || ''}${props.path}`,
+        route || '',
         props.method,
         { ...props.body },
         { ...context.rdfHeaders, ...props.headers },
@@ -168,11 +177,22 @@ class Fetch extends Component<Props> {
     }
   }
 
-  _validateProps = (props: Props): void => {
-    invariant(props.path, 'You must provide a `path` to <Fetch>')
+  _validateProps = (props: Props, context: Context): void => {
+    invariant(
+      props.path || props.url,
+      'You must provide a `url` or a `path` to <Fetch>',
+    )
+
+    if (props.path) {
+      invariant(
+        props.path && context.rdfApi,
+        'You must implement <ConnectedFetch> at the route of your ' +
+          'app and provide an `api` in order to use `path`',
+      )
+    }
 
     invariant(
-      props.children || props.onSuccess || props.render,
+      props.children || props.render || props.onSuccess,
       'You must provide at least one of the following ' +
         'to <Fetch>: children, `onSuccess`, `render`',
     )
