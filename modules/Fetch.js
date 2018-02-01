@@ -125,6 +125,7 @@ class Fetch extends Component<Props> {
         props.method,
         { ...props.body },
         { ...context.rdfHeaders, ...props.headers },
+        { ...props.params },
       )
       if (!this._isUnmounted) {
         apiResponse.isOK
