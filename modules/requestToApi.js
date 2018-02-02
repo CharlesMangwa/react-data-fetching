@@ -1,19 +1,14 @@
 /* @flow */
 /* eslint no-return-assign: 0 */
 
-import type { Method } from './types'
+import type { RequestToApi } from './types'
 
-const requestToApi = (
-  path: string,
-  method: Method,
-  body: Object,
-  headers?: Object,
-  params?: Object,
-): Promise<any> => {
+const requestToApi = (args: RequestToApi): Promise<any> => {
+  const { body, headers, method, params, url } = args
   const formData = new FormData()
-  let url = path
+  let route = url
 
-  if (method === 'FORM_DATA' && Object.entries(body).length) {
+  if (method === 'FORM_DATA' && Object.entries(body).length > 0) {
     Object.entries(body).map(
       // $FlowFixMe
       entry => formData.append(entry[0], entry[1]),
@@ -23,14 +18,14 @@ const requestToApi = (
   if (params && Object.keys(params).length > 0) {
     Object.entries(params).map((param, index) => (
       index === 0
-        ? url = `${url}?${param[0]}=${String(param[1])}`
-        : url = `${url}&${param[0]}=${String(param[1])}`
+        ? route = `${route}?${param[0]}=${String(param[1])}`
+        : route = `${route}&${param[0]}=${String(param[1])}`
     ))
   }
 
   return new Promise(async (resolve, reject) => {
     try {
-      const request = await fetch(url, {
+      const request = await fetch(route, {
         method: method === 'FORM_DATA' ? 'POST' : method,
         headers: {
           Accept: 'application/json',

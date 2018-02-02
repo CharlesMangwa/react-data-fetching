@@ -113,20 +113,21 @@ class Fetch extends Component<Props> {
   }
 
   _fetchData = async (props: Props, context: Context): Promise<*> => {
+    const { body, headers, method, params, path, url } = props
     let route: ?string
 
-    if (props.path)
-      route = `${context.rdfApi || ''}${props.path}`
-    else route = props.url
+    if (path)
+      route = `${context.rdfApi || ''}${path}`
+    else route = url
 
     try {
-      const apiResponse = await requestToApi(
-        route || '',
-        props.method,
-        { ...props.body },
-        { ...context.rdfHeaders, ...props.headers },
-        { ...props.params },
-      )
+      const apiResponse = await requestToApi({
+        url: route || '',
+        method,
+        body: { ...body },
+        headers: { ...context.rdfHeaders, ...headers },
+        params: { ...params },
+      })
       if (!this._isUnmounted) {
         apiResponse.isOK
           ? this._handleData({
@@ -150,7 +151,7 @@ class Fetch extends Component<Props> {
           isOK: false,
           store: context.rdfStore,
         })
-        invariant(!error, `Route "${props.path}" resolved with: %s`, error)
+        invariant(!error, `Route "${path}" resolved with: %s`, error)
       }
     }
   }

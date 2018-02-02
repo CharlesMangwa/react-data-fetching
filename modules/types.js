@@ -51,6 +51,14 @@ export type ReturnedData = {
   store?: Object,
 }
 
+export type RequestToApi = {
+  url: string,
+  method: Method,
+  body?: Object,
+  headers?: Object,
+  params?: Object,
+}
+
 export type Store = {
   subscribe: Function,
   dispatch: Function,
