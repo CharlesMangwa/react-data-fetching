@@ -65,7 +65,7 @@ class Fetch extends Component<Props> {
   }
 
   componentDidMount() {
-    if (this.props.path === 'redux' || this.props.url === 'redux') {
+    if (this.props.path === 'redux') {
       this._handleData({
         data: this.context.rdfStore,
         isOK: true,
@@ -80,7 +80,7 @@ class Fetch extends Component<Props> {
       this._didCallOnLoad = true
       this.props.onLoad()
     }
-    if (this.props.path === 'redux' || this.props.url === 'redux') {
+    if (this.props.path === 'redux') {
       this._handleData({
         data: this.context.rdfStore,
         isOK: true,
