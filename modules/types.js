@@ -44,7 +44,7 @@ export type Props = {
 
 export type ReturnedData = {
   data?: Object,
-  error?: Object | string,
+  error?: Object,
   isOK?: boolean,
   response?: Object,
   status?: number,
@@ -85,5 +85,5 @@ export const methodShape = PropTypes.oneOf([
 ])
 
 export const storeShape = PropTypes.shape({
-  getState: PropTypes.func.isRequired,
+  getState: PropTypes.func,
 })

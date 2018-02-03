@@ -6,16 +6,22 @@ import invariant from 'invariant'
 
 import { type ProviderProps, type Store, storeShape } from './types'
 
-export const createConnectedFetch = (): Class<*> => {
+const createConnectedFetch = (): Class<*> => {
   class ConnectedFetch extends Component<ProviderProps> {
     rdfApi: string = this.props.api
     rdfHeaders: ?Object = this.props.headers
-    rdfStore: ?Store = this.props.store || this.context.store
+    rdfStore: ?Store = this.props.store
+      ? this.context.store && this.context.store.getState()
+      : this.props.store
 
-    static defaultProps = { headers: {}, store: undefined }
+    static defaultProps = {
+      api: undefined,
+      headers: {},
+      store: undefined,
+    }
 
     static propTypes = {
-      api: PropTypes.string.isRequired,
+      api: PropTypes.string,
       headers: PropTypes.object,
       children: PropTypes.element.isRequired,
       store: storeShape,
@@ -26,16 +32,16 @@ export const createConnectedFetch = (): Class<*> => {
     }
 
     static childContextTypes = {
-      rdfApi: PropTypes.string.isRequired,
-      rdfHeaders: PropTypes.object.isRequired,
-      rdfStore: PropTypes.object.isRequired,
+      rdfApi: PropTypes.string,
+      rdfHeaders: PropTypes.object,
+      rdfStore: PropTypes.object,
     }
 
     getChildContext() {
       return {
         rdfApi: this.rdfApi || '',
         rdfHeaders: this.rdfHeaders,
-        rdfStore: this.rdfStore && this.rdfStore.getState(),
+        rdfStore: this.rdfStore,
       }
     }
 

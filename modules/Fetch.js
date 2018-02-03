@@ -147,11 +147,15 @@ class Fetch extends Component<Props> {
     catch (error) {
       if (!this._isUnmounted) {
         this._handleData({
-          error: 'Something went wrong during the request 😲...',
+          error: {
+            content: error,
+            message: 'Something went wrong during the request 😲...',
+            url: route,
+          },
           isOK: false,
           store: context.rdfStore,
         })
-        invariant(!error, `Route "${path}" resolved with: %s`, error)
+        // invariant(!error, `Route "${path}" resolved with: %s`, error)
       }
     }
   }
@@ -162,8 +166,11 @@ class Fetch extends Component<Props> {
         ? this.props.onSuccess(result && result.data)
         : this.props.onSuccess(result)
     }
-    if (result.error && this.props.onError)
-      this.props.onError(result)
+    if (result.error && this.props.onError) {
+      this.props.resultOnly
+        ? this.props.onError(result.error)
+        : this.props.onError(result)
+    }
     if (!this._isUnmounted) this.forceUpdate()
   }
 
