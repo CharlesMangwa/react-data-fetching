@@ -22,4 +22,31 @@ describe('requestToApi', () => {
     const response = request.result
     expect(response.userName).toEqual('Octocat')
   })
+
+  it('performs correctly with FORM_DATA method', async () => {
+    expect.assertions(1)
+    const request = await requestToApi({
+      url: 'https://api.github.com/users',
+      method: 'FORM_DATA',
+      body: {
+        userName: 'Charles'
+      }
+    })
+    const response = request.isOK
+    expect(response).toBeTruthy()
+  })
+
+
+  it('performs correctly with GET parameters', async () => {
+    expect.assertions(1)
+    const request = await requestToApi({
+      url: 'https://api.github.com/users',
+      method: 'GET',
+      params: {
+        limit: 0
+      }
+    })
+    const response = request.isOK
+    expect(response).toBeTruthy()
+  })
 })

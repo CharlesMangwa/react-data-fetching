@@ -54,6 +54,31 @@ describe('A <Fetch>', () => {
     expect(fn).toHaveBeenCalled()
   })
 
+  it("re-renders only when necessary", () => {
+    const component = TestRenderer.create(
+      <Fetch url="https://api.github.com/users/octocat">
+        <div />
+      </Fetch>,
+    )
+
+    const instance = component.getInstance()
+    const spy = jest.spyOn(instance, '_fetchData')
+
+    component.update(
+      <Fetch url="https://api.github.com/users/octocat">
+        <div />
+      </Fetch>,
+    )
+    expect(spy).not.toHaveBeenCalled()
+
+    component.update(
+      <Fetch url="https://api.github.com/users/octocat" refetch>
+        <div />
+      </Fetch>,
+    )
+    expect(spy).toHaveBeenCalled()
+  })
+
   it('calls onLoad when passed', () => {
     renderer.render(
       <Fetch
