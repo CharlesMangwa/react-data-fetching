@@ -43,7 +43,8 @@ describe('requestToApi', () => {
       url: 'https://api.github.com/users',
       method: 'GET',
       params: {
-        limit: 0
+        start: 0,
+        limit: 20
       }
     })
     const response = request.isOK
