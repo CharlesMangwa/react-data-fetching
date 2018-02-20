@@ -155,7 +155,6 @@ class Fetch extends Component<Props> {
           isOK: false,
           store: context.rdfStore,
         })
-        // invariant(!error, `Route "${path}" resolved with: %s`, error)
       }
     }
   }

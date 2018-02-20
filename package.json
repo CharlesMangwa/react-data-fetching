@@ -1,6 +1,6 @@
 {
   "name": "react-data-fetcher",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "🎣 A component-driven way to fetch data in React",
   "repository": "CharlesMangwa/react-data-fetcher",
   "license": "MIT",
@@ -27,9 +27,7 @@
     "presets": [
       [
         "env",
-        {
-          "loose": true
-        }
+        { "loose": true }
       ],
       "stage-1",
       "react",
