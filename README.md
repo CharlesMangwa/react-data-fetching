@@ -47,3 +47,74 @@
     />
   </a>
 </div>
+
+`react-data-fetcher` lets you use a single component to handle any API call without hassle, using JavaScript's Fetch API. It also helps you take care of loading states, errors handling, data saving, etc. Fetching data while letting the user know what's going on have never been that easy.
+
+`react-data-fetcher` has been built from the ground up with universal apps in mind: you can use it with any app based on React - meaning it works with React (web), React Native, ReactVR and even Preact!
+
+
+## Installation
+
+Using [Yarn](https://yarnpkg.com/):
+
+```shell
+$ yarn add react-data-fetcher
+```
+
+Then, use as you would anything else:
+
+```js
+// using ES6 modules
+import { Fetch } from "react-data-fetcher"
+
+// using CommonJS modules
+var Fetch = require("react-data-fetcher").Fetch
+```
+
+The UMD build is also available on [unpkg](https://unpkg.com):
+
+```html
+<script src="https://unpkg.com/react-data-fetcher/umd/react-data-fetcher.min.js"></script>
+```
+
+You can find the library on `window.ReactDataFetcher`.
+
+# Usage
+
+The following illustrates the simplest way to use `react-data-fetcher`:
+
+```jsx
+import React, { Component } from "react"
+import { Fetch } from "react-data-fetcher"
+
+export default class App extends Component {
+  render() {
+    return (
+      <Fetch
+        url="https://api.github.com/users/octocat"
+      >
+        {({ data }) => (
+         <div>
+          <h1>Username</h1>
+          <p>{data.name}</p>
+         </div>
+        )}
+      </Fetch>
+    )
+  }
+}
+```
+
+Through `react-data-fetcher`, you have access to `<Fetch>`, `<ConnectedFetch>` and `requestToApi()`. To have an in-depth explanation about how to use them, how they work and even more, head to this post: [Introducing 🎣 React Data Fetcher](https://medium.com/p/2140a1d36cc8/).
+
+# Todo
+
+- [ ] Implement React 16.3.0 new context API & lifecycles  ⚛️
+- [ ] Increase code coverage 🤓
+- [ ] Ability to make several calls at once ⛓
+- [ ] Implement caching system 📥
+- [ ] What else?
+
+# About
+
+`react-data-fetcher` is actually developed and maintained by your truly, [@Charles_Mangwa](https://twitter.com/Charles_Mangwa). Feel free to contact me if you want to contribute to the project!
