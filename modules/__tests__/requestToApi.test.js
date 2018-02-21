@@ -7,7 +7,7 @@ describe('requestToApi', () => {
         resolve({
           ok: true,
           userName: 'Octocat',
-          json: function () {
+          json: () => {
             return { userName: 'Octocat' }
           }
         })

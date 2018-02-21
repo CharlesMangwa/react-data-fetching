@@ -27,7 +27,9 @@
     "presets": [
       [
         "env",
-        { "loose": true }
+        {
+          "loose": true
+        }
       ],
       "stage-1",
       "react",

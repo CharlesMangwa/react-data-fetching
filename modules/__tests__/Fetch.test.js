@@ -2,7 +2,7 @@ import React from 'react'
 import TestRenderer from 'react-test-renderer'
 import ShallowRenderer from 'react-test-renderer/shallow'
 
-import { ConnectedFetch, Fetch } from '../index'
+import {  ConnectedFetch, Fetch } from '../index'
 import getElementWithContent from './__helpers__'
 
 describe('A <Fetch>', () => {
@@ -11,6 +11,17 @@ describe('A <Fetch>', () => {
   beforeEach(() => {
     fn = jest.fn()
     renderer = new ShallowRenderer()
+    global.fetch = jest.fn().mockImplementation(() => {
+      const p = new Promise((resolve, reject) => {
+        resolve({
+          ok: true,
+          json: () => {
+            return { ok: true }
+          }
+        })
+      })
+      return p
+    })
   })
 
   afterEach(() => jest.clearAllMocks())
@@ -44,13 +55,13 @@ describe('A <Fetch>', () => {
   it('renders & calls function children correctly', () => {
     const component = TestRenderer.create(
       <Fetch url="https://api.github.com/users/octocat">
-        {() => fn() || null} 
+        {() => fn() || null}
       </Fetch>,
     )
 
     const instance = component.root
     instance.props.children()
-    
+
     expect(fn).toHaveBeenCalled()
   })
 

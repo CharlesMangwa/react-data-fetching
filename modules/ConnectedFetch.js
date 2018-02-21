@@ -10,8 +10,8 @@ const createConnectedFetch = (): Class<*> => {
   class ConnectedFetch extends Component<ProviderProps> {
     rdfApi: string = this.props.api
     rdfHeaders: ?Object = this.props.headers
-    rdfStore: ?Store = this.props.store
-      ? this.context.store && this.context.store.getState()
+    rdfStore: ?Store = this.context && this.context.store
+      ? this.context.store.getState()
       : this.props.store
 
     static defaultProps = {

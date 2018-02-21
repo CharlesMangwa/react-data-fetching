@@ -11,6 +11,17 @@ describe('A <ConnectedFetch>', () => {
   beforeEach(() => {
     fn = jest.fn()
     renderer = new ShallowRenderer()
+    global.fetch = jest.fn().mockImplementation(() => {
+      const p = new Promise((resolve, reject) => {
+        resolve({
+          ok: true,
+          json: () => {
+            return { ok: true }
+          }
+        })
+      })
+      return p
+    })
   })
 
   afterEach(() => jest.clearAllMocks())
@@ -32,31 +43,33 @@ describe('A <ConnectedFetch>', () => {
     expect(tree).toMatchSnapshot()
   })
   
-  // it('propagates `api` & constructs URL correctly', () => {
-  //   let receivedUrl
-  //   const expectedContext = {
-  //     rdfApi: 'https://api.nyan.com',
-  //   }
-  //   const expectedUrl = 'https://api.nyan.com/cats/meowssages'
+  it('constructs URL correctly through `api`', () => {
+    const expectedContext = {
+      rdfApi: 'https://api.nyan.com',
+    }
+    const expectedUrl = 'https://api.nyan.com/cats/meowssages'
 
-  //   const wrapper = getElementWithContent(
-  //     expectedContext,
-  //     <Fetch
-  //       resultOnly
-  //       path="/cats/meowssages"
-  //       onError={data => receivedUrl = data.url || null}
-  //       render={() => null}
-  //     />,
-  //   )
+    const wrapper = getElementWithContent(
+      expectedContext,
+      <Fetch
+        resultOnly
+        path="/cats/meowssages"
+        render={() => null}
+      />,
+    )
 
-  //   const component = TestRenderer.create(
-  //     <ConnectedFetch api="https://api.nyan.com">
-  //       {wrapper}
-  //     </ConnectedFetch>,
-  //   )
+    const component = TestRenderer.create(
+      <ConnectedFetch api="https://api.nyan.com">
+        {wrapper}
+      </ConnectedFetch>,
+    )
 
-  //   expect(receivedUrl).toEqual(expectedUrl)
-  // })
+    const instance = component.getInstance()
+    const children = component.root.props.children
+    const receivedUrl = instance.rdfApi + children.props.path
+
+    expect(receivedUrl).toEqual(expectedUrl)
+  })
 
   it('propagates `store` correctly', () => {
     let receivedData

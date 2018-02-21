@@ -155,7 +155,21 @@ class Fetch extends Component<Props> {
           isOK: false,
           store: context.rdfStore,
         })
+        if (process.env.NODE_ENV !== 'production')
+          invariant(!error, `Route "${String(route)}" resolved with: %s`, error)
       }
+    }
+  }
+
+  _handleData = (result: ReturnedData): void => {
+    if (!this._isUnmounted) {
+      this._isLoaded = true
+      if (!result.error) {
+        this.props.resultOnly
+          ? this._data = result.data
+          : this._data = result
+      }
+      this._returnData(result)
     }
   }
 
@@ -171,18 +185,6 @@ class Fetch extends Component<Props> {
         : this.props.onError(result)
     }
     if (!this._isUnmounted) this.forceUpdate()
-  }
-
-  _handleData = (result: ReturnedData): void => {
-    if (!this._isUnmounted) {
-      this._isLoaded = true
-      if (!result.error) {
-        this.props.resultOnly
-          ? this._data = result.data
-          : this._data = result
-      }
-      this._returnData(result)
-    }
   }
 
   _validateProps = (props: Props, context: Context): void => {
