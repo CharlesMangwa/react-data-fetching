@@ -48,7 +48,10 @@
   </a>
 </div>
 
-`react-data-fetcher` lets you use a single component to handle any API call without hassle, using JavaScript's Fetch API. It also helps you take care of loading states, errors handling, data saving, etc. Fetching data while letting the user know what's going on have never been that easy.
+# 
+<br />
+
+Using JavaScript's Fetch API, `react-data-fetcher` lets you use a single component to handle any API call without hassle. It also helps you take care of loading states, errors handling, data saving, etc. Fetching data while letting the user know what's going on have never been that easy.
 
 `react-data-fetcher` has been built from the ground up with universal apps in mind: you can use it with any app based on React - meaning it works with React (web), React Native, ReactVR and even Preact!
 
