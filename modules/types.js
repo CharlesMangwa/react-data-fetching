@@ -7,6 +7,7 @@ export type Context = {
   rdfApi: string,
   rdfHeaders: Object,
   rdfStore: Object,
+  rdfTimeout: number,
 }
 
 export type Method =
@@ -25,51 +26,72 @@ export type DefaultProps = {
   params: Object,
 }
 
+type Progress = {
+  bubbles: boolean,
+  cancelable: boolean,
+  lengthComputable: boolean,
+  loaded: number,
+  target: EventTarget,
+  total: number,
+  type: string,
+}
+
 export type Props = {
   body?: Object,
-  children?: (?Object) => React$Element<any>,
+  children?: (?Object) => React$Element<*>,
   headers?: Object,
-  loader?: () => React$Element<any>,
+  loader?: (void) => React$Element<*>,
   onError?: (?Object) => void,
-  onLoad?: () => void,
+  onLoad?: (void) => void,
+  onProgress?: (Progress) => void,
   onSuccess?: (?Object) => void,
+  onTimeout?: (void) => void,
   method: Method,
   params?: Object,
   path: string,
   refetch?: boolean,
-  render?: (?Object) => React$Element<any>,
+  render?: (?Object) => React$Element<*>,
   resultOnly?: boolean,
+  timeout?: number,
   url?: string,
 }
 
 export type ReturnedData = {
   data?: Object,
   error?: Object,
+  headers?: string,
   isOK?: boolean,
-  response?: Object,
+  response?: *,
+  request?: XMLHttpRequest,
+  responseType?: string,
   status?: number,
+  statusText?: string,
   store?: Object,
 }
 
 export type RequestToApi = {
-  url: string,
-  method: Method,
   body?: Object,
   headers?: Object,
+  method: Method,
+  onProgress?: (Progress) => void,
+  onTimeout?: () => void,
   params?: Object,
+  url: string,
+  timeout?: number,
 }
 
 export type Store = {
-  subscribe: Function,
-  dispatch: Function,
+  subscribe: () => void,
+  dispatch: () => void,
   getState: () => Object,
 }
 
 export type ProviderProps = {
   api: string,
-  children: React$Element<any>,
+  children: React$Element<*>,
   headers?: Object,
   store?: Store,
+  timeout?: number,
 }
 
 // PROPTYPES

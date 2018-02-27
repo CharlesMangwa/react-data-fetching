@@ -1,45 +1,54 @@
 import requestToApi from '../requestToApi'
 
 describe('requestToApi', () => {
-  beforeAll(() => {
-    global.fetch = jest.fn().mockImplementation(() => {
-      const p = new Promise((resolve, reject) => {
-        resolve({
-          ok: true,
-          userName: 'Octocat',
-          json: () => {
-            return { userName: 'Octocat' }
-          }
-        })
-      })
-      return p
+  const mockXHR = {
+    getAllResponseHeaders: jest.fn(),
+    onload: jest.fn(),
+    open: jest.fn(),
+    onreadystatechange: jest.fn(),
+    readyState: 4,
+    responseText: JSON.stringify([{ ok: true, username: 'Octocat' }]),
+    send: jest.fn(),
+    setRequestHeader: jest.fn(),
+  }
+  const oldXMLHttpRequest = XMLHttpRequest
+
+  beforeEach(() => {
+    window.XMLHttpRequest = jest.fn(() => mockXHR)
+  })
+
+  afterEach(() => { window.XMLHttpRequest = oldXMLHttpRequest })
+
+  it('fetches data correctly', () => {
+    expect.assertions(1)
+    const request = requestToApi({ url: 'https://api.github.com/users/4', method: 'GET' })
+    mockXHR.onreadystatechange()
+    request.then((result) => {
+      const response = result.data[0]
+      expect(response.username).toEqual('Octocat')
     })
   })
 
-  it('fetches data correctly', async () => {
+  it('performs correctly with FORM_DATA method', () => {
     expect.assertions(1)
-    const request = await requestToApi({ url: 'https://api.github.com/users/4', method: 'GET' })
-    const response = request.result
-    expect(response.userName).toEqual('Octocat')
-  })
-
-  it('performs correctly with FORM_DATA method', async () => {
-    expect.assertions(1)
-    const request = await requestToApi({
+    const request = requestToApi({
       url: 'https://api.github.com/users',
       method: 'FORM_DATA',
       body: {
         userName: 'Charles'
       }
     })
-    const response = request.isOK
-    expect(response).toBeTruthy()
+    mockXHR.onreadystatechange()
+    request.then((result) => {
+      const response = result.data[0]
+      expect(response.ok).toBeTruthy()
+    })
   })
 
 
-  it('performs correctly with GET parameters', async () => {
+  it('performs correctly with GET parameters', () => {
     expect.assertions(1)
-    const request = await requestToApi({
+    const request = requestToApi({
       url: 'https://api.github.com/users',
       method: 'GET',
       params: {
@@ -47,7 +56,10 @@ describe('requestToApi', () => {
         limit: 20
       }
     })
-    const response = request.isOK
-    expect(response).toBeTruthy()
+    mockXHR.onreadystatechange()
+    request.then((result) => {
+      const response = result.data[0]
+      expect(response.ok).toBeTruthy()
+    })
   })
 })

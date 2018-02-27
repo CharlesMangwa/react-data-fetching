@@ -26,17 +26,29 @@ describe('A <Fetch>', () => {
 
   afterEach(() => jest.clearAllMocks())
 
-  it('throws an invariant when it is not rendered in the context of a <ConnectedFetch>', () => {
+  it('throws when it is not rendered in the context of a <ConnectedFetch>', () => {
     expect(() =>
       renderer.render(<Fetch path="/users/octocat">{() => null}</Fetch>),
     ).toThrow()
   })
 
-  it('throws an invariant when no url nor path is passed', () => {
+  it('throws when no url nor path is passed', () => {
     expect(() => renderer.render(<Fetch>{() => null}</Fetch>)).toThrow()
   })
 
-  it('throws an invariant when no children, onSuccess, render prop is passed', () => {
+  it('throws when onTimeout is passed, but no timeout', () => {
+    expect(() =>
+      renderer.render(
+        <Fetch
+          url="https://api.github.com/users/octocat"
+          onTimeout={() => fn()}
+        >
+          {() => null}
+        </Fetch>),
+    ).toThrow()
+  })
+
+  it('throws when no children, onSuccess, render prop is passed', () => {
     expect(() =>
       renderer.render(<Fetch url="https://api.github.com/users/octocat" />),
     ).toThrow()

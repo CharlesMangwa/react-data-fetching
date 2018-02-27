@@ -50,7 +50,7 @@
 
 # 
 
-Using JavaScript's Fetch API, `react-data-fetcher` lets you use a single component to handle any API call without hassle. It also helps you take care of loading states, errors handling, data saving, etc. Fetching data while letting the user know what's going on have never been that easy.
+Using JavaScript's [Fetch API](https://github.github.io/fetch/), `react-data-fetcher` lets you use a single component to handle any REST API call without hassle. It also helps you take care of loading states, errors handling, data saving, etc. Fetching data while letting the user know what's going on have never been that easy.
 
 `react-data-fetcher` has been built from the ground up with universal apps in mind: you can use it with any app based on React - meaning it works with React (web), React Native, ReactVR and even Preact!
 
@@ -81,7 +81,7 @@ The UMD build is also available on [unpkg](https://unpkg.com):
 
 You can find the library on `window.ReactDataFetcher`.
 
-# Usage
+## Usage
 
 The following illustrates the simplest way to use `react-data-fetcher`:
 
@@ -109,14 +109,17 @@ export default class App extends Component {
 
 Through `react-data-fetcher`, you have access to `<Fetch>`, `<ConnectedFetch>` and `requestToApi()`. To have an in-depth explanation about how to use them, how they work and even more, head to this post: [Introducing 🎣 React Data Fetcher](https://medium.com/p/2140a1d36cc8/).
 
-# Todo
+## Todo
 
-- [ ] Implement React 16.3.0 new context API & lifecycles  ⚛️
+Want to submit a PR but don't know where to start? Here is a list of features you could consider!
+
+- [ ] React 16.3.0 new context API & lifecycles  ⚛️
 - [ ] Increase code coverage 🤓
 - [ ] Ability to make several calls at once ⛓
-- [ ] Implement caching system 📥
+- [ ] Caching system 📥
+- [ ] GraphQL support ✨ 
 - [ ] What else?
 
-# About
+## About
 
 `react-data-fetcher` is actually developed and maintained by your truly, [@Charles_Mangwa](https://twitter.com/Charles_Mangwa). Feel free to contact me if you want to contribute to the project!

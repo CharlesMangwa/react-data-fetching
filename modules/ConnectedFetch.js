@@ -13,11 +13,13 @@ const createConnectedFetch = (): Class<*> => {
     rdfStore: ?Store = this.context && this.context.store
       ? this.context.store.getState()
       : this.props.store
+    rdfTimeout: ?number = this.props.timeout
 
     static defaultProps = {
       api: undefined,
       headers: {},
       store: undefined,
+      timeout: undefined,
     }
 
     static propTypes = {
@@ -25,6 +27,7 @@ const createConnectedFetch = (): Class<*> => {
       headers: PropTypes.object,
       children: PropTypes.element.isRequired,
       store: storeShape,
+      timeout: PropTypes.number,
     }
 
     static contextTypes = {
@@ -35,6 +38,7 @@ const createConnectedFetch = (): Class<*> => {
       rdfApi: PropTypes.string,
       rdfHeaders: PropTypes.object,
       rdfStore: PropTypes.object,
+      rdfTimeout: PropTypes.number,
     }
 
     getChildContext() {
@@ -42,6 +46,7 @@ const createConnectedFetch = (): Class<*> => {
         rdfApi: this.rdfApi || '',
         rdfHeaders: this.rdfHeaders,
         rdfStore: this.rdfStore,
+        rdfTimeout: this.rdfTimeout,
       }
     }
 
@@ -67,6 +72,10 @@ const createConnectedFetch = (): Class<*> => {
       invariant(
         this.rdfStore === nextProps.store,
         '<ConnectedFetch> does not support changing `store` on the fly.',
+      )
+      invariant(
+        this.rdfTimeout === nextProps.timeout,
+        '<ConnectedFetch> does not support changing `timeout` on the fly.',
       )
     }
   }

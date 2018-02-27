@@ -25,19 +25,23 @@ class Fetch extends Component<Props> {
     loader: PropTypes.func,
     onError: PropTypes.func,
     onLoad: PropTypes.func,
+    onProgress: PropTypes.func,
     onSuccess: PropTypes.func,
+    onTimeout: PropTypes.func,
     params: PropTypes.object,
     path: PropTypes.string,
     refetch: PropTypes.bool,
     render: PropTypes.func,
     resultOnly: PropTypes.bool,
     url: PropTypes.string,
+    timeout: PropTypes.number,
   }
 
   static contextTypes = {
     rdfApi: PropTypes.string,
     rdfHeaders: PropTypes.object,
     rdfStore: PropTypes.object,
+    rdfTimeout: PropTypes.number,
   }
 
   static defaultProps = {
@@ -47,13 +51,16 @@ class Fetch extends Component<Props> {
     method: 'GET',
     onError: undefined,
     onLoad: undefined,
+    onProgress: undefined,
     onSuccess: undefined,
+    onTimeout: undefined,
     params: {},
     path: undefined,
     refetch: false,
     render: undefined,
     resultOnly: false,
     url: undefined,
+    timeout: -1,
   }
 
   componentWillMount() {
@@ -113,35 +120,49 @@ class Fetch extends Component<Props> {
   }
 
   _fetchData = async (props: Props, context: Context): Promise<*> => {
-    const { body, headers, method, params, path, url } = props
+    const {
+      body,
+      headers,
+      method,
+      onProgress,
+      onTimeout,
+      params,
+      path,
+      url,
+      timeout,
+    } = props
     let route: ?string
+    let timeoutValue = 0
 
-    if (path)
-      route = `${context.rdfApi || ''}${path}`
+    if (path) route = `${context.rdfApi || ''}${path}`
     else route = url
+
+    if (context.rdfTimeout && timeout === -1)
+      timeoutValue = context.rdfTimeout
+    else if (!context.rdfTimeout && timeout)
+      timeoutValue = Math.max(0, timeout)
+    else if (context.rdfTimeout && timeout) {
+      timeoutValue = timeout === -1
+        ? context.rdfTimeout
+        : timeout
+    }
 
     try {
       const apiResponse = await requestToApi({
         url: route || '',
-        method,
         body: { ...body },
         headers: { ...context.rdfHeaders, ...headers },
+        method,
+        onTimeout,
+        onProgress,
         params: { ...params },
+        timeout: timeoutValue,
       })
       if (!this._isUnmounted) {
-        apiResponse.isOK
-          ? this._handleData({
-            data: apiResponse.result,
-            isOK: apiResponse.isOK,
-            response: apiResponse.response,
-            status: apiResponse.status,
-            store: context.rdfStore,
-          })
-          : this._handleData({
-            error: apiResponse,
-            isOK: apiResponse.isOK,
-            store: context.rdfStore,
-          })
+        this._handleData({
+          ...apiResponse,
+          store: context.rdfStore,
+        })
       }
     }
     catch (error) {
@@ -166,8 +187,8 @@ class Fetch extends Component<Props> {
       this._isLoaded = true
       if (!result.error) {
         this.props.resultOnly
-          ? this._data = result.data
-          : this._data = result
+          ? (this._data = result.data)
+          : (this._data = result)
       }
       this._returnData(result)
     }
@@ -198,6 +219,13 @@ class Fetch extends Component<Props> {
         props.path && context.rdfApi,
         'You must implement <ConnectedFetch> at the route of your ' +
           'app and provide an `api` in order to use `path`',
+      )
+    }
+
+    if (props.onTimeout) {
+      invariant(
+        props.timeout !== -1 || context.rdfTimeout,
+        'You must provide a `timeout` in ms to <Fetch> or <ConnectedFetch>',
       )
     }
 
