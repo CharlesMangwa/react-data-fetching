@@ -9,6 +9,7 @@ describe('requestToApi', () => {
     readyState: 4,
     responseText: JSON.stringify([{ ok: true, username: 'Octocat' }]),
     send: jest.fn(),
+    status: 200,
     setRequestHeader: jest.fn(),
   }
   const oldXMLHttpRequest = XMLHttpRequest
