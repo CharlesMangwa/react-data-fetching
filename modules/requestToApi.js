@@ -9,7 +9,7 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
     headers,
     method,
     onProgress = () => null,
-    onTimeout = () => null,
+    onTimeout,
     params,
     url,
     timeout = 0,
@@ -21,15 +21,6 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
   }
   const formData = new FormData()
   let route = url
-
-  const setHeaders = (request: XMLHttpRequest): void => {
-    Object.entries(defaultHeaders).map(defaultHeader =>
-      request.setRequestHeader(defaultHeader[0], String(defaultHeader[1])))
-    if (headers && Object.keys(headers).length > 0) {
-      Object.entries(headers).map(header =>
-        request.setRequestHeader(header[0], String(header[1])))
-    }
-  }
 
   const returnData = async (
     request: XMLHttpRequest,
@@ -47,18 +38,33 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
     }
   }
 
-  if (params && Object.keys(params).length > 0) {
-    Object.entries(params).map((param, index) => (
-      index === 0
-        ? (route = `${route}?${param[0]}=${String(param[1])}`)
-        : (route = `${route}&${param[0]}=${String(param[1])}`)
-    ))
+  const handleTimeout = (request: XMLHttpRequest, reject: Function): void => {
+    request.abort()
+    if (onTimeout) onTimeout()
+    reject(`Your request took more than ${timeout}ms to resolve.`)
+  }
+
+  const setHeaders = (request: XMLHttpRequest): void => {
+    Object.entries(defaultHeaders).map(defaultHeader =>
+      request.setRequestHeader(defaultHeader[0], String(defaultHeader[1])))
+    if (headers && Object.keys(headers).length > 0) {
+      Object.entries(headers).map(header =>
+        request.setRequestHeader(header[0], String(header[1])))
+    }
   }
 
   if (method === 'FORM_DATA' && Object.entries(body).length > 0) {
     Object.entries(body).map(
       // $FlowFixMe
       entry => formData.append(entry[0], entry[1]))
+  }
+
+  if (params && Object.keys(params).length > 0) {
+    Object.entries(params).map((param, index) => (
+      index === 0
+        ? (route = `${route}?${param[0]}=${String(param[1])}`)
+        : (route = `${route}&${param[0]}=${String(param[1])}`)
+    ))
   }
 
   return new Promise((resolve, reject) => {
@@ -68,26 +74,23 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
       request.withCredentials = true
 
       if (request.upload) {
-        request.upload.onerror = () => reject()
+        request.upload.onerror = e => reject(e)
+        request.upload.onload = () => returnData(request, resolve, true)
         request.upload.onprogress = onProgress
-        request.upload.ontimeout = onTimeout
-        request.upload.onload = (): Promise<void> =>
-          returnData(request, resolve, true)
+        request.upload.ontimeout = () => handleTimeout(request, reject)
       }
 
-      request.onerror = () => reject()
+      request.onerror = e => reject(e)
       request.onprogress = onProgress
-      request.ontimeout = onTimeout
-      request.onreadystatechange = async () => returnData(request, resolve)
-      request.onload = (): Promise<void> =>
-        returnData(request, resolve, true)
+      request.onreadystatechange = () => returnData(request, resolve)
+      request.ontimeout = () => handleTimeout(request, reject)
 
       request.open(method === 'FORM_DATA' ? 'POST' : method, route)
       setHeaders(request)
       request.send(
         method === 'FORM_DATA'
           ? formData
-          : method === 'GET'
+          : method === 'GET' || method === 'DELETE'
             ? null
             : JSON.stringify({ ...body }))
     }
