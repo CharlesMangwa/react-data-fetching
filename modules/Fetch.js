@@ -40,6 +40,7 @@ class Fetch extends Component<Props> {
   static contextTypes = {
     rdfApi: PropTypes.string,
     rdfHeaders: PropTypes.object,
+    rdfLoader: PropTypes.func,
     rdfStore: PropTypes.object,
     rdfTimeout: PropTypes.number,
   }
@@ -104,7 +105,7 @@ class Fetch extends Component<Props> {
     this._isUnmounted = true
   }
 
-  shouldComponentUpdate = (nextProps: Props): boolean => {
+  shouldComponentUpdate(nextProps: Props): boolean {
     if (this.props.children !== nextProps.children) return true
     if (this.props.loader !== nextProps.loader) return true
     if (this.props.onError !== nextProps.onError) return true
@@ -199,6 +200,16 @@ class Fetch extends Component<Props> {
     }
   }
 
+  _renderLoader = (): ?React$Element<*> => {
+    if (this.context.rdfLoader && !this.props.loader)
+      return this.context.rdfLoader()
+    else if (!this.context.rdfLoader && this.props.loader)
+      return this.props.loader()
+    else if (this.context.rdfLoader && this.props.loader)
+      return this.props.loader()
+    return null
+  }
+
   _returnData = (result: ReturnedData): void => {
     if (this.props.onSuccess) {
       this.props.resultOnly
@@ -242,8 +253,8 @@ class Fetch extends Component<Props> {
   }
 
   render() {
-    if (!this._isLoaded && !this._isUnmounted && this.props.loader)
-      return this.props.loader()
+    if (!this._isLoaded && !this._isUnmounted)
+      return this._renderLoader()
     if (this._isLoaded && !this._isUnmounted) {
       if (this.props.render) {
         return this.props.resultOnly

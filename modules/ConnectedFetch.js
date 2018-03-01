@@ -10,6 +10,7 @@ const createConnectedFetch = (): Class<*> => {
   class ConnectedFetch extends Component<ProviderProps> {
     rdfApi: string = this.props.api
     rdfHeaders: ?Object = this.props.headers
+    rdfLoader: ?(void) => React$Element<*> = this.props.loader
     rdfStore: ?Store = this.context && this.context.store
       ? this.context.store.getState()
       : this.props.store
@@ -18,14 +19,16 @@ const createConnectedFetch = (): Class<*> => {
     static defaultProps = {
       api: undefined,
       headers: {},
+      loader: undefined,
       store: undefined,
       timeout: undefined,
     }
 
     static propTypes = {
       api: PropTypes.string,
-      headers: PropTypes.object,
       children: PropTypes.element.isRequired,
+      headers: PropTypes.object,
+      loader: PropTypes.func,
       store: storeShape,
       timeout: PropTypes.number,
     }
@@ -37,6 +40,7 @@ const createConnectedFetch = (): Class<*> => {
     static childContextTypes = {
       rdfApi: PropTypes.string,
       rdfHeaders: PropTypes.object,
+      rdfLoader: PropTypes.func,
       rdfStore: PropTypes.object,
       rdfTimeout: PropTypes.number,
     }
@@ -45,6 +49,7 @@ const createConnectedFetch = (): Class<*> => {
       return {
         rdfApi: this.rdfApi || '',
         rdfHeaders: this.rdfHeaders,
+        rdfLoader: this.rdfLoader,
         rdfStore: this.rdfStore,
         rdfTimeout: this.rdfTimeout,
       }
@@ -68,6 +73,10 @@ const createConnectedFetch = (): Class<*> => {
       invariant(
         this.rdfHeaders === nextProps.headers,
         '<ConnectedFetch> does not support changing `headers` on the fly.',
+      )
+      invariant(
+        this.rdfLoader === nextProps.loader,
+        '<ConnectedFetch> does not support changing `loader` on the fly.',
       )
       invariant(
         this.rdfStore === nextProps.store,

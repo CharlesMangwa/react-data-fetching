@@ -95,6 +95,7 @@ export type ProviderProps = {
   api: string,
   children: React$Element<*>,
   headers?: Object,
+  loader?: (void) => React$Element<*>,
   store?: Store,
   timeout?: number,
 }

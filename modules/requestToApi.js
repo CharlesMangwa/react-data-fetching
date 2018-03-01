@@ -28,7 +28,13 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
     reject: Function,
   ): Promise<void> => {
     reject({
-      response: request.response && await JSON.parse(request.response),
+      response: request.response
+        ? typeof request.response === 'string'
+          ? request.response
+          : typeof request.response === 'object'
+            ? await JSON.parse(request.response)
+            : {}
+        : {},
       request,
     })
   }
