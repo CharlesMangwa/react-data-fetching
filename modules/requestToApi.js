@@ -22,13 +22,15 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
   const formData = new FormData()
   let route = url
 
-  const handleError = (
+  const handleError = async (
     error: Event | XMLHttpRequest,
     request: XMLHttpRequest,
     reject: Function,
-  ): void => {
-    request.abort()
-    reject(error)
+  ): Promise<void> => {
+    reject({
+      response: request.response && await JSON.parse(request.response),
+      request,
+    })
   }
 
   const handleTimeout = (request: XMLHttpRequest, reject: Function): void => {
@@ -47,7 +49,9 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
       const isOK = request.status >= 200 && request.status <= 299
       if (isOK) {
         const response = {
-          data: await JSON.parse(request.responseText),
+          data: request.responseText
+            ? await JSON.parse(request.responseText)
+            : undefined,
           isOK,
           request,
           status: request.status,
@@ -109,8 +113,8 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
             : JSON.stringify({ ...body }),
       )
     }
-    catch (errors) {
-      reject(errors)
+    catch (request) {
+      handleError(request, request, reject)
     }
   })
 }

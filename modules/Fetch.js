@@ -176,8 +176,13 @@ class Fetch extends Component<Props> {
           isOK: false,
           store: context.rdfStore,
         })
-        if (process.env.NODE_ENV !== 'production')
-          invariant(!error, `Route "${String(route)}" resolved with: %s`, error)
+        if (process.env.NODE_ENV !== 'production') {
+          invariant(
+            !error,
+            `<Fetch> tried to call the route "${String(route)}" ` +
+              'but resolved with the following error: %s\n',
+            JSON.stringify(error.response || error.request._response))
+        }
       }
     }
   }

@@ -10,6 +10,15 @@ export type Context = {
   rdfTimeout: number,
 }
 
+type Error = {
+  content: {
+    request: XMLHttpRequest,
+    response: Object,
+  },
+  message: string,
+  url?: string,
+}
+
 export type Method =
   'DELETE'
   | 'FORM_DATA'
@@ -58,7 +67,7 @@ export type Props = {
 
 export type ReturnedData = {
   data?: Object,
-  error?: Object,
+  error?: Error,
   isOK?: boolean,
   request?: XMLHttpRequest,
   status?: number,
