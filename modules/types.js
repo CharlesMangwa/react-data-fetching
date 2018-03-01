@@ -59,13 +59,9 @@ export type Props = {
 export type ReturnedData = {
   data?: Object,
   error?: Object,
-  headers?: string,
   isOK?: boolean,
-  response?: *,
   request?: XMLHttpRequest,
-  responseType?: string,
   status?: number,
-  statusText?: string,
   store?: Object,
 }
 

@@ -39,13 +39,9 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
     if (request.readyState === 4 || isUpload) {
       const response = {
         data: await JSON.parse(request.responseText),
-        headers: await request.getAllResponseHeaders(),
         isOK: request.status >= 200 && request.status <= 299,
-        response: request.response,
         request,
         status: request.status,
-        statusText: request.statusText,
-        responseType: request.responseType,
       }
       resolve(response)
     }
@@ -83,11 +79,17 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
       request.onprogress = onProgress
       request.ontimeout = onTimeout
       request.onreadystatechange = async () => returnData(request, resolve)
+      request.onload = (): Promise<void> =>
+        returnData(request, resolve, true)
 
       request.open(method === 'FORM_DATA' ? 'POST' : method, route)
       setHeaders(request)
       request.send(
-        method === 'FORM_DATA' ? formData : JSON.stringify({ ...body }))
+        method === 'FORM_DATA'
+          ? formData
+          : method === 'GET'
+            ? null
+            : JSON.stringify({ ...body }))
     }
     catch (errors) {
       reject(errors)
