@@ -2,7 +2,7 @@
   <a href="https://github.com/CharlesMangwa/react-data-fetcher" target="\_parent">
     <img 
       alt="React Data Fetcher logo"
-      src="https://image.ibb.co/f6o7G6/RDF.png"
+      src="https://raw.githubusercontent.com/CharlesMangwa/react-data-fetcher/master/docs/images/logo.png"
       style="width:450px;"
     />
   </a>
@@ -11,7 +11,7 @@
 <br />
 
 <div align="center">
-  <strong>A component-driven way to 🎣 fetch data in any React-based app</strong>
+  <strong>A component-driven way to fetch data in any React app 🎣 </strong>
   <br />
   <br />
   <a href="https://circleci.com/gh/CharlesMangwa/react-data-fetcher">
@@ -50,9 +50,9 @@
 
 # 
 
-Using JavaScript's [Fetch API](https://github.github.io/fetch/), `react-data-fetcher` lets you use a single component to handle any REST API call without hassle. It also helps you take care of loading states, errors handling, data saving, etc. Fetching data while letting the user know what's going on have never been that easy.
+`react-data-fetcher` provides a very intuitive way to perform any REST API call without hassle, through a single React component. It also helps you take care of timeouts, loading states, errors handling, data saving, uploading/downloading progress, etc. Fetching data while letting the user know what's going on have never been that easy!
 
-`react-data-fetcher` has been built from the ground up with universal apps in mind: you can use it with any app based on React - meaning it works with React (web), React Native, ReactVR and even Preact!
+The package is really lightweight (~3.6 kB gzipped) and has been built from the ground up with universal apps in mind: you can use it wherever React is rendering - meaning it works seamlessly with React (web), React Native, ReactVR and even Preact apps!
 
 
 ## Installation
@@ -63,7 +63,7 @@ Using [Yarn](https://yarnpkg.com/):
 $ yarn add react-data-fetcher
 ```
 
-Then, use as you would anything else:
+Then, use it as you would with anything else:
 
 ```js
 // using ES6 modules
@@ -107,19 +107,25 @@ export default class App extends Component {
 }
 ```
 
-Through `react-data-fetcher`, you have access to `<Fetch>`, `<ConnectedFetch>` and `requestToApi()`. To have an in-depth explanation about how to use them, how they work and even more, head to this post: [Introducing 🎣 React Data Fetcher](https://medium.com/p/2140a1d36cc8/).
+The package gives  access to `<Fetch>`, `<ConnectedFetch>` and `requestToApi()`. To have an in-depth explanation about how to use them, how they work and even more, head to this post: [Introducing 🎣 React Data Fetcher](https://medium.com/p/2140a1d36cc8/).
+
+## Docs
+
+- [**`<Fetch>`**](https://github.com/CharlesMangwa/react-data-fetcher/blob/master/docs/Fetch.md) carries out all your network requests.
+- [**`<ConnectedFetch>`**](https://github.com/CharlesMangwa/react-data-fetcher/blob/master/docs/ConnectedFetch.md) allows you to share several parameters among every `<Fetch>` instance in your app.
+- [**`requestToApi()`**](https://github.com/CharlesMangwa/react-data-fetcher/blob/master/docs/requestToApi.md) lets you perform your request with a good old function.
 
 ## Todo
 
-Want to submit a PR but don't know where to start? Here is a list of features you could consider!
+Want to submit a PR but don't know where to start? Here is a list of features you could consider! This might change in the future as the API is far from being complete.
 
-- [ ] React 16.3.0 new context API & lifecycles  ⚛️
 - [ ] Increase code coverage 🤓
-- [ ] Ability to make several calls at once ⛓
-- [ ] Caching system 📥
-- [ ] GraphQL support ✨ 
+- [ ] Implement React 16.3.0 new context API & lifecycles ⚛️
+- [ ] Add the ability to make several calls at once / manage a queue ⛓
+- [ ] Implement a caching (and/or normalization) system 📥
+- [ ] Add GraphQL support ✨ 
 - [ ] What else?
 
 ## About
 
-`react-data-fetcher` is actually developed and maintained by your truly, [@Charles_Mangwa](https://twitter.com/Charles_Mangwa). Feel free to contact me if you want to contribute to the project!
+`react-data-fetcher` is currently developed and maintained by your truly, [@Charles_Mangwa](https://twitter.com/Charles_Mangwa). Feel free get in touch if you want to contribute!

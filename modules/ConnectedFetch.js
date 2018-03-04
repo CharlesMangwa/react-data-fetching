@@ -10,7 +10,7 @@ const createConnectedFetch = (): Class<*> => {
   class ConnectedFetch extends Component<ProviderProps> {
     rdfApi: string = this.props.api
     rdfHeaders: ?Object = this.props.headers
-    rdfLoader: ?(void) => React$Element<*> = this.props.loader
+    rdfLoader: ?React$Node = this.props.loader
     rdfStore: ?Store = this.context && this.context.store
       ? this.context.store.getState()
       : this.props.store
@@ -28,7 +28,7 @@ const createConnectedFetch = (): Class<*> => {
       api: PropTypes.string,
       children: PropTypes.element.isRequired,
       headers: PropTypes.object,
-      loader: PropTypes.func,
+      loader: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
       store: storeShape,
       timeout: PropTypes.number,
     }
@@ -40,7 +40,7 @@ const createConnectedFetch = (): Class<*> => {
     static childContextTypes = {
       rdfApi: PropTypes.string,
       rdfHeaders: PropTypes.object,
-      rdfLoader: PropTypes.func,
+      rdfLoader: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
       rdfStore: PropTypes.object,
       rdfTimeout: PropTypes.number,
     }

@@ -6,28 +6,31 @@ import PropTypes from 'prop-types'
 export type Context = {
   rdfApi: string,
   rdfHeaders: Object,
+  rdfLoader: React$Node,
   rdfStore: Object,
   rdfTimeout: number,
 }
 
+export type ErrorContent = {
+  request: XMLHttpRequest,
+  response: String | Object,
+}
+
 type Error = {
-  content: {
-    request: XMLHttpRequest,
-    response: Object,
-  },
-  message: string,
+  content: ErrorContent,
+  message: 'Something went wrong during the request',
   url?: string,
 }
 
 export type Method =
   'DELETE'
-  | 'FORM_DATA'
-  | 'GET'
-  | 'HEAD'
-  | 'PATCH'
-  | 'POST'
-  | 'PUT'
-  | 'TRACE'
+| 'FORM_DATA'
+| 'GET'
+| 'HEAD'
+| 'PATCH'
+| 'POST'
+| 'PUT'
+| 'TRACE'
 
 export type DefaultProps = {
   body: Object,
@@ -45,26 +48,6 @@ type Progress = {
   type: string,
 }
 
-export type Props = {
-  body?: Object,
-  children?: (?Object) => React$Element<*>,
-  headers?: Object,
-  loader?: (void) => React$Element<*>,
-  onError?: (?Object) => void,
-  onLoad?: (void) => void,
-  onProgress?: (Progress) => void,
-  onSuccess?: (?Object) => void,
-  onTimeout?: (void) => void,
-  method: Method,
-  params?: Object,
-  path: string,
-  refetch?: boolean,
-  render?: (?Object) => React$Element<*>,
-  resultOnly?: boolean,
-  timeout?: number,
-  url?: string,
-}
-
 export type ReturnedData = {
   data?: Object,
   error?: Error,
@@ -74,28 +57,49 @@ export type ReturnedData = {
   store?: Object,
 }
 
+export type Props = {
+  body?: Object,
+  children?: React$StatelessFunctionalComponent<?ReturnedData>,
+  component?: React$ComponentType<?ReturnedData>,
+  headers?: Object,
+  loader?: React$Node,
+  method: Method,
+  onError?: (?ReturnedData | Error) => void,
+  onFetch?: (?ReturnedData) => void,
+  onLoad?: Function,
+  onProgress?: (Progress) => void,
+  onTimeout?: Function,
+  params?: Object,
+  path?: string,
+  refetch?: any,
+  render?: React$StatelessFunctionalComponent<?ReturnedData>,
+  resultOnly?: boolean,
+  timeout?: number,
+  url?: string,
+}
+
 export type RequestToApi = {
   body?: Object,
   headers?: Object,
   method: Method,
   onProgress?: (Progress) => void,
-  onTimeout?: () => void,
+  onTimeout?: Function,
   params?: Object,
   url: string,
   timeout?: number,
 }
 
 export type Store = {
-  subscribe: () => void,
-  dispatch: () => void,
+  subscribe: Function,
+  dispatch: Function,
   getState: () => Object,
 }
 
 export type ProviderProps = {
   api: string,
-  children: React$Element<*>,
+  children: React$Node,
   headers?: Object,
-  loader?: (void) => React$Element<*>,
+  loader?: React$Node,
   store?: Store,
   timeout?: number,
 }

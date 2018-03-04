@@ -48,7 +48,7 @@ describe('A <Fetch>', () => {
     ).toThrow()
   })
 
-  it('throws when no children, onSuccess, render prop is passed', () => {
+  it('throws when no children, component, onFetch, render prop is passed', () => {
     expect(() =>
       renderer.render(<Fetch url="https://api.github.com/users/octocat" />),
     ).toThrow()
@@ -140,7 +140,7 @@ describe('A <Fetch>', () => {
       <Fetch
         resultOnly
         path="redux"
-        onSuccess={data => (receivedData = data || null)}
+        onFetch={data => (receivedData = data || null)}
       />,
     )
 

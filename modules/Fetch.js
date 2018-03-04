@@ -1,16 +1,19 @@
 /* @flow */
 
-import { Component } from 'react'
+import { Children, Component, createElement } from 'react'
 import PropTypes from 'prop-types'
 import invariant from 'invariant'
 
 import requestToApi from './requestToApi'
 import {
   type Context,
+  type ErrorContent,
   type Props,
   type ReturnedData,
   methodShape,
 } from './types'
+
+const isEmptyChildren = (children): boolean => Children.count(children) === 0
 
 class Fetch extends Component<Props> {
   _data: ?ReturnedData = undefined
@@ -21,16 +24,17 @@ class Fetch extends Component<Props> {
   static propTypes = {
     body: PropTypes.object,
     children: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
+    component: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
     method: methodShape,
-    loader: PropTypes.func,
+    loader: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
     onError: PropTypes.func,
+    onFetch: PropTypes.func,
     onLoad: PropTypes.func,
     onProgress: PropTypes.func,
-    onSuccess: PropTypes.func,
     onTimeout: PropTypes.func,
     params: PropTypes.object,
     path: PropTypes.string,
-    refetch: PropTypes.bool,
+    refetch: PropTypes.any,
     render: PropTypes.func,
     resultOnly: PropTypes.bool,
     url: PropTypes.string,
@@ -40,7 +44,7 @@ class Fetch extends Component<Props> {
   static contextTypes = {
     rdfApi: PropTypes.string,
     rdfHeaders: PropTypes.object,
-    rdfLoader: PropTypes.func,
+    rdfLoader: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
     rdfStore: PropTypes.object,
     rdfTimeout: PropTypes.number,
   }
@@ -48,12 +52,13 @@ class Fetch extends Component<Props> {
   static defaultProps = {
     body: {},
     children: undefined,
+    component: undefined,
     loader: undefined,
     method: 'GET',
     onError: undefined,
+    onFetch: undefined,
     onLoad: undefined,
     onProgress: undefined,
-    onSuccess: undefined,
     onTimeout: undefined,
     params: {},
     path: undefined,
@@ -64,7 +69,7 @@ class Fetch extends Component<Props> {
     timeout: -1,
   }
 
-  componentWillMount() {
+  componentWillMount(): void {
     this._validateProps(this.props, this.context)
     if (this.props.onLoad && !this._didCallOnLoad) {
       this._didCallOnLoad = true
@@ -72,7 +77,7 @@ class Fetch extends Component<Props> {
     }
   }
 
-  componentDidMount() {
+  componentDidMount(): void {
     if (this.props.path === 'redux') {
       this._handleData({
         data: this.context.rdfStore,
@@ -83,25 +88,29 @@ class Fetch extends Component<Props> {
   }
 
   componentWillReceiveProps(nextProps: Props, nextContext: Context) {
+    const { onLoad, path, refetch } = this.props
+
     this._validateProps(nextProps, nextContext)
-    if (this.props.onLoad && !this._didCallOnLoad) {
+
+    if (onLoad && !this._didCallOnLoad) {
       this._didCallOnLoad = true
-      this.props.onLoad()
+      onLoad()
     }
-    if (this.props.path === 'redux') {
+
+    if (path === 'redux') {
       this._handleData({
         data: this.context.rdfStore,
         isOK: true,
       })
     }
     else if (
-      nextProps.path !== this.props.path ||
-      nextProps.refetch !== this.props.refetch
+      nextProps.path !== path ||
+      nextProps.refetch !== refetch
     )
       this._fetchData(nextProps, nextContext)
   }
 
-  componentWillUnmount() {
+  componentWillUnmount(): void {
     this._isUnmounted = true
   }
 
@@ -109,8 +118,8 @@ class Fetch extends Component<Props> {
     if (this.props.children !== nextProps.children) return true
     if (this.props.loader !== nextProps.loader) return true
     if (this.props.onError !== nextProps.onError) return true
+    if (this.props.onFetch !== nextProps.onFetch) return true
     if (this.props.onLoad !== nextProps.onLoad) return true
-    if (this.props.onSuccess !== nextProps.onSuccess) return true
     if (this.props.path !== nextProps.path) return true
     if (this.props.params !== nextProps.params) return true
     if (this.props.refetch !== nextProps.refetch) return true
@@ -120,7 +129,7 @@ class Fetch extends Component<Props> {
     return false
   }
 
-  _fetchData = async (props: Props, context: Context): Promise<*> => {
+  _fetchData = async (props: Props, context: Context): Promise<void> => {
     const {
       body,
       headers,
@@ -133,7 +142,7 @@ class Fetch extends Component<Props> {
       timeout,
     } = props
     let route: ?string
-    let timeoutValue = 0
+    let timeoutValue: number = 0
 
     if (path) route = `${context.rdfApi || ''}${path}`
     else route = url
@@ -171,7 +180,7 @@ class Fetch extends Component<Props> {
         this._handleData({
           error: {
             content: error,
-            message: 'Something went wrong during the request 😲...',
+            message: 'Something went wrong during the request',
             url: route,
           },
           isOK: false,
@@ -181,8 +190,10 @@ class Fetch extends Component<Props> {
           invariant(
             !error,
             `<Fetch> tried to call the route "${String(route)}" ` +
+              `with "${String(method).toUpperCase()}" method ` +
               'but resolved with the following error: %s\n',
-            JSON.stringify(error.response || error.request._response))
+            this._printError(error),
+          )
         }
       }
     }
@@ -200,75 +211,116 @@ class Fetch extends Component<Props> {
     }
   }
 
-  _renderLoader = (): ?React$Element<*> => {
-    if (this.context.rdfLoader && !this.props.loader)
-      return this.context.rdfLoader()
-    else if (!this.context.rdfLoader && this.props.loader)
-      return this.props.loader()
-    else if (this.context.rdfLoader && this.props.loader)
-      return this.props.loader()
+  _printError = (error: ErrorContent): string => (
+    error.response && JSON.stringify(error.response).length
+      ? typeof error.response === 'string'
+        ? error.response
+        : typeof error.response === 'object'
+          ? JSON.stringify(error.response)
+          : `${error.response}. Sorry <Fetch> couldn't turned this into a readable string. `
+            + 'Check error.content.request to see what happened.'
+      : error.request._response
+        ? typeof error.request._response === 'string'
+          ? error.request._response
+          : typeof error.request._response === 'object'
+            ? JSON.stringify(error.request._response)
+            : `${String(error.request._response)}. Sorry <Fetch> couldn't turned this into a readable string. `
+              + 'Check error.content.request to see what happened.'
+        : " .Sorry <Fetch> couldn't turned this into a readable string. "
+            + 'Check error.content.request to see what happened.'
+  )
+
+  _renderLoader = (): React$Node => {
+    const { rdfLoader } = this.context
+    const { loader } = this.props
+
+    if (rdfLoader && !loader) {
+      return typeof rdfLoader === 'function'
+        ? rdfLoader() : rdfLoader
+    }
+    else if (!rdfLoader && loader) {
+      return typeof loader === 'function'
+        ? loader() : loader
+    }
+    else if (rdfLoader && loader) {
+      return typeof loader === 'function'
+        ? loader() : loader
+    }
+
     return null
   }
 
   _returnData = (result: ReturnedData): void => {
-    if (this.props.onSuccess) {
-      this.props.resultOnly
-        ? this.props.onSuccess(result && result.data)
-        : this.props.onSuccess(result)
-    }
-    if (result.error && this.props.onError) {
-      this.props.resultOnly
-        ? this.props.onError(result.error)
-        : this.props.onError(result)
-    }
+    const { onError, onFetch, resultOnly } = this.props
+
+    if (onFetch)
+      resultOnly ? onFetch(result && result.data) : onFetch(result)
+
+    if (result.error && onError)
+      resultOnly ? onError(result.error) : onError(result)
+
     if (!this._isUnmounted) this.forceUpdate()
   }
 
   _validateProps = (props: Props, context: Context): void => {
+    const { rdfApi, rdfTimeout } = context
+    const {
+      children,
+      component,
+      onTimeout,
+      onFetch,
+      path,
+      render,
+      timeout,
+      url,
+    } = props
+
     invariant(
-      props.path || props.url,
+      path || url,
       'You must provide a `url` or a `path` to <Fetch>',
     )
 
-    if (props.path) {
+    if (path) {
       invariant(
-        props.path && context.rdfApi,
-        'You must implement <ConnectedFetch> at the route of your ' +
-          'app and provide an `api` in order to use `path`',
+        path && rdfApi,
+        'You must implement <ConnectedFetch> at the route of your '
+          + 'app and provide an `api` in order to use `path`',
       )
     }
 
-    if (props.onTimeout) {
+    if (onTimeout) {
       invariant(
-        props.timeout !== -1 || context.rdfTimeout,
-        'You must provide a `timeout` in ms to <Fetch> or <ConnectedFetch>',
+        (typeof timeout === 'number' && timeout >= 0) ||
+        (typeof rdfTimeout === 'number' && rdfTimeout >= 0),
+        'You must provide a `timeout` number in ms to <Fetch> or <ConnectedFetch> '
+          + 'in order to use `onTimeout`',
       )
     }
 
     invariant(
-      props.children || props.render || props.onSuccess,
-      'You must provide at least one of the following ' +
-        'to <Fetch>: children, `onSuccess`, `render`',
+      children || component || render || onFetch,
+      'You must provide at least one of the following '
+        + 'to <Fetch>: children, `component`, `onFetch`, `render`',
     )
   }
 
-  render() {
+  render(): React$Node {
+    const { children, component, render } = this.props
+
     if (!this._isLoaded && !this._isUnmounted)
       return this._renderLoader()
+
     if (this._isLoaded && !this._isUnmounted) {
-      if (this.props.render) {
-        return this.props.resultOnly
-          ? this.props.render(this._data)
-          : this.props.render(this._data)
-      }
-      if (this.props.children) {
-        return typeof this.props.children === 'function'
-          ? this.props.resultOnly
-            ? this.props.children(this._data)
-            : this.props.children(this._data)
-          : this.props.children
-      }
+      if (component) return createElement(component, this._data)
+
+      if (render) return render(this._data)
+
+      if (typeof children === 'function') return children(this._data)
+
+      if (children && !isEmptyChildren(children))
+        return Children.only(children)
     }
+
     return null
   }
 }

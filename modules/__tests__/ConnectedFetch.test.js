@@ -85,7 +85,7 @@ describe('A <ConnectedFetch>', () => {
       expectedContext,
       <Fetch
         path="redux"
-        onSuccess={data => (receivedData = data || null)}
+        onFetch={data => (receivedData = data || null)}
       />,
     )
 
