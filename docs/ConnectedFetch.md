@@ -6,7 +6,7 @@ A provider which helps you share parameters among your `<Fetch>` instances.
 ```jsx
 import React from 'react'
 import { Provider } from 'react-redux'
-import { ConnectedRouter } from 'react-router-redux'
+import { ConnectedFetch } from 'react-data-fetcher'
 
 import Root from './app'
 import store from './store'

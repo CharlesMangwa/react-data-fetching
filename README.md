@@ -122,7 +122,7 @@ Want to submit a PR but don't know where to start? Here is a list of features yo
 - [ ] Increase code coverage 🤓
 - [ ] Implement React 16.3.0 new context API & lifecycles ⚛️
 - [ ] Add the ability to make several calls at once / manage a queue ⛓
-- [ ] Implement a caching (and/or normalization) system 📥
+- [ ] Implement a caching (and/or normalization) system (through React.Suspense?) 📥
 - [ ] Add GraphQL support ✨ 
 - [ ] What else?
 
