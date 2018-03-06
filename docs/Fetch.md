@@ -113,7 +113,7 @@ type Error = {
 <img 
   alt="React Data Fetcher error printing example"
   src="https://raw.githubusercontent.com/CharlesMangwa/react-data-fetcher/master/docs/images/error.png"
-  style="width:450px;"
+  width="450"
 />
 
 ### Method

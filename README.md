@@ -3,7 +3,7 @@
     <img 
       alt="React Data Fetcher logo"
       src="https://raw.githubusercontent.com/CharlesMangwa/react-data-fetcher/master/docs/images/logo.png"
-      style="width:450px;"
+      width="450"
     />
   </a>
 </div>

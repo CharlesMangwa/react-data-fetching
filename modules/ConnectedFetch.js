@@ -50,7 +50,7 @@ const createConnectedFetch = (): Class<*> => {
         rdfApi: this.rdfApi || '',
         rdfHeaders: this.rdfHeaders,
         rdfLoader: this.rdfLoader,
-        rdfStore: this.rdfStore,
+        rdfStore: this.props.store || this.rdfStore,
         rdfTimeout: this.rdfTimeout,
       }
     }
