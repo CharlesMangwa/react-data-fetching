@@ -6,7 +6,7 @@ A provider which helps you share parameters among your `<Fetch>` instances.
 ```jsx
 import React from 'react'
 import { Provider } from 'react-redux'
-import { ConnectedFetch } from 'react-data-fetcher'
+import { ConnectedFetch } from 'react-data-refetcher'
 
 import Root from './app'
 import store from './store'
@@ -35,15 +35,15 @@ export default App
 * **children**: `React$Node`, a mandatory prop used to render your app. Basically, you'll just have to wrap your whole app inside `<ConnectedFetch>` like in the example above.
 * **headers**?: `Object`, used to share headers which are common to all your requests. This could be useful if you have some authentication going on at some point, and need to send a token with your calls.
 * **loader**?: `React$Node`, a component (or a function returning one) render every time a `<Fetch>` is loading data. The typical use case for this prop would be when you have a common loader for your whole app. Instead of using `<Fetch>`'s `loader` prop, you'll just have to do it once here and that's it: you'll have the same beautiful spinner in your whole app!
-* **store**?: `Object`, containing a store you want to propagate inside your [`ReturnedData`](https://github.com/CharlesMangwa/react-data-fetcher/blob/master/docs/Fetch.md#returneddata). `store` can be used if you want to get access to more data in your component than what you get from your request. This could be either a value you explicitly passed or if you've implemented `<ConnectedFetch>` by wrapping it inside `<Provider>` from Redux: React Data Fetcher will automatically send your Redux's store inside `data.store` (see [`ReturnedData`](https://github.com/CharlesMangwa/react-data-fetcher/blob/master/docs/Fetch.md#returneddata) for more details). This means that you won't even have to precise `store={...}` as React Data Fetcher will know that `<ConnectedFetch>` is inside Redux's `<Provider>`, and will do the job for you!
+* **store**?: `Object`, containing a store you want to propagate inside your [`ReturnedData`](https://github.com/CharlesMangwa/react-data-refetcher/blob/master/docs/Fetch.md#returneddata). `store` can be used if you want to get access to more data in your component than what you get from your request. This could be either a value you explicitly passed or if you've implemented `<ConnectedFetch>` by wrapping it inside `<Provider>` from Redux: React Data Refetcher will automatically send your Redux's store inside `data.store` (see [`ReturnedData`](https://github.com/CharlesMangwa/react-data-refetcher/blob/master/docs/Fetch.md#returneddata) for more details). This means that you won't even have to precise `store={...}` as React Data Refetcher will know that `<ConnectedFetch>` is inside Redux's `<Provider>`, and will do the job for you!
 * **timeout**?: `number`, value in ms after which you'll want the library to abort any request you'll send from any `<Fetch>` in your app. It's defaulted to `0`, which means there is no timeout. By using this, all your requests will have a common timeout value you can handle in `<Fetch>` through `onTimeout` prop.
 
 ## Notes
 
 ###  Duplicated props
 
-You'll notice that `<ConnectedFetch>` and `<Fetch>` share a few props in common: `headers`, `loader`, `timeout`. You could ask then: "OK, but what if I use a `loader` in `<ConnectedFetch>`, but want a special one in a specific `<Fetch>` ?". Well it would be a very good question! **React Data Fetcher will always apply the prop coming from a `<Fetch>` over the same one coming from `<ConnectedFetch>`**. This allows you to share general parameters, but still have a fine-grained control on specific `<Fetch>` instances. The only exception is `headers` where the library will simply merge both `<ConnectedFetch>` and `<Fetch>` headers, so make sure to Don't Repeat Yourself™!
+You'll notice that `<ConnectedFetch>` and `<Fetch>` share a few props in common: `headers`, `loader`, `timeout`. You could ask then: "OK, but what if I use a `loader` in `<ConnectedFetch>`, but want a special one in a specific `<Fetch>` ?". Well it would be a very good question! **React Data Refetcher will always apply the prop coming from a `<Fetch>` over the same one coming from `<ConnectedFetch>`**. This allows you to share general parameters, but still have a fine-grained control on specific `<Fetch>` instances. The only exception is `headers` where the library will simply merge both `<ConnectedFetch>` and `<Fetch>` headers, so make sure to Don't Repeat Yourself™!
 
 ### Store propagation
 
-As seen above, *for now*, React Data Fetcher can share your Redux store all by itself. This is a feature which is nice to have, was possible to implement without spending too much time on it, but could possibly disappear/be modified in the (near?) future. However you will always be able to at least manually pass a variable you want to be share through `data.store`.
+As seen above, *for now*, React Data Refetcher can share your Redux store all by itself. This is a feature which is nice to have, was possible to implement without spending too much time on it, but could possibly disappear/be modified in the (near?) future. However you will always be able to at least manually pass a variable you want to be share through `data.store`.

@@ -55,4 +55,4 @@ type RequestToApi = {
 }
 ```
 
-See [`<Fetch>`'s doc](https://github.com/CharlesMangwa/react-data-fetcher/blob/master/docs/Fetch.md) to have more details about specific types and [`ReturnedData`](https://github.com/CharlesMangwa/react-data-fetcher/blob/master/docs/Fetch.md#returneddata) you get from the `requestToApi()`.
+See [`<Fetch>`'s doc](https://github.com/CharlesMangwa/react-data-refetcher/blob/master/docs/Fetch.md) to have more details about specific types and [`ReturnedData`](https://github.com/CharlesMangwa/react-data-refetcher/blob/master/docs/Fetch.md#returneddata) you get from the `requestToApi()`.

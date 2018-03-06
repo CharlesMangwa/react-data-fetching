@@ -1,8 +1,8 @@
 {
-  "name": "react-data-fetcher",
+  "name": "react-data-refetcher",
   "version": "0.1.0",
   "description": "🎣 A component-driven way to fetch data in React",
-  "repository": "CharlesMangwa/react-data-fetcher",
+  "repository": "CharlesMangwa/react-data-refetcher",
   "license": "MIT",
   "author": "Charles Mangwa",
   "files": [
@@ -10,9 +10,9 @@
     "esm",
     "umd"
   ],
-  "main": "cjs/react-data-fetcher.js",
-  "module": "esm/react-data-fetcher.js",
-  "unpkg": "umd/react-data-fetcher.js",
+  "main": "cjs/react-data-refetcher.js",
+  "module": "esm/react-data-refetcher.js",
+  "unpkg": "umd/react-data-refetcher.js",
   "scripts": {
     "build": "node ./scripts/build.js",
     "clean": "git clean -fdX .",
