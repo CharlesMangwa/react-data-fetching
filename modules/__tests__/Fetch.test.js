@@ -139,7 +139,7 @@ describe('A <Fetch>', () => {
       expectedContext,
       <Fetch
         resultOnly
-        path="redux"
+        path="store"
         onFetch={data => (receivedData = data || null)}
       />,
     )

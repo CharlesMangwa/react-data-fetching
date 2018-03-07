@@ -84,7 +84,7 @@ describe('A <ConnectedFetch>', () => {
     const wrapper = getElementWithContent(
       expectedContext,
       <Fetch
-        path="redux"
+        path="store"
         onFetch={data => (receivedData = data || null)}
       />,
     )
