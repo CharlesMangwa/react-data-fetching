@@ -6,6 +6,8 @@ A function which against all odds: sends a request to an API!
 
 ```jsx
 import React, { Component, Fragment } from 'react'
+import { requestToApi } from 'react-data-refetcher'
+
 import { Button } from './components
 
 export default class Auth extends Component {

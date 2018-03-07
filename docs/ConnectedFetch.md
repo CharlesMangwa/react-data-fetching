@@ -32,10 +32,15 @@ export default App
 ## Props
 
 * **api**: `string`, a mandatory prop used to create the final URL `<Fetch>` will use. By setting this prop, you can switch from using `url` inside `<Fetch>` to using `path`, with only what comes after `api` in your URL. For instance, the following URL "https://my-app.com/api/v1/users" will become `api="https://my-app.com/api/v1"` (goes inside `<ConnectedFetch>`) and `path="/users"` (goes inside `<Fetch>`).
+
 * **children**: `React$Node`, a mandatory prop used to render your app. Basically, you'll just have to wrap your whole app inside `<ConnectedFetch>` like in the example above.
+
 * **headers**?: `Object`, used to share headers which are common to all your requests. This could be useful if you have some authentication going on at some point, and need to send a token with your calls.
+
 * **loader**?: `React$Node`, a component (or a function returning one) render every time a `<Fetch>` is loading data. The typical use case for this prop would be when you have a common loader for your whole app. Instead of using `<Fetch>`'s `loader` prop, you'll just have to do it once here and that's it: you'll have the same beautiful spinner in your whole app!
+
 * **store**?: `Object`, containing a store you want to propagate inside your [`ReturnedData`](https://github.com/CharlesMangwa/react-data-refetcher/blob/master/docs/Fetch.md#returneddata). `store` can be used if you want to get access to more data in your component than what you get from your request. This could be either a value you explicitly passed or if you've implemented `<ConnectedFetch>` by wrapping it inside `<Provider>` from Redux: React Data Refetcher will automatically send your Redux's store inside `data.store` (see [`ReturnedData`](https://github.com/CharlesMangwa/react-data-refetcher/blob/master/docs/Fetch.md#returneddata) for more details). This means that you won't even have to precise `store={...}` as React Data Refetcher will know that `<ConnectedFetch>` is inside Redux's `<Provider>`, and will do the job for you!
+
 * **timeout**?: `number`, value in ms after which you'll want the library to abort any request you'll send from any `<Fetch>` in your app. It's defaulted to `0`, which means there is no timeout. By using this, all your requests will have a common timeout value you can handle in `<Fetch>` through `onTimeout` prop.
 
 ## Notes
