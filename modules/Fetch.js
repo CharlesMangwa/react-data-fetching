@@ -78,7 +78,7 @@ class Fetch extends Component<Props> {
   }
 
   componentDidMount(): void {
-    if (this.props.path === 'redux') {
+    if (this.props.path === 'store') {
       this._handleData({
         data: this.context.rdfStore,
         isOK: true,
@@ -97,7 +97,7 @@ class Fetch extends Component<Props> {
       onLoad()
     }
 
-    if (path === 'redux') {
+    if (path === 'store') {
       this._handleData({
         data: this.context.rdfStore,
         isOK: true,
