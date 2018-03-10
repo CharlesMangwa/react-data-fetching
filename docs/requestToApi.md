@@ -1,4 +1,4 @@
-# requestToApi()
+# requestToApi
 
 A function which against all odds: sends a request to an API!
 
@@ -6,7 +6,7 @@ A function which against all odds: sends a request to an API!
 
 ```jsx
 import React, { Component, Fragment } from 'react'
-import { requestToApi } from 'react-data-refetcher'
+import { requestToApi } from 'react-data-fetching'
 
 import { Button } from './components
 
@@ -57,4 +57,4 @@ type RequestToApi = {
 }
 ```
 
-See [`<Fetch>`'s doc](https://github.com/CharlesMangwa/react-data-refetcher/blob/master/docs/Fetch.md) to have more details about specific types and [`ReturnedData`](https://github.com/CharlesMangwa/react-data-refetcher/blob/master/docs/Fetch.md#returneddata) you get from the `requestToApi()`.
+See [`<Fetch>`'s doc](Fetch.md) to have more details about specific types and [`ReturnedData`](Fetch.md#returneddata) you get from the `requestToApi()`.

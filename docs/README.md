@@ -2,17 +2,12 @@
   <a href="https://github.com/CharlesMangwa/react-data-fetching" target="\_parent">
     <img 
       alt="React Data Fetching logo"
-      src="docs/images/logo.png"
-      width="450"
+      src="images/logo.png"
+      width="900"
     />
   </a>
 </div>
-
-<br />
-
 <div align="center">
-  <strong>Declarative data fetching for React 🎣 </strong>
-  <br />
   <br />
   <a href="https://circleci.com/gh/CharlesMangwa/react-data-fetching">
     <img
@@ -47,8 +42,6 @@
     />
   </a>
 </div>
-
-#
 
 `react-data-fetching` provides a very intuitive way to perform any REST API call without hassle, through a single React component. It also helps you take care of timeouts, loading states, errors handling, data saving, uploading/downloading progress, etc. Fetching data while letting the user know what's going on have never been that easy!
 
@@ -111,24 +104,7 @@ export default class App extends Component {
 }
 ```
 
-The package gives  access to `<Fetch>`, `<ConnectedFetch>` and `requestToApi()`. To have an in-depth explanation about how to use them, how they work and even more, head to this post: [Introducing 🎣 React Data Fetching](https://medium.com/p/2140a1d36cc8/).
-
-## Docs
-
-- [**`<Fetch>`**](https://github.com/CharlesMangwa/react-data-fetching/blob/master/docs/Fetch.md) carries out all your network requests.
-- [**`<ConnectedFetch>`**](https://github.com/CharlesMangwa/react-data-fetching/blob/master/docs/ConnectedFetch.md) allows you to share several parameters among every `<Fetch>` instance in your app.
-- [**`requestToApi()`**](https://github.com/CharlesMangwa/react-data-fetching/blob/master/docs/requestToApi.md) lets you perform your request with a good old function.
-
-## Todo
-
-Want to submit a PR but don't know where to start? Here is a list of features you could consider! This might change in the future as the API is far from being complete.
-
-- [ ] Increase code coverage 🤓
-- [ ] Implement React 16.3.0 new context API & lifecycles ⚛️
-- [ ] Add the ability to make several calls at once / manage a queue ⛓
-- [ ] Implement a caching (and/or normalization) system (through React.Suspense?) 📥
-- [ ] Add GraphQL support? ✨ 
-- [ ] What else?
+The package gives  access to `<Fetch>`, `<ConnectedFetch>` and `requestToApi()`. To have an in-depth explanation about how to use them, how they work and even more, head to this post: [Introducing 🎣 React Data Refetcher](https://medium.com/p/2140a1d36cc8/).
 
 ## About
 
