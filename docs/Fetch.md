@@ -68,7 +68,7 @@ export default class MyComponent extends Component {
 
 ## Props
 
-This library is fully typed with [Flow](https://flow.org). Some of these types are detailed inside the [Related types](Fetch.md#related-types) section below for better understanding of how `<Fetch>` works.
+This library is fully typed with [Flow](https://flow.org). Some of these types are detailed in the [Related types](Fetch.md#related-types) section below for better understanding of how `<Fetch>` works.
 
 ### body
 

@@ -50,7 +50,7 @@ type RequestToApi = {
   headers?: Object,
   method: Method,
   onProgress?: (Progress) => void,
-  onTimeout?: (void) => void,
+  onTimeout?: Function,
   params?: Object,
   url: string,
   timeout?: number,

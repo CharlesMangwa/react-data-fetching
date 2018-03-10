@@ -43,7 +43,7 @@
   </a>
 </div>
 
-`react-data-fetching` provides a very intuitive way to perform any REST API call without hassle, through a single React component. It also helps you take care of timeouts, loading states, errors handling, data saving, uploading/downloading progress, etc. Fetching data while letting the user know what's going on have never been that easy!
+`react-data-fetching` provides a very intuitive way to perform any REST API call without hassle, through a single React component. It also helps you take care of timeouts, loading states, errors handling, data saving, uploading/downloading progress, etc. Fetching data while letting the user know what's going on has never been that easy!
 
 The package is really lightweight (~4.01 kB gzipped) and has been built from the ground up with universal apps in mind: you can use it wherever React is rendering - meaning it works seamlessly with React (web) & React Native!
 
@@ -72,7 +72,7 @@ The UMD build is also available on [unpkg](https://unpkg.com):
 <script src="https://unpkg.com/react-data-fetching/umd/react-data-fetching.min.js"></script>
 ```
 
-You can find the library on `window.ReactDataRefetcher`.
+You can find the library on `window.ReactDataFetching`.
 
 ## Usage
 
@@ -104,8 +104,8 @@ export default class App extends Component {
 }
 ```
 
-The package gives  access to `<Fetch>`, `<ConnectedFetch>` and `requestToApi()`. To have an in-depth explanation about how to use them, how they work and even more, head to this post: [Introducing 🎣 React Data Refetcher](https://medium.com/p/2140a1d36cc8/).
+The package gives  access to `<Fetch>`, `<ConnectedFetch>` and `requestToApi()`. To have an in-depth explanation of how to use them, how they work and even more, head to this post: [Introducing 🎣 React Data Fetching](https://medium.com/p/2140a1d36cc8/).
 
 ## About
 
-`react-data-fetching` is currently developed and maintained by your truly, [@Charles_Mangwa](https://twitter.com/Charles_Mangwa). Feel free get in touch if you want to contribute!
+`react-data-fetching` is currently developed and maintained by yours truly, [@Charles_Mangwa](https://twitter.com/Charles_Mangwa). Feel free get in touch if you want to contribute!
