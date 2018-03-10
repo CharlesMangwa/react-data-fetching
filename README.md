@@ -3,7 +3,7 @@
     <img 
       alt="React Data Fetching logo"
       src="docs/images/logo.png"
-      width="450"
+      width="900"
     />
   </a>
 </div>
