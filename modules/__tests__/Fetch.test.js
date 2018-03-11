@@ -28,7 +28,7 @@ describe('A <Fetch>', () => {
 
   it('throws when it is not rendered in the context of a <ConnectedFetch>', () => {
     expect(() =>
-      renderer.render(<Fetch path="/users/octocat">{() => null}</Fetch>),
+      renderer.render(<Fetch path="store">{() => null}</Fetch>),
     ).toThrow()
   })
 
@@ -99,6 +99,7 @@ describe('A <Fetch>', () => {
         <div />
       </Fetch>,
     )
+
     expect(spy).toHaveBeenCalled()
   })
 

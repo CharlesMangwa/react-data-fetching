@@ -8,18 +8,19 @@ import requestToApi from './requestToApi'
 import {
   type Context,
   type ErrorContent,
+  type Error,
   type Props,
   type ReturnedData,
   methodShape,
 } from './types'
 
-const isEmptyChildren = (children): boolean => Children.count(children) === 0
+const isEmptyChildren = children => Children.count(children) === 0
 
 class Fetch extends Component<Props> {
-  _data: ?ReturnedData = undefined
-  _didCallOnLoad: boolean = false
-  _isLoaded: boolean = false
-  _isUnmounted: boolean = false
+  _data: ?ReturnedData | Error = undefined
+  _didCallOnLoad = false
+  _isLoaded = false
+  _isUnmounted = false
 
   static propTypes = {
     body: PropTypes.object,
@@ -69,7 +70,7 @@ class Fetch extends Component<Props> {
     timeout: -1,
   }
 
-  componentWillMount(): void {
+  componentWillMount() {
     this._validateProps(this.props, this.context)
     if (this.props.onLoad && !this._didCallOnLoad) {
       this._didCallOnLoad = true
@@ -77,7 +78,7 @@ class Fetch extends Component<Props> {
     }
   }
 
-  componentDidMount(): void {
+  componentDidMount() {
     if (this.props.path === 'store') {
       this._handleData({
         data: this.context.rdfStore,
@@ -110,11 +111,11 @@ class Fetch extends Component<Props> {
       this._fetchData(nextProps, nextContext)
   }
 
-  componentWillUnmount(): void {
+  componentWillUnmount() {
     this._isUnmounted = true
   }
 
-  shouldComponentUpdate(nextProps: Props): boolean {
+  shouldComponentUpdate(nextProps: Props) {
     if (this.props.children !== nextProps.children) return true
     if (this.props.loader !== nextProps.loader) return true
     if (this.props.onError !== nextProps.onError) return true
@@ -202,11 +203,9 @@ class Fetch extends Component<Props> {
   _handleData = (result: ReturnedData): void => {
     if (!this._isUnmounted) {
       this._isLoaded = true
-      if (!result.error) {
-        this.props.resultOnly
-          ? (this._data = result.data)
-          : (this._data = result)
-      }
+      this.props.resultOnly
+        ? (this._data = result.error || result.data)
+        : (this._data = result)
       this._returnData(result)
     }
   }
@@ -251,19 +250,17 @@ class Fetch extends Component<Props> {
   }
 
   _returnData = (result: ReturnedData): void => {
-    const { onError, onFetch, resultOnly } = this.props
+    const { onError, onFetch } = this.props
 
-    if (onFetch)
-      resultOnly ? onFetch(result && result.data) : onFetch(result)
+    if (onFetch) onFetch(this._data)
 
-    if (result.error && onError)
-      resultOnly ? onError(result.error) : onError(result)
+    if (result.error && onError) onError(this._data)
 
     if (!this._isUnmounted) this.forceUpdate()
   }
 
   _validateProps = (props: Props, context: Context): void => {
-    const { rdfApi, rdfTimeout } = context
+    const { rdfApi, rdfStore, rdfTimeout } = context
     const {
       children,
       component,
@@ -283,8 +280,16 @@ class Fetch extends Component<Props> {
     if (path) {
       invariant(
         path && rdfApi,
-        'You must implement <ConnectedFetch> at the route of your '
+        'You must implement <ConnectedFetch> at the root of your '
           + 'app and provide an `api` in order to use `path`',
+      )
+    }
+
+    if (path === 'store') {
+      invariant(
+        path && rdfStore,
+        'You must implement <ConnectedFetch> at the root of your '
+          + 'app and provide a `store` in order to use `path="store"`',
       )
     }
 

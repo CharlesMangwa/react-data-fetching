@@ -8,7 +8,7 @@ import { type ProviderProps, type Store, storeShape } from './types'
 
 const createConnectedFetch = (): Class<*> => {
   class ConnectedFetch extends Component<ProviderProps> {
-    rdfApi: string = this.props.api
+    rdfApi = this.props.api
     rdfHeaders: ?Object = this.props.headers
     rdfLoader: ?React$Node = this.props.loader
     rdfStore: ?Store = this.context && this.context.store

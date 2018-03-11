@@ -78,7 +78,7 @@ Object used whenever you're using an appropriated method which accepts a body (`
 
 ### children
 
-**Type: `React$StatelessFunctionalComponent?ReturnedData>`**
+**Type: `React$StatelessFunctionalComponent<?ReturnedData | Error>`**
 
 Called when the response has been received. This could be a regular React component, or a [Function as Child Component (FaCC)](https://medium.com/merrickchristensen/function-as-child-components-5f3920a9ace9). Only the former will received [`ReturnedData`](Fetch.md#returneddata) as an argument.
 
@@ -94,7 +94,7 @@ Useful when you need to pass headers to your request. See [`<ConnectedFetch>`](C
 
 ### component
 
-**Type: `React$ComponentType<?ReturnedData>`**
+**Type: `React$ComponentType<?ReturnedData | Error>`**
 
 Rendered when the response has been received. When you use `component` over `children` or `render`, `<Fetch>` uses `React.createElement` to create a new React element from the given component, and automatically passes [`ReturnedData`](Fetch.md#returneddata) as props. That means if you provide an inline function to `component` instead of a React component, you would create a new component every render. This results in the existing component unmounting and the new component mounting instead of just updating the existing component. When using an inline function for inline rendering, prefer the `children` or `render` props below. The common use case for `component` would be to render a custom component that needs  [`ReturnedData`](Fetch.md#returneddata) in its props, while `children` & `render` can be used to directly exploit the data inside HTML tags or React Native's components (`<View>`, `<Text>`, `<Image>`, etc). Make sure to implement `shouldComponentUpdate` to avoid any unnecessary re-rerender.
 
@@ -112,13 +112,13 @@ Defaulted to `'GET'`, it defines the method you want to be used for your request
 
 ### onError
 
-**Type: `(ReturnedData | Error) => void`**
+**Type: `(?ReturnedData | Error) => void`**
 
 Called whenever the request couldn't be sent or your API responds with a status code < 200 or > 299. See the [Error](Fetch.md#error) section above for more details.
 
 ### onFetch
 
-**Type: `(ReturnedData) => void`**
+**Type: `(?ReturnedData | Error) => void`**
 
 Called when the response has been received. But beware: seeing this function being called doesn't mean the request has succeeded, you should check the field `isOK` from [`ReturnedData`](Fetch.md#returneddata) to make sure of that. Moreover, if you want to call `setState` with your newly fetched data inside a stateful component, **this is the recommended place to do so**. The tradeoff is that you can't use `onFetch` to render a component, see `children`, `component` or `render` to do so. Nothing stops you from using `component`, `render` or `children` to render your component, plus `onFetch` to save your data in the same `<Fetch>` for instance.
 
@@ -160,7 +160,7 @@ Follows the same principle as [`extraData`](https://facebook.github.io/react-nat
 
 ### render
 
-**Type: `React$StatelessFunctionalComponent?ReturnedData>`**
+**Type: `React$StatelessFunctionalComponent<?ReturnedData | Error>`**
 
 Exactly the same thing as `children`, but instead of writing your function inside the component (`<Fetch>{...}</Fetch>`), you use a prop to do so (`<Fetch render={...} />`). These are the 2 main approaches when it comes to [*render props*](https://reactjs.org/docs/render-props.html). React Data Fetching supports both, so just use the one that works best for you!
 

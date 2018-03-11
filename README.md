@@ -130,4 +130,4 @@ Want to submit a PR but don't know where to start? Here is a list of features yo
 
 ## About
 
-`react-data-fetching` is currently developed and maintained by yours truly, [@Charles_Mangwa](https://twitter.com/Charles_Mangwa). Feel free get in touch if you want to contribute!
+`react-data-fetching` is currently developed and maintained by yours truly, [@Charles_Mangwa](https://twitter.com/Charles_Mangwa). Feel free to get in touch if you want to contribute!

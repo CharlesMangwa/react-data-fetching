@@ -16,7 +16,7 @@ export type ErrorContent = {
   response: String | Object,
 }
 
-type Error = {
+export type Error = {
   content: ErrorContent,
   message: 'Something went wrong during the request',
   url?: string,
@@ -38,7 +38,7 @@ export type DefaultProps = {
   params: Object,
 }
 
-type Progress = {
+export type Progress = {
   bubbles: boolean,
   cancelable: boolean,
   lengthComputable: boolean,
@@ -59,20 +59,20 @@ export type ReturnedData = {
 
 export type Props = {
   body?: Object,
-  children?: React$StatelessFunctionalComponent<?ReturnedData>,
-  component?: React$ComponentType<?ReturnedData>,
+  children?: React$StatelessFunctionalComponent<?ReturnedData | Error>,
+  component?: React$ComponentType<?ReturnedData | Error>,
   headers?: Object,
   loader?: React$Node,
   method: Method,
   onError?: (?ReturnedData | Error) => void,
-  onFetch?: (?ReturnedData) => void,
+  onFetch?: (?ReturnedData | Error) => void,
   onLoad?: Function,
   onProgress?: (Progress) => void,
   onTimeout?: Function,
   params?: Object,
   path?: string,
   refetch?: any,
-  render?: React$StatelessFunctionalComponent<?ReturnedData>,
+  render?: React$StatelessFunctionalComponent<?ReturnedData | Error>,
   resultOnly?: boolean,
   timeout?: number,
   url?: string,
