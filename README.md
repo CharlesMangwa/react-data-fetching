@@ -23,7 +23,7 @@
   <a href="https://coveralls.io/github/CharlesMangwa/react-data-fetching?branch=master">
     <img
       alt="coverage: Coveralls"
-      src="https://coveralls.io/repos/github/CharlesMangwa/react-data-fetching/badge.svg?branch=master&t=YCvNBr"
+      src="https://coveralls.io/repos/github/CharlesMangwa/react-data-fetching/badge.svg?branch=master&t=v4mvo8"
     />
   </a>
   <a href="https://www.npmjs.com/package/react-data-fetching">
