@@ -48,7 +48,7 @@ A mandatory prop used to render your app. Basically, you'll just have to wrap yo
 
 **Type: `Object`**
 
-Object used to share headers which are common to all your requests. This could be useful if you have some authentication going on at some point, and need to send a token with your calls.
+`Object` used to share headers which are common to all your requests. This could be useful if you have some authentication going on at some point, and need to send a token with your calls for instance.
 
 ### loader
 
@@ -72,7 +72,11 @@ Value in ms after which you'll want the library to abort any request you'll send
 
 ###  Duplicated props
 
-You'll notice that `<ConnectedFetch>` and `<Fetch>` share a few props in common: `headers`, `loader`, `timeout`. You could ask then: "OK, but what if I use a `loader` in `<ConnectedFetch>`, but want a special one in a specific `<Fetch>` ?". Well, it would be a very good question! **React Data Fetching will always apply the prop coming from a `<Fetch>` over the same one coming from `<ConnectedFetch>`**. This allows you to share general parameters, but still have a fine-grained control on specific `<Fetch>` instances. The only exception is `headers` where the library will simply merge both `<ConnectedFetch>` and `<Fetch>` headers, so make sure to Don't Repeat Yourself™!
+You'll notice that `<ConnectedFetch>` and `<Fetch>` have a few props in common: `headers`, `loader`, `timeout`. You could ask then: "OK, but what if I use a `loader` in `<ConnectedFetch>`, but want a special one in a specific `<Fetch>` ?". Well, it would be a very good question!
+
+!>React Data Fetching will always apply the prop coming from a `<Fetch>` over the same one coming from `<ConnectedFetch>`.
+
+This allows you to share general parameters, but still have fine-grained control on specific `<Fetch>` instances. The only exception is `headers` where the library will simply merge both `<ConnectedFetch>` and `<Fetch>` headers, so make sure to Don't Repeat Yourself™!
 
 ### Store propagation
 

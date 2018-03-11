@@ -57,4 +57,4 @@ type RequestToApi = {
 }
 ```
 
-See [`<Fetch>`'s doc](Fetch.md) to have more details about specific types and [`ReturnedData`](Fetch.md#returneddata) you get from the `requestToApi()`.
+See [`<Fetch>`'s doc](Fetch.md) to have more details about these types and [`ReturnedData`](Fetch.md#returneddata) you get from the `requestToApi()`.

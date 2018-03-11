@@ -318,7 +318,7 @@ class Fetch extends Component<Props> {
     if (this._isLoaded && !this._isUnmounted) {
       if (component) return createElement(component, this._data)
 
-      if (render) return render(this._data)
+      if (typeof render === 'function') return render(this._data)
 
       if (typeof children === 'function') return children(this._data)
 

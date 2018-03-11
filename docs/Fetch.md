@@ -1,10 +1,10 @@
 # Fetch
 
-A declarative way to perform your network requests to REST APIs.
+A declarative way to perform network requests to REST APIs.
 
 ## Usage
 
-The following example doesn't portray a real-world example, but rather present how to use all the props exposed by the component:
+The following example doesn't portray a real-world example, but rather present how to use the props exposed by the component (you'll rarely use all of them):
 
 ```jsx
 import React, { Fragment, Component } from 'react'
@@ -28,6 +28,10 @@ export default class MyComponent extends Component {
       console.log(`${Math.round((progress.loaded / progress.total) * 100)} %`)
   }
 
+  /**
+   * Notice: You won't have `store` if you haven't
+   * implemented it through <ConnectedFetch>
+  */
   _saveData = ({ data, isOK, store }) => {
     if (isOK) {
       this.setState(() => ({ users: { ...data, currentUser: store.user } }))
@@ -55,7 +59,7 @@ export default class MyComponent extends Component {
         onTimeout={this._onRequestAborted}
         params={{ start: 0, limit: 20 }}
         render={data => <p>{JSON.stringify(data)}</p>}
-        timeout={200} /* modify this value to get data inside onError / onTimeout */
+        timeout={200} /* modify this value to get something inside onError / onTimeout */
         url="https://reqres.in/api/register"
       />
       <Fetch resultOnly path="/api/users">
@@ -74,17 +78,17 @@ This library is fully typed with [Flow](https://flow.org). Some of these types a
 
 **Type: `Object`**
 
-Object used whenever you're using an appropriated method which accepts a body (`'FORM_DATA' | 'PATCH' | 'POST' | 'PUT'`), and need to pass one to your request.
+`Object` used whenever you're using an appropriated method which accepts a body (`'FORM_DATA' | 'PATCH' | 'POST' | 'PUT'`), and need to pass one to your request.
 
 ### children
 
 **Type: `React$StatelessFunctionalComponent<?ReturnedData | Error>`**
 
-Called when the response has been received. This could be a regular React component, or a [Function as Child Component (FaCC)](https://medium.com/merrickchristensen/function-as-child-components-5f3920a9ace9). Only the former will received [`ReturnedData`](Fetch.md#returneddata) as an argument.
+Called when the response has been received. This could be a regular React component, or a [Function as Child Component (FaCC)](https://medium.com/merrickchristensen/function-as-child-components-5f3920a9ace9). Only the former will received [`ReturnedData`](Fetch.md#returneddata) or ([`Error`](Fetch.md#error)) as an argument.
 
 !> **On another note: *never* call `setState` from here**
 
-as this will cause an infinite loop: you start rendering, call `setState`, that starts rendering again, you call `setState` again, etc. Simply use a FaCC to render your data, or see `onFetch` if you still want to use `this.setState`.
+as this will cause an infinite loop: you start rendering, call `setState`, that starts rendering again, you call `setState` again, etc. Simply use a FaCC to render your data, or see [`onFetch`](Fetch.md#onfetch) if you still want to use `setState`.
 
 ### headers
 
@@ -96,7 +100,13 @@ Useful when you need to pass headers to your request. See [`<ConnectedFetch>`](C
 
 **Type: `React$ComponentType<?ReturnedData | Error>`**
 
-Rendered when the response has been received. When you use `component` over `children` or `render`, `<Fetch>` uses `React.createElement` to create a new React element from the given component, and automatically passes [`ReturnedData`](Fetch.md#returneddata) as props. That means if you provide an inline function to `component` instead of a React component, you would create a new component every render. This results in the existing component unmounting and the new component mounting instead of just updating the existing component. When using an inline function for inline rendering, prefer the `children` or `render` props below. The common use case for `component` would be to render a custom component that needs  [`ReturnedData`](Fetch.md#returneddata) in its props, while `children` & `render` can be used to directly exploit the data inside HTML tags or React Native's components (`<View>`, `<Text>`, `<Image>`, etc). Make sure to implement `shouldComponentUpdate` to avoid any unnecessary re-rerender.
+Rendered when the response has been received. When you use `component` over `children` or `render`, `<Fetch>` uses `React.createElement` to create a new React element from the given component, and automatically passes [`ReturnedData`](Fetch.md#returneddata) as props.
+
+> That means if you provide an inline function to the `component` prop, you would create a new component every render. This results in the existing component unmounting and the new component mounting instead of just updating the existing component. When using an inline function for inline rendering, use the render or the children prop (below).
+
+\- as explained from the folks at [ReactTraining](https://reacttraining.com/react-router/web/api/Route/component).
+
+The common use case for `component` would be to render a custom component that needs  [`ReturnedData`](Fetch.md#returneddata) in its props, while `children` & `render` can be used to directly exploit the data inside HTML tags or React Native's components (`<View>`, `<Text>`, `<Image>`, etc). Make sure to implement `shouldComponentUpdate` where (and when!) needed to avoid any unnecessary re-rerender.
 
 ### loader
 
@@ -114,19 +124,23 @@ Defaulted to `'GET'`, it defines the method you want to be used for your request
 
 **Type: `(?ReturnedData | Error) => void`**
 
-Called whenever the request couldn't be sent or your API responds with a status code < 200 or > 299. See the [Error](Fetch.md#error) section above for more details.
+Called whenever the request couldn't be sent or your API responds with a status code < 200 or > 299. See the [Error](Fetch.md#error) section below for more details.
 
 ### onFetch
 
 **Type: `(?ReturnedData | Error) => void`**
 
-Called when the response has been received. But beware: seeing this function being called doesn't mean the request has succeeded, you should check the field `isOK` from [`ReturnedData`](Fetch.md#returneddata) to make sure of that. Moreover, if you want to call `setState` with your newly fetched data inside a stateful component, **this is the recommended place to do so**. The tradeoff is that you can't use `onFetch` to render a component, see `children`, `component` or `render` to do so. Nothing stops you from using `component`, `render` or `children` to render your component, plus `onFetch` to save your data in the same `<Fetch>` for instance.
+Called when the response has been received. But beware: seeing this function being called doesn't mean the request has succeeded, you should check the field `isOK` from [`ReturnedData`](Fetch.md#returneddata) to make sure of that.
+
+!> If you want to call `setState` with your freshly fetched data inside a stateful component, **this is the recommended place to do so**.
+
+The tradeoff is that you can't use `onFetch` to render a component, see `children`, `component` or `render` to do so. Nothing stops you from using `component`, `render` or `children` to render your component, plus `onFetch` to save your data in the same `<Fetch>` for instance.
 
 ### onLoad
 
 **Type: `Function`**
 
-Called as soon as `<Fetch>` starts rendering & gets prepare to send your requests.
+Called as soon as `<Fetch>` starts rendering & gets prepare to send your request.
 
 ### onProgress
 
@@ -144,7 +158,7 @@ Called when your request exceeds the `timeout` you defined (no argument is passe
 
 **Type: `Object`**
 
-Works exactly like `body`, but is used to construct your URL whenever you need to pass parameters to your request (i.e.:  `https://my-app.com/api/v1/users?limit=100&age=18`).
+Works exactly like `body`, but is used whenever you need to pass parameters to your request to construct your final URL (i.e.: `https://my-app.com/api/v1/users?limit=100&age=18`).
 
 ### path
 
@@ -156,17 +170,17 @@ Only available if you've configured `<ConnectedFetch>` in your app, and provided
 
 **Type: `any`**
 
-Follows the same principle as [`extraData`](https://facebook.github.io/react-native/docs/flatlist.html#extradata) from React Native's FlatList component. This prop tells `<Fetch>` to re-render. This can be used inside a pull-to-refresh function, or to implement a pagination system. You can pass `any` value here, the only requirement for it to operate as expected is to make sure that the value you passed will change over time. Otherwise, there will be no re-render.
+Follows the same principle as [`extraData`](https://facebook.github.io/react-native/docs/flatlist.html#extradata) from React Native's FlatList component. This prop tells `<Fetch>` to re-render. This can be used inside a pull-to-refresh function, or to implement a pagination system for instance. You can pass `any` value here, the only requirement for it to operate as expected is to make sure that the value you passed will change over time. Otherwise, there will be no re-render.
 
 ### render
 
 **Type: `React$StatelessFunctionalComponent<?ReturnedData | Error>`**
 
-Exactly the same thing as `children`, but instead of writing your function inside the component (`<Fetch>{...}</Fetch>`), you use a prop to do so (`<Fetch render={...} />`). These are the 2 main approaches when it comes to [*render props*](https://reactjs.org/docs/render-props.html). React Data Fetching supports both, so just use the one that works best for you!
+`Function` similar to `children`, but instead of writing it inside the component (`<Fetch>{...}</Fetch>`), you use a prop to do so (`<Fetch render={...} />`). These are the 2 main approaches when it comes to [**render props**](https://reactjs.org/docs/render-props.html). React Data Fetching supports both, so just use the one that works best for you!
 
-!> **Like `children`: *never* call `this.setState` from here**
+!> **Like `children`: *never* call `setState` from here**
 
-as this will cause an infinite loop: you start rendering, call `setState`, that starts rendering again, you call `setState` again, etc. Simply use a FaCC to render your data, or see `onFetch` if you still want to use `this.setState`. If you just want to render a component, see [`component`](Fetch.md#component) instead.
+as this will cause an infinite loop: you start rendering, call `setState`, that starts rendering again, you call `setState` again, etc. Simply use a FaCC to render your data, or see [`onFetch`](Fetch.md#onfetch) if you still want to use `setState`. If you just want to render a component, see [`component`](Fetch.md#component) instead.
 
 ### resultOnly
 
@@ -206,7 +220,7 @@ type Error = {
 
 `Object` provided to `children`, `component`, `onError`, `onFetch` & `render` prop when an error occurred while sending the request. It could be part of another `object` (corresponding to [ReturnedData](Fetch.md#returneddata)) or the only argument sent to these functions if you set `resultOnly` to `true`.
 
-`Error` could exist if your API responded with a non-successful status code (`statusCode < 200 && statusCode > 299`) or if the URL you provided couldn't be used. In either way, if you're in `__DEV__` environment, a descriptive error of what could have gone wrong will be printed in your console:
+`Error` could exist if your API responded with a non-successful status code (`statusCode < 200 || statusCode > 299`) or if the URL you provided couldn't be used. In either way, if you're in `__DEV__` environment, a descriptive error of what could have gone wrong will be printed in your console:
 
 <img 
   alt="React Data Fetching error printing example"
@@ -242,7 +256,7 @@ type Progress = {
   loaded: number,
   target: EventTarget,
   total: number,
-  **type: string,**
+  type: string,
 }
 ```
 
@@ -301,6 +315,6 @@ type ReturnedData = {
 
 `Object` provided to `children`, `component`, `onError`, `onFetch` & `render`. As you can see, you won't necessarily get every field. For instance: if your API responds with a `200 'OK'` status, there's no reason to get an `error` field. However, if you set `resultOnly` to `true`, the above-mentioned props won't received this `object`, but rather:
 
-- **data**, if you're inside `children`, `component`, `onFetch` & `render`
-- **error**, if you're inside `children` & `component`
-- **store**, everywhere (`children`, `component`, `onError`, `onFetch` & `render`): if you've configured `<ConnectedFetch>` and call `path="redux"` inside `<Fetch>`
+- **data**, if everything went well and you're inside `children` (FaCC not a component), `component`, `onFetch` & `render`
+- **error**, if you caught an error and are inside `children` (FaCC not a component), `component`, `onFetch` & `render`
+- **store**, if you've configured `ConnectedFetch` and call `path="redux"` inside `<Fetch>`: everywhere (`children`, `component`, `onError`, `onFetch` & `render`)
