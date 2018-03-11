@@ -104,7 +104,7 @@ Rendered when the response has been received. When you use `component` over `chi
 
 > That means if you provide an inline function to the `component` prop, you would create a new component every render. This results in the existing component unmounting and the new component mounting instead of just updating the existing component. When using an inline function for inline rendering, use the render or the children prop (below).
 
-\- as explained from the folks at [ReactTraining](https://reacttraining.com/react-router/web/api/Route/component).
+\- as explained by the folks at [ReactTraining](https://reacttraining.com/react-router/web/api/Route/component).
 
 The common use case for `component` would be to render a custom component that needs  [`ReturnedData`](Fetch.md#returneddata) in its props, while `children` & `render` can be used to directly exploit the data inside HTML tags or React Native's components (`<View>`, `<Text>`, `<Image>`, etc). Make sure to implement `shouldComponentUpdate` where (and when!) needed to avoid any unnecessary re-rerender.
 
