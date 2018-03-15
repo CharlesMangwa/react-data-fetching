@@ -21,8 +21,7 @@
     "lint": "eslint .",
     "test": "yarn lint && yarn flow && yarn jest",
     "test:ci": "yarn jest && cat ./modules/__tests__/__coverage__/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
-    "prepack": "node ./scripts/build.js",
-    "prepublish": "node ./scripts/build.js"
+    "prepack": "node ./scripts/build.js"
   },
   "babel": {
     "presets": [
