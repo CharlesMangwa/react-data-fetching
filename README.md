@@ -28,13 +28,13 @@
   </a>
   <a href="https://www.npmjs.com/package/react-data-fetching">
     <img
-      alt="version: 0.1.0"
+      alt="version: 0.1.1"
       src="https://img.shields.io/npm/v/react-data-fetching.svg"
     />
   </a>
   <img 
     alt="gzip size"
-    src="http://img.badgesize.io/https://npmcdn.com/react-data-fetching/umd/react-data-fetching.min.js?compression=gzip"
+    src="https://img.shields.io/badge/gzip%20size-4.04%20kB-brightgreen.svg"
   />
   <img
     alt="module formats: umd, cjs, esm"
