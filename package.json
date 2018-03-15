@@ -1,6 +1,6 @@
 {
   "name": "react-data-fetching",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Declarative data fetching for React",
   "repository": "CharlesMangwa/react-data-fetching",
   "license": "MIT",
@@ -21,7 +21,8 @@
     "lint": "eslint .",
     "test": "yarn lint && yarn flow && yarn jest",
     "test:ci": "yarn jest && cat ./modules/__tests__/__coverage__/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
-    "prepack": "node ./scripts/build.js"
+    "prepack": "node ./scripts/build.js",
+    "prepublish": "node ./scripts/build.js"
   },
   "babel": {
     "presets": [
