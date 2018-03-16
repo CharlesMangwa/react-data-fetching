@@ -88,15 +88,15 @@ export default class App extends Component {
   render() {
     return (
       <Fetch
-        loader={<Loader/>} // Replace this with your lovely handcrafted loader
+        loader={<Loader />} // Replace this with your lovely handcrafted loader
         url="https://api.github.com/users/octocat"
         timeout={5000}
       >
         {({ data }) => (
-         <div>
-          <h1>Username</h1>
-          <p>{data.name}</p>
-         </div>
+          <div>
+            <h1>Username</h1>
+            <p>{data.name}</p>
+          </div>
         )}
       </Fetch>
     )
@@ -104,7 +104,7 @@ export default class App extends Component {
 }
 ```
 
-The package gives  access to `<Fetch>`, `<ConnectedFetch>` and `requestToApi()`. To have an in-depth explanation of how to use them, how they work and even more, head to this post: [Introducing 🎣 React Data Fetching](https://medium.com/p/2140a1d36cc8/).
+The package gives  access to `<Fetch>`, `<ConnectedFetch>` and `requestToApi()`. To have an in-depth explanation of how to use them, how they work and even more, head to this post: [Introducing 🎣 React Data Fetching](https://medium.com/@CharlesMangwa/introducing-react-data-fetching-2140a1d36cc8).
 
 ## About
 

@@ -233,14 +233,14 @@ type Error = {
 
 ```js
 type Method =
-  'DELETE'
-| 'FORM_DATA'
-| 'GET'
-| 'HEAD'
-| 'PATCH'
-| 'POST'
-| 'PUT'
-| 'TRACE'
+  | 'DELETE'
+  | 'FORM_DATA'
+  | 'GET'
+  | 'HEAD'
+  | 'PATCH'
+  | 'POST'
+  | 'PUT'
+  | 'TRACE'
 ```
 
 `String` enumerating all the HTTP methods currently supported by the library. If you use one which is not listed in the type above, your request will still be sent, but there is no guarantee that `<Fetch>` will work exactly as expected.

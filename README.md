@@ -111,7 +111,7 @@ export default class App extends Component {
 }
 ```
 
-The package gives  access to `<Fetch>`, `<ConnectedFetch>` and `requestToApi()`. To have an in-depth explanation of how to use them, how they work and even more, head to this post: [Introducing 🎣 React Data Fetching](https://medium.com/p/2140a1d36cc8/).
+The package gives  access to `<Fetch>`, `<ConnectedFetch>` and `requestToApi()`. To have an in-depth explanation of how to use them, how they work and even more, head to this post: [Introducing 🎣 React Data Fetching](https://medium.com/@CharlesMangwa/introducing-react-data-fetching-2140a1d36cc8).
 
 ## Docs
 

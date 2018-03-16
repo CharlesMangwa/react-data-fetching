@@ -2,3 +2,6 @@ __tests__/
 coverage/
 node_modules/
 docs/
+cjs/
+esm/
+umd/

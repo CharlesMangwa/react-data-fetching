@@ -70,7 +70,7 @@ Value in ms after which you'll want the library to abort any request you'll send
 
 ## Notes
 
-###  Duplicated props
+### Duplicated props
 
 You'll notice that `<ConnectedFetch>` and `<Fetch>` have a few props in common: `headers`, `loader`, `timeout`. You could ask then: "OK, but what if I use a `loader` in `<ConnectedFetch>`, but want a special one in a specific `<Fetch>` ?". Well, it would be a very good question!
 
