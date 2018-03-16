@@ -22,7 +22,16 @@ const getPlugins = (env) => {
       exclude: 'node_modules/**',
       babelrc: false,
       presets: [
-        ['env', { loose: true, modules: false }],
+        [
+          'env',
+          {
+            loose: true,
+            modules: false,
+            targets: {
+              node: 'current',
+            },
+          },
+        ],
         'stage-1',
         'flow',
         'react',
