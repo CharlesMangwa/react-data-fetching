@@ -89,7 +89,6 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
     try {
       const request = new XMLHttpRequest()
       request.timeout = timeout
-      request.withCredentials = true
 
       if (request.upload) {
         request.upload.onerror = error => handleError(error, request, resolve)
