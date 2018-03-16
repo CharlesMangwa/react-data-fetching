@@ -5,6 +5,7 @@ import commonjs from 'rollup-plugin-commonjs'
 import replace from 'rollup-plugin-replace'
 import resolve from 'rollup-plugin-node-resolve'
 import uglify from 'rollup-plugin-uglify'
+import { minify } from 'uglify-es'
 
 const getPlugins = (env) => {
   const plugins = [resolve()]
@@ -52,7 +53,7 @@ const getPlugins = (env) => {
   )
 
   if (env === 'production')
-    plugins.push(uglify())
+    plugins.push(uglify({}, minify))
 
   return plugins
 }
