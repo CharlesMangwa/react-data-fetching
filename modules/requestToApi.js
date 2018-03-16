@@ -1,7 +1,7 @@
 /* @flow */
 /* eslint no-return-assign: 0 */
 
-import type { RequestToApi } from './types'
+import type { RequestToApi } from "./types";
 
 const requestToApi = (args: RequestToApi): Promise<any> => {
   const {
@@ -12,41 +12,41 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
     onTimeout,
     params,
     url,
-    timeout = 0,
-  } = args
+    timeout = 0
+  } = args;
   const defaultHeaders = {
-    Accept: 'application/json;charset=UTF-8',
-    'Content-Type':
-      method === 'FORM_DATA' ? 'multipart/form-data' : 'application/json',
-  }
-  const formData = new FormData()
-  let route = url
+    Accept: "application/json;charset=UTF-8",
+    "Content-Type":
+      method === "FORM_DATA" ? "multipart/form-data" : "application/json"
+  };
+  const formData = new FormData();
+  let route = url;
 
   const handleError = async (
     error: Event | XMLHttpRequest,
     request: XMLHttpRequest,
-    reject: Function,
+    reject: Function
   ): Promise<void> => {
     reject({
       response: request.response,
-      request,
-    })
-  }
+      request
+    });
+  };
 
   const handleTimeout = (request: XMLHttpRequest, reject: Function): void => {
-    request.abort()
-    if (onTimeout) onTimeout()
-    reject(`Your request took more than ${timeout}ms to resolve.`)
-  }
+    request.abort();
+    if (onTimeout) onTimeout();
+    reject(`Your request took more than ${timeout}ms to resolve.`);
+  };
 
   const returnData = async (
     request: XMLHttpRequest,
     resolve: Function,
     reject: Function,
-    isUpload?: boolean,
+    isUpload?: boolean
   ): Promise<void> => {
     if (request.readyState === 4 || isUpload) {
-      const isOK = request.status >= 200 && request.status <= 299
+      const isOK = request.status >= 200 && request.status <= 299;
       if (isOK) {
         const response = {
           data: request.responseText
@@ -54,69 +54,75 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
             : undefined,
           isOK,
           request,
-          status: request.status,
-        }
-        resolve(response)
-      }
-      else handleError(request, request, reject)
+          status: request.status
+        };
+        resolve(response);
+      } else handleError(request, request, reject);
     }
-  }
+  };
 
   const setHeaders = (request: XMLHttpRequest): void => {
     Object.entries(defaultHeaders).map(defaultHeader =>
-      request.setRequestHeader(defaultHeader[0], String(defaultHeader[1])))
+      request.setRequestHeader(defaultHeader[0], String(defaultHeader[1]))
+    );
     if (headers && Object.keys(headers).length > 0) {
       Object.entries(headers).map(header =>
-        request.setRequestHeader(header[0], String(header[1])))
+        request.setRequestHeader(header[0], String(header[1]))
+      );
     }
-  }
+  };
 
-  if (method === 'FORM_DATA' && Object.entries(body).length > 0) {
+  if (method === "FORM_DATA" && Object.entries(body).length > 0) {
     Object.entries(body).map(
       // $FlowFixMe
-      entry => formData.append(entry[0], entry[1]))
+      entry => formData.append(entry[0], entry[1])
+    );
   }
 
   if (params && Object.keys(params).length > 0) {
-    Object.entries(params).map((param, index) => (
-      index === 0
-        ? (route = `${route}?${param[0]}=${String(param[1])}`)
-        : (route = `${route}&${param[0]}=${String(param[1])}`)
-    ))
+    Object.entries(params).map(
+      (param, index) =>
+        index === 0
+          ? (route = `${route}?${param[0]}=${String(param[1])}`)
+          : (route = `${route}&${param[0]}=${String(param[1])}`)
+    );
   }
 
   return new Promise((resolve, reject) => {
     try {
-      const request = new XMLHttpRequest()
-      request.timeout = timeout
-      request.withCredentials = true
+      const request = new XMLHttpRequest();
+      request.timeout = timeout;
+      request.withCredentials = true;
 
       if (request.upload) {
-        request.upload.onerror = error => handleError(error, request, resolve)
-        request.upload.onload = () => returnData(request, resolve, reject, true)
-        request.upload.onprogress = onProgress
-        request.upload.ontimeout = () => handleTimeout(request, reject)
+        request.upload.onerror = error => handleError(error, request, resolve);
+        request.upload.onload = () =>
+          returnData(request, resolve, reject, true);
+        request.upload.onprogress = onProgress;
+        request.upload.ontimeout = () => handleTimeout(request, reject);
       }
 
-      request.onerror = error => handleError(error, request, resolve)
-      request.onprogress = onProgress
-      request.onreadystatechange = () => returnData(request, resolve, reject)
-      request.ontimeout = () => handleTimeout(request, reject)
+      request.onerror = error => handleError(error, request, resolve);
+      request.onprogress = onProgress;
+      request.onreadystatechange = () => returnData(request, resolve, reject);
+      request.ontimeout = () => handleTimeout(request, reject);
 
-      request.open(method === 'FORM_DATA' ? 'POST' : method, route)
-      setHeaders(request)
+      request.open(method === "FORM_DATA" ? "POST" : method, route);
+      setHeaders(request);
       request.send(
-        method === 'FORM_DATA'
+        method === "FORM_DATA"
           ? formData
-          : method === 'DELETE' || method === 'GET' || method === 'HEAD' || method === 'PUT'
+          : method === "DELETE" ||
+            method === "GET" ||
+            method === "HEAD" ||
+            method === "PUT"
             ? null
-            : JSON.stringify({ ...body }),
-      )
+            : JSON.stringify({ ...body })
+      );
+    } catch (request) {
+      handleError(request, request, reject);
     }
-    catch (request) {
-      handleError(request, request, reject)
-    }
-  })
-}
+  });
+};
 
-export default requestToApi
+export default requestToApi;

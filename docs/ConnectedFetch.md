@@ -27,7 +27,6 @@ const App = () => (
 )
 
 export default App
-
 ```
 
 ## Props
@@ -70,7 +69,7 @@ Value in ms after which you'll want the library to abort any request you'll send
 
 ## Notes
 
-###  Duplicated props
+### Duplicated props
 
 You'll notice that `<ConnectedFetch>` and `<Fetch>` have a few props in common: `headers`, `loader`, `timeout`. You could ask then: "OK, but what if I use a `loader` in `<ConnectedFetch>`, but want a special one in a specific `<Fetch>` ?". Well, it would be a very good question!
 
@@ -80,4 +79,4 @@ This allows you to share general parameters, but still have fine-grained control
 
 ### Store propagation
 
-As seen above, *for now*, React Data Fetching can share your Redux store all by itself. This is a feature which is nice to have, was possible to implement without spending too much time on it, but could possibly disappear/be modified in the (near?) future. However, you will always be able to at least manually pass a variable you want to be shared through `data.store`.
+As seen above, _for now_, React Data Fetching can share your Redux store all by itself. This is a feature which is nice to have, was possible to implement without spending too much time on it, but could possibly disappear/be modified in the (near?) future. However, you will always be able to at least manually pass a variable you want to be shared through `data.store`.

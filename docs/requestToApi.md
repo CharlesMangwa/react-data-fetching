@@ -49,12 +49,12 @@ type RequestToApi = {
   body?: Object,
   headers?: Object,
   method: Method,
-  onProgress?: (Progress) => void,
+  onProgress?: Progress => void,
   onTimeout?: Function,
   params?: Object,
   url: string,
-  timeout?: number,
-}
+  timeout?: number
+};
 ```
 
 See [`<Fetch>`'s doc](Fetch.md) to have more details about these types and [`ReturnedData`](Fetch.md#returneddata) you get from the `requestToApi()`.

@@ -47,7 +47,6 @@
 
 The package is really lightweight (~4 kB gzipped) and has been built from the ground up with universal apps in mind: you can use it wherever React is rendering - meaning it works seamlessly with React (web) & React Native!
 
-
 ## Installation
 
 Using [Yarn](https://yarnpkg.com/):
@@ -60,10 +59,10 @@ Then, use it as you would with anything else:
 
 ```js
 // using ES6 modules
-import { Fetch } from "react-data-fetching"
+import { Fetch } from "react-data-fetching";
 
 // using CommonJS modules
-var Fetch = require("react-data-fetching").Fetch
+var Fetch = require("react-data-fetching").Fetch;
 ```
 
 The UMD build is also available on [unpkg](https://unpkg.com):
@@ -79,32 +78,32 @@ You can find the library on `window.ReactDataFetching`.
 The following illustrates the simplest way to use `react-data-fetching`:
 
 ```jsx
-import React, { Component } from "react"
-import { Fetch } from "react-data-fetching"
+import React, { Component } from "react";
+import { Fetch } from "react-data-fetching";
 
-import { Loader } from './components'
+import { Loader } from "./components";
 
 export default class App extends Component {
   render() {
     return (
       <Fetch
-        loader={<Loader/>} // Replace this with your lovely handcrafted loader
+        loader={<Loader />} // Replace this with your lovely handcrafted loader
         url="https://api.github.com/users/octocat"
         timeout={5000}
       >
         {({ data }) => (
-         <div>
-          <h1>Username</h1>
-          <p>{data.name}</p>
-         </div>
+          <div>
+            <h1>Username</h1>
+            <p>{data.name}</p>
+          </div>
         )}
       </Fetch>
-    )
+    );
   }
 }
 ```
 
-The package gives  access to `<Fetch>`, `<ConnectedFetch>` and `requestToApi()`. To have an in-depth explanation of how to use them, how they work and even more, head to this post: [Introducing 🎣 React Data Fetching](https://medium.com/p/2140a1d36cc8/).
+The package gives access to `<Fetch>`, `<ConnectedFetch>` and `requestToApi()`. To have an in-depth explanation of how to use them, how they work and even more, head to this post: [Introducing 🎣 React Data Fetching](https://medium.com/p/2140a1d36cc8/).
 
 ## About
 

@@ -78,7 +78,7 @@ This library is fully typed with [Flow](https://flow.org). Some of these types a
 
 **Type: `Object`**
 
-`Object` used whenever you're using an appropriated method which accepts a body (`'FORM_DATA' | 'PATCH' | 'POST' | 'PUT'`), and need to pass one to your request.
+`Object` used whenever you're using an appropriated method which accepts a body (`'FORM_DATA' | 'PATCH' | 'POST' | 'PUT'`), and need to pass one to your request.
 
 ### children
 
@@ -86,7 +86,7 @@ This library is fully typed with [Flow](https://flow.org). Some of these types a
 
 Called when the response has been received. This could be a regular React component, or a [Function as Child Component (FaCC)](https://medium.com/merrickchristensen/function-as-child-components-5f3920a9ace9). Only the former will received [`ReturnedData`](Fetch.md#returneddata) or ([`Error`](Fetch.md#error)) as an argument.
 
-!> **On another note: *never* call `setState` from here**
+!> **On another note: _never_ call `setState` from here**
 
 as this will cause an infinite loop: you start rendering, call `setState`, that starts rendering again, you call `setState` again, etc. Simply use a FaCC to render your data, or see [`onFetch`](Fetch.md#onfetch) if you still want to use `setState`.
 
@@ -106,7 +106,7 @@ Rendered when the response has been received. When you use `component` over `chi
 
 \- as explained by the folks at [ReactTraining](https://reacttraining.com/react-router/web/api/Route/component).
 
-The common use case for `component` would be to render a custom component that needs  [`ReturnedData`](Fetch.md#returneddata) in its props, while `children` & `render` can be used to directly exploit the data inside HTML tags or React Native's components (`<View>`, `<Text>`, `<Image>`, etc). Make sure to implement `shouldComponentUpdate` where (and when!) needed to avoid any unnecessary re-rerender.
+The common use case for `component` would be to render a custom component that needs [`ReturnedData`](Fetch.md#returneddata) in its props, while `children` & `render` can be used to directly exploit the data inside HTML tags or React Native's components (`<View>`, `<Text>`, `<Image>`, etc). Make sure to implement `shouldComponentUpdate` where (and when!) needed to avoid any unnecessary re-rerender.
 
 ### loader
 
@@ -178,7 +178,7 @@ Follows the same principle as [`extraData`](https://facebook.github.io/react-nat
 
 `Function` similar to `children`, but instead of writing it inside the component (`<Fetch>{...}</Fetch>`), you use a prop to do so (`<Fetch render={...} />`). These are the 2 main approaches when it comes to [**render props**](https://reactjs.org/docs/render-props.html). React Data Fetching supports both, so just use the one that works best for you!
 
-!> **Like `children`: *never* call `setState` from here**
+!> **Like `children`: _never_ call `setState` from here**
 
 as this will cause an infinite loop: you start rendering, call `setState`, that starts rendering again, you call `setState` again, etc. Simply use a FaCC to render your data, or see [`onFetch`](Fetch.md#onfetch) if you still want to use `setState`. If you just want to render a component, see [`component`](Fetch.md#component) instead.
 
@@ -192,7 +192,7 @@ Defines if you want to received the whole [`ReturnedData`](Fetch.md#returneddata
 
 **Type: `number`**
 
-Value in ms after which you'll want the library to abort the request. It's defaulted to `0`, which means there is no timeout. See [`<ConnectedFetch>` docs](ConnectedFetch.md#timeout) if you have a `timeout` value you want to share among all your `<Fetch>` instances. 
+Value in ms after which you'll want the library to abort the request. It's defaulted to `0`, which means there is no timeout. See [`<ConnectedFetch>` docs](ConnectedFetch.md#timeout) if you have a `timeout` value you want to share among all your `<Fetch>` instances.
 
 ### url
 
@@ -204,18 +204,17 @@ String used to make your request. Here you passed the complete string of the URL
 
 ### Error
 
-
 ```js
 type ErrorContent = {
   request: XMLHttpRequest,
-  response: String | Object,
-}
+  response: String | Object
+};
 
 type Error = {
   content: ErrorContent,
-  message: 'Something went wrong during the request',
-  url?: string,
-}
+  message: "Something went wrong during the request",
+  url?: string
+};
 ```
 
 `Object` provided to `children`, `component`, `onError`, `onFetch` & `render` prop when an error occurred while sending the request. It could be part of another `object` (corresponding to [ReturnedData](Fetch.md#returneddata)) or the only argument sent to these functions if you set `resultOnly` to `true`.
@@ -230,23 +229,21 @@ type Error = {
 
 ### Method
 
-
 ```js
 type Method =
-  'DELETE'
-| 'FORM_DATA'
-| 'GET'
-| 'HEAD'
-| 'PATCH'
-| 'POST'
-| 'PUT'
-| 'TRACE'
+  | "DELETE"
+  | "FORM_DATA"
+  | "GET"
+  | "HEAD"
+  | "PATCH"
+  | "POST"
+  | "PUT"
+  | "TRACE";
 ```
 
 `String` enumerating all the HTTP methods currently supported by the library. If you use one which is not listed in the type above, your request will still be sent, but there is no guarantee that `<Fetch>` will work exactly as expected.
 
 ### Progress
-
 
 ```js
 type Progress = {
@@ -256,8 +253,8 @@ type Progress = {
   loaded: number,
   target: EventTarget,
   total: number,
-  type: string,
-}
+  type: string
+};
 ```
 
 `Object` provided to `onProgress` when you're making a request. This is particularly handy if you're uploading files through the `"FORM_DATA"` method seen above, and want to keep your user update of the progression. You could use it as so:
@@ -268,7 +265,7 @@ import { ProgressionBar } from './components'
 
 export default class Inscription extends Component {
   state = { uploadProgression: 0 }
-  
+
   onUploadProgression = (progress) => {
     if (progress.lengthComputable) {
       this.setState(() => ({
@@ -301,7 +298,6 @@ export default class Inscription extends Component {
 
 ### ReturnedData
 
-
 ```js
 type ReturnedData = {
   data?: Object,
@@ -309,12 +305,12 @@ type ReturnedData = {
   isOK?: boolean,
   request?: XMLHttpRequest,
   status?: number,
-  store?: Object,
-}
+  store?: Object
+};
 ```
 
 `Object` provided to `children`, `component`, `onError`, `onFetch` & `render`. As you can see, you won't necessarily get every field. For instance: if your API responds with a `200 'OK'` status, there's no reason to get an `error` field. However, if you set `resultOnly` to `true`, the above-mentioned props won't received this `object`, but rather:
 
-- **data**, if everything went well and you're inside `children` (FaCC not a component), `component`, `onFetch` & `render`
-- **error**, if you caught an error and are inside `children` (FaCC not a component), `component`, `onFetch` & `render`
-- **store**, if you've configured `ConnectedFetch` and call `path="redux"` inside `<Fetch>`: everywhere (`children`, `component`, `onError`, `onFetch` & `render`)
+* **data**, if everything went well and you're inside `children` (FaCC not a component), `component`, `onFetch` & `render`
+* **error**, if you caught an error and are inside `children` (FaCC not a component), `component`, `onFetch` & `render`
+* **store**, if you've configured `ConnectedFetch` and call `path="redux"` inside `<Fetch>`: everywhere (`children`, `component`, `onError`, `onFetch` & `render`)
