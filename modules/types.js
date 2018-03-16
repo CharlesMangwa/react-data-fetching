@@ -1,6 +1,6 @@
 /* @flow */
 
-import PropTypes from 'prop-types'
+import PropTypes from "prop-types";
 
 // FLOW
 export type Context = {
@@ -8,35 +8,35 @@ export type Context = {
   rdfHeaders: Object,
   rdfLoader: React$Node,
   rdfStore: Object,
-  rdfTimeout: number,
-}
+  rdfTimeout: number
+};
 
 export type ErrorContent = {
   request: XMLHttpRequest,
-  response: String | Object,
-}
+  response: String | Object
+};
 
 export type Error = {
   content: ErrorContent,
-  message: 'Something went wrong during the request',
-  url?: string,
-}
+  message: "Something went wrong during the request",
+  url?: string
+};
 
 export type Method =
-  'DELETE'
-| 'FORM_DATA'
-| 'GET'
-| 'HEAD'
-| 'PATCH'
-| 'POST'
-| 'PUT'
-| 'TRACE'
+  | "DELETE"
+  | "FORM_DATA"
+  | "GET"
+  | "HEAD"
+  | "PATCH"
+  | "POST"
+  | "PUT"
+  | "TRACE";
 
 export type DefaultProps = {
   body: Object,
   method: Method,
-  params: Object,
-}
+  params: Object
+};
 
 export type Progress = {
   bubbles: boolean,
@@ -45,8 +45,8 @@ export type Progress = {
   loaded: number,
   target: EventTarget,
   total: number,
-  type: string,
-}
+  type: string
+};
 
 export type ReturnedData = {
   data?: Object,
@@ -54,8 +54,8 @@ export type ReturnedData = {
   isOK?: boolean,
   request?: XMLHttpRequest,
   status?: number,
-  store?: Object,
-}
+  store?: Object
+};
 
 export type Props = {
   body?: Object,
@@ -67,7 +67,7 @@ export type Props = {
   onError?: (?ReturnedData | Error) => void,
   onFetch?: (?ReturnedData | Error) => void,
   onLoad?: Function,
-  onProgress?: (Progress) => void,
+  onProgress?: Progress => void,
   onTimeout?: Function,
   params?: Object,
   path?: string,
@@ -75,25 +75,25 @@ export type Props = {
   render?: React$StatelessFunctionalComponent<?ReturnedData | Error>,
   resultOnly?: boolean,
   timeout?: number,
-  url?: string,
-}
+  url?: string
+};
 
 export type RequestToApi = {
   body?: Object,
   headers?: Object,
   method: Method,
-  onProgress?: (Progress) => void,
+  onProgress?: Progress => void,
   onTimeout?: Function,
   params?: Object,
   url: string,
-  timeout?: number,
-}
+  timeout?: number
+};
 
 export type Store = {
   subscribe: Function,
   dispatch: Function,
-  getState: () => Object,
-}
+  getState: () => Object
+};
 
 export type ProviderProps = {
   api: string,
@@ -101,21 +101,21 @@ export type ProviderProps = {
   headers?: Object,
   loader?: React$Node,
   store?: Store,
-  timeout?: number,
-}
+  timeout?: number
+};
 
 // PROPTYPES
 export const methodShape = PropTypes.oneOf([
-  'DELETE',
-  'FORM_DATA',
-  'GET',
-  'HEAD',
-  'PATCH',
-  'POST',
-  'PUT',
-  'TRACE',
-])
+  "DELETE",
+  "FORM_DATA",
+  "GET",
+  "HEAD",
+  "PATCH",
+  "POST",
+  "PUT",
+  "TRACE"
+]);
 
 export const storeShape = PropTypes.shape({
-  getState: PropTypes.func,
-})
+  getState: PropTypes.func
+});

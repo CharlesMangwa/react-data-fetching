@@ -1,42 +1,42 @@
-import React from 'react'
-import TestRenderer from 'react-test-renderer'
-import ShallowRenderer from 'react-test-renderer/shallow'
+import React from "react";
+import TestRenderer from "react-test-renderer";
+import ShallowRenderer from "react-test-renderer/shallow";
 
-import {  ConnectedFetch, Fetch } from '../index'
-import getElementWithContent from './__helpers__'
+import { ConnectedFetch, Fetch } from "../index";
+import getElementWithContent from "./__helpers__";
 
-describe('A <Fetch>', () => {
-  let fn, renderer
+describe("A <Fetch>", () => {
+  let fn, renderer;
 
   beforeEach(() => {
-    fn = jest.fn()
-    renderer = new ShallowRenderer()
+    fn = jest.fn();
+    renderer = new ShallowRenderer();
     global.fetch = jest.fn().mockImplementation(() => {
       const p = new Promise((resolve, reject) => {
         resolve({
           ok: true,
           json: () => {
-            return { ok: true }
+            return { ok: true };
           }
-        })
-      })
-      return p
-    })
-  })
+        });
+      });
+      return p;
+    });
+  });
 
-  afterEach(() => jest.clearAllMocks())
+  afterEach(() => jest.clearAllMocks());
 
-  it('throws when it is not rendered in the context of a <ConnectedFetch>', () => {
+  it("throws when it is not rendered in the context of a <ConnectedFetch>", () => {
     expect(() =>
-      renderer.render(<Fetch path="store">{() => null}</Fetch>),
-    ).toThrow()
-  })
+      renderer.render(<Fetch path="store">{() => null}</Fetch>)
+    ).toThrow();
+  });
 
-  it('throws when no url nor path is passed', () => {
-    expect(() => renderer.render(<Fetch>{() => null}</Fetch>)).toThrow()
-  })
+  it("throws when no url nor path is passed", () => {
+    expect(() => renderer.render(<Fetch>{() => null}</Fetch>)).toThrow();
+  });
 
-  it('throws when onTimeout is passed, but no timeout', () => {
+  it("throws when onTimeout is passed, but no timeout", () => {
     expect(() =>
       renderer.render(
         <Fetch
@@ -44,97 +44,98 @@ describe('A <Fetch>', () => {
           onTimeout={() => fn()}
         >
           {() => null}
-        </Fetch>),
-    ).toThrow()
-  })
+        </Fetch>
+      )
+    ).toThrow();
+  });
 
-  it('throws when no children, component, onFetch, render prop is passed', () => {
+  it("throws when no children, component, onFetch, render prop is passed", () => {
     expect(() =>
-      renderer.render(<Fetch url="https://api.github.com/users/octocat" />),
-    ).toThrow()
-  })
+      renderer.render(<Fetch url="https://api.github.com/users/octocat" />)
+    ).toThrow();
+  });
 
-  it('renders component children correctly', () => {
+  it("renders component children correctly", () => {
     const component = TestRenderer.create(
       <Fetch url="https://api.github.com/users/octocat">
         <div />
-      </Fetch>,
-    )
-    const tree = component.toJSON()
-    expect(tree).toMatchSnapshot()
-  })
+      </Fetch>
+    );
+    const tree = component.toJSON();
+    expect(tree).toMatchSnapshot();
+  });
 
-  it('renders & calls function children correctly', () => {
+  it("renders & calls function children correctly", () => {
     const component = TestRenderer.create(
       <Fetch url="https://api.github.com/users/octocat">
         {() => fn() || null}
-      </Fetch>,
-    )
+      </Fetch>
+    );
 
-    const instance = component.root
-    instance.props.children()
+    const instance = component.root;
+    instance.props.children();
 
-    expect(fn).toHaveBeenCalled()
-  })
+    expect(fn).toHaveBeenCalled();
+  });
 
   it("re-renders only when necessary", () => {
     const component = TestRenderer.create(
       <Fetch url="https://api.github.com/users/octocat">
         <div />
-      </Fetch>,
-    )
+      </Fetch>
+    );
 
-    const instance = component.getInstance()
-    const spy = jest.spyOn(instance, '_fetchData')
+    const instance = component.getInstance();
+    const spy = jest.spyOn(instance, "_fetchData");
 
     component.update(
       <Fetch url="https://api.github.com/users/octocat">
         <div />
-      </Fetch>,
-    )
-    expect(spy).not.toHaveBeenCalled()
+      </Fetch>
+    );
+    expect(spy).not.toHaveBeenCalled();
 
     component.update(
       <Fetch url="https://api.github.com/users/octocat" refetch>
         <div />
-      </Fetch>,
-    )
+      </Fetch>
+    );
 
-    expect(spy).toHaveBeenCalled()
-  })
+    expect(spy).toHaveBeenCalled();
+  });
 
-  it('calls onLoad when passed', () => {
+  it("calls onLoad when passed", () => {
     renderer.render(
       <Fetch
         onLoad={fn}
         url="https://api.github.com/users/octocat"
         render={() => null}
       />
-    )
+    );
 
-    expect(fn).toHaveBeenCalled()
-  })
+    expect(fn).toHaveBeenCalled();
+  });
 
-  it('calls loader when passed', () => {
+  it("calls loader when passed", () => {
     renderer.render(
       <Fetch
         loader={fn}
         url="https://api.github.com/users/octocat"
         render={() => null}
       />
-    )
+    );
 
-    expect(fn).toHaveBeenCalled()
-  })
+    expect(fn).toHaveBeenCalled();
+  });
 
-  it('returns data only if `resultOnly` is passed', () => {
-    let receivedData
+  it("returns data only if `resultOnly` is passed", () => {
+    let receivedData;
     const expectedData = {
-      cats: 42,
-    }
+      cats: 42
+    };
     const expectedContext = {
-      rdfStore: { cats: 42 },
-    }
+      rdfStore: { cats: 42 }
+    };
 
     const wrapper = getElementWithContent(
       expectedContext,
@@ -142,18 +143,15 @@ describe('A <Fetch>', () => {
         resultOnly
         path="store"
         onFetch={data => (receivedData = data || null)}
-      />,
-    )
+      />
+    );
 
     const component = TestRenderer.create(
-      <ConnectedFetch
-        api="https://api.github.com"
-        store={{ cats: 42 }}
-      >
+      <ConnectedFetch api="https://api.github.com" store={{ cats: 42 }}>
         {wrapper}
-      </ConnectedFetch>,
-    )
+      </ConnectedFetch>
+    );
 
-    expect(receivedData).toMatchObject(expectedData)
-  })
-})
+    expect(receivedData).toMatchObject(expectedData);
+  });
+});

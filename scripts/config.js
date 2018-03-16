@@ -1,62 +1,61 @@
 /* eslint import/no-extraneous-dependencies: 0 */
 
-import babel from 'rollup-plugin-babel'
-import commonjs from 'rollup-plugin-commonjs'
-import replace from 'rollup-plugin-replace'
-import resolve from 'rollup-plugin-node-resolve'
-import uglify from 'rollup-plugin-uglify'
+import babel from "rollup-plugin-babel";
+import commonjs from "rollup-plugin-commonjs";
+import replace from "rollup-plugin-replace";
+import resolve from "rollup-plugin-node-resolve";
+import uglify from "rollup-plugin-uglify";
 
-const getPlugins = (env) => {
-  const plugins = [resolve()]
+const getPlugins = env => {
+  const plugins = [resolve()];
 
   if (env) {
     plugins.push(
       replace({
-        'process.env.NODE_ENV': JSON.stringify(env),
-      }),
-    )
+        "process.env.NODE_ENV": JSON.stringify(env)
+      })
+    );
   }
 
   plugins.push(
     babel({
-      exclude: 'node_modules/**',
+      exclude: "node_modules/**",
       babelrc: false,
       presets: [
-        ['env', { loose: true, modules: false }],
-        'stage-1',
-        'flow',
-        'react',
+        ["env", { loose: true, modules: false }],
+        "stage-1",
+        "flow",
+        "react"
       ],
-      plugins: ['external-helpers'].concat(
-        env === 'production'
+      plugins: ["external-helpers"].concat(
+        env === "production"
           ? [
-            'dev-expression',
-            'transform-react-remove-prop-types',
-            'transform-flow-strip-types',
-          ]
-          : [],
-      ),
+              "dev-expression",
+              "transform-react-remove-prop-types",
+              "transform-flow-strip-types"
+            ]
+          : []
+      )
     }),
     commonjs({
-      include: /node_modules/,
-    }),
-  )
+      include: /node_modules/
+    })
+  );
 
-  if (env === 'production')
-    plugins.push(uglify())
+  if (env === "production") plugins.push(uglify());
 
-  return plugins
-}
+  return plugins;
+};
 
 const config = {
-  input: 'modules/index.js',
+  input: "modules/index.js",
   output: {
     globals: {
-      react: 'React',
-    },
+      react: "React"
+    }
   },
-  external: ['react'],
-  plugins: getPlugins(process.env.BUILD_ENV),
-}
+  external: ["react"],
+  plugins: getPlugins(process.env.BUILD_ENV)
+};
 
-module.exports = config
+module.exports = config;

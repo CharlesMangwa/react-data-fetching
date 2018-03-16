@@ -5,11 +5,7 @@
   "repository": "CharlesMangwa/react-data-fetching",
   "license": "MIT",
   "author": "Charles Mangwa",
-  "files": [
-    "cjs",
-    "esm",
-    "umd"
-  ],
+  "files": ["cjs", "esm", "umd"],
   "main": "cjs/react-data-fetching.js",
   "module": "esm/react-data-fetching.js",
   "unpkg": "umd/react-data-fetching.js",
@@ -20,7 +16,8 @@
     "jest": "jest --verbose --coverage",
     "lint": "eslint .",
     "test": "yarn lint && yarn flow && yarn jest",
-    "test:ci": "yarn jest && cat ./modules/__tests__/__coverage__/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+    "test:ci":
+      "yarn jest && cat ./modules/__tests__/__coverage__/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "prepack": "node ./scripts/build.js"
   },
   "babel": {
@@ -38,12 +35,8 @@
   },
   "jest": {
     "coverageDirectory": "./modules/__tests__/__coverage__",
-    "coveragePathIgnorePatterns": [
-      "/node_modules/"
-    ],
-    "coverageReporters": [
-      "lcov"
-    ],
+    "coveragePathIgnorePatterns": ["/node_modules/"],
+    "coverageReporters": ["lcov"],
     "rootDir": ".",
     "testRegex": "./modules/__tests__/.*.test.js$"
   },
@@ -90,12 +83,5 @@
     "rollup-plugin-replace": "^2.0.0",
     "rollup-plugin-uglify": "^2.0.1"
   },
-  "keywords": [
-    "react",
-    "native",
-    "data",
-    "fetch",
-    "api",
-    "component"
-  ]
+  "keywords": ["react", "native", "data", "fetch", "api", "component"]
 }

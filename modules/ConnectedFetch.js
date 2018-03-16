@@ -1,28 +1,28 @@
 /* @flow */
 
-import { Children, Component } from 'react'
-import PropTypes from 'prop-types'
-import invariant from 'invariant'
+import { Children, Component } from "react";
+import PropTypes from "prop-types";
+import invariant from "invariant";
 
-import { type ProviderProps, type Store, storeShape } from './types'
+import { type ProviderProps, type Store, storeShape } from "./types";
 
 const createConnectedFetch = (): Class<*> => {
   class ConnectedFetch extends Component<ProviderProps> {
-    rdfApi = this.props.api
-    rdfHeaders: ?Object = this.props.headers
-    rdfLoader: ?React$Node = this.props.loader
+    rdfApi = this.props.api;
+    rdfHeaders: ?Object = this.props.headers;
+    rdfLoader: ?React$Node = this.props.loader;
     rdfStore: ?Store = this.context && this.context.store
       ? this.context.store.getState()
-      : this.props.store
-    rdfTimeout: ?number = this.props.timeout
+      : this.props.store;
+    rdfTimeout: ?number = this.props.timeout;
 
     static defaultProps = {
       api: undefined,
       headers: {},
       loader: undefined,
       store: undefined,
-      timeout: undefined,
-    }
+      timeout: undefined
+    };
 
     static propTypes = {
       api: PropTypes.string,
@@ -30,66 +30,66 @@ const createConnectedFetch = (): Class<*> => {
       headers: PropTypes.object,
       loader: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
       store: storeShape,
-      timeout: PropTypes.number,
-    }
+      timeout: PropTypes.number
+    };
 
     static contextTypes = {
-      store: storeShape,
-    }
+      store: storeShape
+    };
 
     static childContextTypes = {
       rdfApi: PropTypes.string,
       rdfHeaders: PropTypes.object,
       rdfLoader: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
       rdfStore: PropTypes.object,
-      rdfTimeout: PropTypes.number,
-    }
+      rdfTimeout: PropTypes.number
+    };
 
     getChildContext() {
       return {
-        rdfApi: this.rdfApi || '',
+        rdfApi: this.rdfApi || "",
         rdfHeaders: this.rdfHeaders,
         rdfLoader: this.rdfLoader,
         rdfStore: this.props.store || this.rdfStore,
-        rdfTimeout: this.rdfTimeout,
-      }
+        rdfTimeout: this.rdfTimeout
+      };
     }
 
-    componentWillReceiveProps = (): null => null
+    componentWillReceiveProps = (): null => null;
 
     render() {
-      return Children.only(this.props.children)
+      return Children.only(this.props.children);
     }
   }
 
-  if (process.env.NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV !== "production") {
     ConnectedFetch.prototype.componentWillReceiveProps = (
-      nextProps: ProviderProps,
+      nextProps: ProviderProps
     ): void => {
       invariant(
         this.rdfApi === nextProps.api,
-        '<ConnectedFetch> does not support changing `api` on the fly.',
-      )
+        "<ConnectedFetch> does not support changing `api` on the fly."
+      );
       invariant(
         this.rdfHeaders === nextProps.headers,
-        '<ConnectedFetch> does not support changing `headers` on the fly.',
-      )
+        "<ConnectedFetch> does not support changing `headers` on the fly."
+      );
       invariant(
         this.rdfLoader === nextProps.loader,
-        '<ConnectedFetch> does not support changing `loader` on the fly.',
-      )
+        "<ConnectedFetch> does not support changing `loader` on the fly."
+      );
       invariant(
         this.rdfStore === nextProps.store,
-        '<ConnectedFetch> does not support changing `store` on the fly.',
-      )
+        "<ConnectedFetch> does not support changing `store` on the fly."
+      );
       invariant(
         this.rdfTimeout === nextProps.timeout,
-        '<ConnectedFetch> does not support changing `timeout` on the fly.',
-      )
-    }
+        "<ConnectedFetch> does not support changing `timeout` on the fly."
+      );
+    };
   }
 
-  return ConnectedFetch
-}
+  return ConnectedFetch;
+};
 
-export default createConnectedFetch()
+export default createConnectedFetch();
