@@ -35,7 +35,7 @@ class Fetch extends Component<Props> {
     onTimeout: PropTypes.func,
     params: PropTypes.object,
     path: PropTypes.string,
-    refetch: PropTypes.any,
+    refetchKey: PropTypes.any,
     render: PropTypes.func,
     resultOnly: PropTypes.bool,
     url: PropTypes.string,
@@ -63,7 +63,7 @@ class Fetch extends Component<Props> {
     onTimeout: undefined,
     params: {},
     path: undefined,
-    refetch: false,
+    refetchKey: false,
     render: undefined,
     resultOnly: false,
     url: undefined,
@@ -89,7 +89,7 @@ class Fetch extends Component<Props> {
   }
 
   componentWillReceiveProps(nextProps: Props, nextContext: Context) {
-    const { onLoad, path, refetch } = this.props
+    const { onLoad, path, refetchKey } = this.props
 
     this._validateProps(nextProps, nextContext)
 
@@ -106,7 +106,7 @@ class Fetch extends Component<Props> {
     }
     else if (
       nextProps.path !== path ||
-      nextProps.refetch !== refetch
+      nextProps.refetchKey !== refetchKey
     )
       this._fetchData(nextProps, nextContext)
   }
@@ -123,7 +123,7 @@ class Fetch extends Component<Props> {
     if (this.props.onLoad !== nextProps.onLoad) return true
     if (this.props.path !== nextProps.path) return true
     if (this.props.params !== nextProps.params) return true
-    if (this.props.refetch !== nextProps.refetch) return true
+    if (this.props.refetchKey !== nextProps.refetchKey) return true
     if (this.props.render !== nextProps.render) return true
     if (this._isLoaded) return true
     if (this._data) return true
