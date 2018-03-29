@@ -71,7 +71,7 @@ export type Props = {
   onTimeout?: Function,
   params?: Object,
   path?: string,
-  refetch?: any,
+  refetchKey?: any,
   render?: React$StatelessFunctionalComponent<?ReturnedData | Error>,
   resultOnly?: boolean,
   timeout?: number,

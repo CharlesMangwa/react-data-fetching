@@ -166,7 +166,7 @@ Works exactly like `body`, but is used whenever you need to pass parameters to y
 
 Only available if you've configured `<ConnectedFetch>` in your app, and provided an `api` (see [`<ConnectedFetch>` docs](ConnectedFetch.md#path) for more details). Then, `path` allows you to write your URL in a more convenient way. Instead of writing `url="https://my-app.com/api/v1/news/latest"`, given that `<ConnectedFetch>` propagates your `api` URL `https://my-app.com/api/v1` inside every `<Fetch>` instances, you can just write `path="/news/latest"`, and React Data Fetching will automatically construct the corresponding URL.
 
-### refetch
+### refetchKey
 
 **Type: `any`**
 
@@ -192,7 +192,7 @@ Defines if you want to received the whole [`ReturnedData`](Fetch.md#returneddata
 
 **Type: `number`**
 
-Value in ms after which you'll want the library to abort the request. It's defaulted to `0`, which means there is no timeout. See [`<ConnectedFetch>` docs](ConnectedFetch.md#timeout) if you have a `timeout` value you want to share among all your `<Fetch>` instances. 
+Value in ms after which you'll want the library to abort the request. It's defaulted to `0`, which means there is no timeout. See [`<ConnectedFetch>` docs](ConnectedFetch.md#timeout) if you have a `timeout` value you want to share among all your `<Fetch>` instances.
 
 ### url
 
@@ -222,7 +222,7 @@ type Error = {
 
 `Error` could exist if your API responded with a non-successful status code (`statusCode < 200 || statusCode > 299`) or if the URL you provided couldn't be used. In either way, if you're in `__DEV__` environment, a descriptive error of what could have gone wrong will be printed in your console:
 
-<img 
+<img
   alt="React Data Fetching error printing example"
   src="images/error.png"
   width="900"
@@ -268,7 +268,7 @@ import { ProgressionBar } from './components'
 
 export default class Inscription extends Component {
   state = { uploadProgression: 0 }
-  
+
   onUploadProgression = (progress) => {
     if (progress.lengthComputable) {
       this.setState(() => ({

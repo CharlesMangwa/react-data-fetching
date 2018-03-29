@@ -95,7 +95,10 @@ describe('A <Fetch>', () => {
     expect(spy).not.toHaveBeenCalled()
 
     component.update(
-      <Fetch url="https://api.github.com/users/octocat" refetch>
+      <Fetch
+        url="https://api.github.com/users/octocat"
+        refetchKey
+      >
         <div />
       </Fetch>,
     )
