@@ -166,7 +166,7 @@ Works exactly like `body`, but is used whenever you need to pass parameters to y
 
 Only available if you've configured `<ConnectedFetch>` in your app, and provided an `api` (see [`<ConnectedFetch>` docs](ConnectedFetch.md#path) for more details). Then, `path` allows you to write your URL in a more convenient way. Instead of writing `url="https://my-app.com/api/v1/news/latest"`, given that `<ConnectedFetch>` propagates your `api` URL `https://my-app.com/api/v1` inside every `<Fetch>` instances, you can just write `path="/news/latest"`, and React Data Fetching will automatically construct the corresponding URL.
 
-### refetchKey
+### refetch
 
 **Type: `any`**
 
