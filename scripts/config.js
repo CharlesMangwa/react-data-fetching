@@ -29,7 +29,7 @@ const getPlugins = (env) => {
             loose: true,
             modules: false,
             targets: {
-              node: 'current',
+              browsers: '> 1%, last 2 versions',
             },
           },
         ],
