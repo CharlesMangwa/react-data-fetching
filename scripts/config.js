@@ -29,7 +29,8 @@ const getPlugins = (env) => {
             loose: true,
             modules: false,
             targets: {
-              browsers: '> 1%, last 2 versions',
+              node: 'current',
+              browser: '> 1%, last 2 versions',
             },
           },
         ],
@@ -37,7 +38,14 @@ const getPlugins = (env) => {
         'flow',
         'react',
       ],
-      plugins: ['external-helpers'].concat(
+      plugins: [
+        'external-helpers',
+        ['transform-runtime', {
+          helpers: false,
+          polyfill: false,
+          regenerator: true,
+        }],
+      ].concat(
         env === 'production'
           ? [
             'dev-expression',
