@@ -88,7 +88,7 @@ export type RequestToApi = {
   method: Method,
   onProgress?: (Progress) => void,
   onTimeout?: Function,
-  onIntercept?: OnInterceptFn,
+  onIntercept?: ?OnInterceptFn,
   params?: Object,
   url: string,
   timeout?: number,
@@ -96,7 +96,8 @@ export type RequestToApi = {
 
 export type InterceptedData = {
   currentParams: RequestToApi,
-  request: XMLHttpRequest
+  request: XMLHttpRequest,
+  status: number
 }
 
 export type Store = {

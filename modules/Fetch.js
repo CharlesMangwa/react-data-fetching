@@ -177,7 +177,7 @@ class Fetch extends Component<Props> {
         method,
         onTimeout,
         onProgress,
-        onIntercept: onInterceptFn || (() => null),
+        onIntercept: onInterceptFn,
         params: { ...params },
         timeout: timeoutValue,
       })
