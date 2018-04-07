@@ -67,7 +67,10 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
           status: request.status
         })
         if (interceptedResult) {
-          resolve(requestToApi(interceptedResult))
+          resolve(requestToApi({
+            ...interceptedResult,
+            onIntercept: undefined
+          }))
         } else handleError(request, request, reject);
       }
       else 
