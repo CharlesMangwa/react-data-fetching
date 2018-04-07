@@ -9,7 +9,7 @@ export type Context = {
   rdfLoader: React$Node,
   rdfStore: Object,
   rdfTimeout: number,
-  refOnIntercept: OnInterceptFn
+  rdfOnIntercept: ?OnInterceptFn
 }
 
 export type ErrorContent = {

@@ -163,7 +163,7 @@ class Fetch extends Component<Props> {
     }
 
     if (context.rdfOnIntercept) {
-      onInterceptFn = context.refOnIntercept;
+      onInterceptFn = context.rdfOnIntercept;
     }
     if (onIntercept) {
       onInterceptFn = onIntercept
