@@ -9,6 +9,7 @@ export type Context = {
   rdfLoader: React$Node,
   rdfStore: Object,
   rdfTimeout: number,
+  refOnIntercept: OnInterceptFn
 }
 
 export type ErrorContent = {
@@ -69,6 +70,7 @@ export type Props = {
   onLoad?: Function,
   onProgress?: (Progress) => void,
   onTimeout?: Function,
+  onIntercept?: OnInterceptFn,
   params?: Object,
   path?: string,
   refetchKey?: any,
@@ -78,15 +80,23 @@ export type Props = {
   url?: string,
 }
 
+export type OnInterceptFn = (InterceptedData) => ?RequestToApi;
+
 export type RequestToApi = {
   body?: Object,
   headers?: Object,
   method: Method,
   onProgress?: (Progress) => void,
   onTimeout?: Function,
+  onIntercept?: OnInterceptFn,
   params?: Object,
   url: string,
   timeout?: number,
+}
+
+export type InterceptedData = {
+  currentParams: RequestToApi,
+  request: XMLHttpRequest
 }
 
 export type Store = {
@@ -100,6 +110,7 @@ export type ProviderProps = {
   children: React$Node,
   headers?: Object,
   loader?: React$Node,
+  onIntercept?: OnInterceptFn,
   store?: Store,
   timeout?: number,
 }
