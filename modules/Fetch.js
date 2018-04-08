@@ -11,7 +11,6 @@ import {
   type Error,
   type Props,
   type ReturnedData,
-  type Interceptor,
   methodShape,
 } from './types'
 
@@ -46,10 +45,10 @@ class Fetch extends Component<Props> {
   static contextTypes = {
     rdfApi: PropTypes.string,
     rdfHeaders: PropTypes.object,
+    rdfInterceptor: PropTypes.func,
     rdfLoader: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
     rdfStore: PropTypes.object,
     rdfTimeout: PropTypes.number,
-    rdfOnIntercept: PropTypes.func,
   }
 
   static defaultProps = {
@@ -137,17 +136,16 @@ class Fetch extends Component<Props> {
       body,
       headers,
       method,
+      onIntercept,
       onProgress,
       onTimeout,
       params,
       path,
       url,
       timeout,
-      onIntercept,
     } = props
     let route: ?string
     let timeoutValue: number = 0
-    let interceptor: ?Interceptor
 
     if (path) route = `${context.rdfApi || ''}${path}`
     else route = url
@@ -162,13 +160,6 @@ class Fetch extends Component<Props> {
         : timeout
     }
 
-    if (context.rdfOnIntercept)
-      interceptor = context.rdfOnIntercept
-
-    if (onIntercept)
-      interceptor = onIntercept
-
-
     try {
       const apiResponse = await requestToApi({
         url: route || '',
@@ -177,7 +168,7 @@ class Fetch extends Component<Props> {
         method,
         onTimeout,
         onProgress,
-        onIntercept: interceptor,
+        onIntercept: onIntercept || context.rdfInterceptor,
         params: { ...params },
         timeout: timeoutValue,
       })

@@ -9,10 +9,10 @@ export type Interceptor = (InterceptedData) => ?RequestToApi;
 export type Context = {
   rdfApi: string,
   rdfHeaders: Object,
+  rdfInterceptor: ?Interceptor,
   rdfLoader: React$Node,
   rdfStore: Object,
   rdfTimeout: number,
-  rdfOnIntercept: ?Interceptor
 }
 
 export type ErrorContent = {

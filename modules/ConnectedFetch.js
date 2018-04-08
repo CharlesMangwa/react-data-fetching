@@ -10,20 +10,20 @@ const createConnectedFetch = (): Class<*> => {
   class ConnectedFetch extends Component<ProviderProps> {
     rdfApi = this.props.api
     rdfHeaders: ?Object = this.props.headers
+    rdfInterceptor: ?Interceptor = this.props.onIntercept
     rdfLoader: ?React$Node = this.props.loader
     rdfStore: ?Store = this.context && this.context.store
       ? this.context.store.getState()
       : this.props.store
     rdfTimeout: ?number = this.props.timeout
-    rdfOnIntercept: ?Interceptor = this.props.onIntercept
 
     static defaultProps = {
       api: undefined,
       headers: {},
       loader: undefined,
+      onIntercept: undefined,
       store: undefined,
       timeout: undefined,
-      onIntercept: undefined,
     }
 
     static propTypes = {
@@ -43,20 +43,20 @@ const createConnectedFetch = (): Class<*> => {
     static childContextTypes = {
       rdfApi: PropTypes.string,
       rdfHeaders: PropTypes.object,
+      rdfInterceptor: PropTypes.func,
       rdfLoader: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
       rdfStore: PropTypes.object,
       rdfTimeout: PropTypes.number,
-      rdfOnIntercept: PropTypes.func,
     }
 
     getChildContext() {
       return {
         rdfApi: this.rdfApi || '',
         rdfHeaders: this.rdfHeaders,
+        rdfInterceptor: this.rdfInterceptor,
         rdfLoader: this.rdfLoader,
         rdfStore: this.props.store || this.rdfStore,
         rdfTimeout: this.rdfTimeout,
-        rdfOnIntercept: this.rdfOnIntercept,
       }
     }
 

@@ -64,14 +64,16 @@ describe('requestToApi', () => {
     })
   })
 
-  it('should run onIntercept when api call is failing with status 401', () => {
+  it('calls `onIntercept` when the request failed with a status 401', () => {
     const mockFailingXHR = {
       getAllResponseHeaders: jest.fn(),
       onload: jest.fn(),
       open: jest.fn(),
       onreadystatechange: jest.fn(),
       readyState: 4,
-      responseText: JSON.stringify({message: 'Credentials are required to access this path'}),
+      responseText: JSON.stringify({
+        message: 'Credentials are required to access this path'
+      }),
       send: jest.fn(),
       status: 401,
       setRequestHeader: jest.fn(),
@@ -82,13 +84,15 @@ describe('requestToApi', () => {
       open: jest.fn(),
       onreadystatechange: jest.fn(),
       readyState: 4,
-      responseText: JSON.stringify({newToken: 'abc123456'}),
+      responseText: JSON.stringify({
+        newToken: 'abc123456'
+      }),
       send: jest.fn(),
       status: 201,
       setRequestHeader: jest.fn(),
     }
     window.XMLHttpRequest = jest.fn(() =>mockFailingXHR);
-    const onIntercept = jest.fn(({currentParams, request, status}) => {
+    const onIntercept = jest.fn(({ currentParams, request, status }) => {
       if (status === 401) {
         window.XMLHttpRequest = jest.fn(() => mockResetXHR);
         const resetRequest = requestToApi({
@@ -124,20 +128,22 @@ describe('requestToApi', () => {
     expect(onIntercept).toBeCalled();
   })
 
-  it('should reject when onIntercept return null or undefined', () => {
+  it('rejects when `onIntercept` returns `null` or is `undefined`', () => {
     const mockFailingXHR = {
       getAllResponseHeaders: jest.fn(),
       onload: jest.fn(),
       open: jest.fn(),
       onreadystatechange: jest.fn(),
       readyState: 4,
-      responseText: JSON.stringify({message: 'Credentials are required to access this path'}),
+      responseText: JSON.stringify({
+        message: 'Credentials are required to access this path'
+      }),
       send: jest.fn(),
       status: 401,
       setRequestHeader: jest.fn(),
     }
     window.XMLHttpRequest = jest.fn(() =>mockFailingXHR);
-    const onIntercept = jest.fn(({currentParams, request, status}) => {
+    const onIntercept = jest.fn(({ currentParams, request, status }) => {
       return null
     });
     const request = requestToApi({
