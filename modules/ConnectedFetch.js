@@ -4,12 +4,13 @@ import { Children, Component } from 'react'
 import PropTypes from 'prop-types'
 import invariant from 'invariant'
 
-import { type ProviderProps, type Store, storeShape } from './types'
+import { type ProviderProps, type Store, type Interceptor, storeShape } from './types'
 
 const createConnectedFetch = (): Class<*> => {
   class ConnectedFetch extends Component<ProviderProps> {
     rdfApi = this.props.api
     rdfHeaders: ?Object = this.props.headers
+    rdfInterceptor: ?Interceptor = this.props.onIntercept
     rdfLoader: ?React$Node = this.props.loader
     rdfStore: ?Store = this.context && this.context.store
       ? this.context.store.getState()
@@ -20,6 +21,7 @@ const createConnectedFetch = (): Class<*> => {
       api: undefined,
       headers: {},
       loader: undefined,
+      onIntercept: undefined,
       store: undefined,
       timeout: undefined,
     }
@@ -31,6 +33,7 @@ const createConnectedFetch = (): Class<*> => {
       loader: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
       store: storeShape,
       timeout: PropTypes.number,
+      onIntercept: PropTypes.func,
     }
 
     static contextTypes = {
@@ -40,6 +43,7 @@ const createConnectedFetch = (): Class<*> => {
     static childContextTypes = {
       rdfApi: PropTypes.string,
       rdfHeaders: PropTypes.object,
+      rdfInterceptor: PropTypes.func,
       rdfLoader: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
       rdfStore: PropTypes.object,
       rdfTimeout: PropTypes.number,
@@ -49,6 +53,7 @@ const createConnectedFetch = (): Class<*> => {
       return {
         rdfApi: this.rdfApi || '',
         rdfHeaders: this.rdfHeaders,
+        rdfInterceptor: this.rdfInterceptor,
         rdfLoader: this.rdfLoader,
         rdfStore: this.props.store || this.rdfStore,
         rdfTimeout: this.rdfTimeout,

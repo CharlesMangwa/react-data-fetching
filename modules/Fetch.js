@@ -45,6 +45,7 @@ class Fetch extends Component<Props> {
   static contextTypes = {
     rdfApi: PropTypes.string,
     rdfHeaders: PropTypes.object,
+    rdfInterceptor: PropTypes.func,
     rdfLoader: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
     rdfStore: PropTypes.object,
     rdfTimeout: PropTypes.number,
@@ -135,6 +136,7 @@ class Fetch extends Component<Props> {
       body,
       headers,
       method,
+      onIntercept,
       onProgress,
       onTimeout,
       params,
@@ -166,6 +168,7 @@ class Fetch extends Component<Props> {
         method,
         onTimeout,
         onProgress,
+        onIntercept: onIntercept || context.rdfInterceptor,
         params: { ...params },
         timeout: timeoutValue,
       })

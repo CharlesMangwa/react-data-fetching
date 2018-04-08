@@ -11,6 +11,7 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
     onProgress = () => null,
     onTimeout,
     params,
+    onIntercept,
     url,
     timeout = 0,
   } = args
@@ -21,6 +22,7 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
   }
   const formData = new FormData()
   let route = url
+  let interceptedResult = null
 
   const handleError = async (
     error: Event | XMLHttpRequest,
@@ -58,7 +60,22 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
         }
         resolve(response)
       }
-      else handleError(request, request, reject)
+      else if (onIntercept) {
+        interceptedResult = onIntercept({
+          currentParams: args,
+          request,
+          status: request.status,
+        })
+        if (interceptedResult) {
+          resolve(requestToApi({
+            ...interceptedResult,
+            onIntercept: undefined,
+          }))
+        }
+        else handleError(request, request, reject)
+      }
+      else
+        handleError(request, request, reject)
     }
   }
 
@@ -85,11 +102,10 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
     ))
   }
 
-  return new Promise((resolve, reject) => {
+  const sendRequest = () => new Promise((resolve, reject) => {
     try {
       const request = new XMLHttpRequest()
       request.timeout = timeout
-
       if (request.upload) {
         request.upload.onerror = error => handleError(error, request, resolve)
         request.upload.onload = () => returnData(request, resolve, reject, true)
@@ -116,6 +132,9 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
       handleError(request, request, reject)
     }
   })
+
+
+  return sendRequest()
 }
 
 export default requestToApi
