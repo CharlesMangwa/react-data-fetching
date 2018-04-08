@@ -3,6 +3,8 @@
 import PropTypes from 'prop-types'
 
 // FLOW
+
+export type OnInterceptFn = (InterceptedData) => ?RequestToApi;
 export type Context = {
   rdfApi: string,
   rdfHeaders: Object,
@@ -79,8 +81,6 @@ export type Props = {
   timeout?: number,
   url?: string,
 }
-
-export type OnInterceptFn = (InterceptedData) => ?RequestToApi;
 
 export type RequestToApi = {
   body?: Object,

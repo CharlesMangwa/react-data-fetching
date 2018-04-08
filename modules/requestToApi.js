@@ -49,6 +49,7 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
   ): Promise<void> => {
     if (request.readyState === 4 || isUpload) {
       const isOK = request.status >= 200 && request.status <= 299
+      
       if (isOK) {
         const response = {
           data: request.responseText
@@ -106,7 +107,6 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
       try {
         const request = new XMLHttpRequest()
         request.timeout = timeout
-  
         if (request.upload) {
           request.upload.onerror = error => handleError(error, request, resolve)
           request.upload.onload = () => returnData(request, resolve, reject, true)
