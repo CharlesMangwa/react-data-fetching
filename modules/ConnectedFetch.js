@@ -4,7 +4,7 @@ import { Children, Component } from 'react'
 import PropTypes from 'prop-types'
 import invariant from 'invariant'
 
-import { type ProviderProps, type Store, type OnInterceptFn, storeShape, } from './types'
+import { type ProviderProps, type Store, type Interceptor, storeShape } from './types'
 
 const createConnectedFetch = (): Class<*> => {
   class ConnectedFetch extends Component<ProviderProps> {
@@ -15,7 +15,7 @@ const createConnectedFetch = (): Class<*> => {
       ? this.context.store.getState()
       : this.props.store
     rdfTimeout: ?number = this.props.timeout
-    rdfOnIntercept: ?OnInterceptFn = this.props.onIntercept
+    rdfOnIntercept: ?Interceptor = this.props.onIntercept
 
     static defaultProps = {
       api: undefined,
@@ -23,7 +23,7 @@ const createConnectedFetch = (): Class<*> => {
       loader: undefined,
       store: undefined,
       timeout: undefined,
-      onIntercept: undefined
+      onIntercept: undefined,
     }
 
     static propTypes = {
@@ -33,7 +33,7 @@ const createConnectedFetch = (): Class<*> => {
       loader: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
       store: storeShape,
       timeout: PropTypes.number,
-      onIntercept: PropTypes.func
+      onIntercept: PropTypes.func,
     }
 
     static contextTypes = {
@@ -46,7 +46,7 @@ const createConnectedFetch = (): Class<*> => {
       rdfLoader: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
       rdfStore: PropTypes.object,
       rdfTimeout: PropTypes.number,
-      rdfOnIntercept: PropTypes.func
+      rdfOnIntercept: PropTypes.func,
     }
 
     getChildContext() {
@@ -56,7 +56,7 @@ const createConnectedFetch = (): Class<*> => {
         rdfLoader: this.rdfLoader,
         rdfStore: this.props.store || this.rdfStore,
         rdfTimeout: this.rdfTimeout,
-        rdfOnIntercept: this.rdfOnIntercept
+        rdfOnIntercept: this.rdfOnIntercept,
       }
     }
 

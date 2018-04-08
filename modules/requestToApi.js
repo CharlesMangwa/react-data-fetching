@@ -22,7 +22,7 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
   }
   const formData = new FormData()
   let route = url
-  let interceptedResult = null;
+  let interceptedResult = null
 
   const handleError = async (
     error: Event | XMLHttpRequest,
@@ -49,7 +49,6 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
   ): Promise<void> => {
     if (request.readyState === 4 || isUpload) {
       const isOK = request.status >= 200 && request.status <= 299
-      
       if (isOK) {
         const response = {
           data: request.responseText
@@ -61,21 +60,22 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
         }
         resolve(response)
       }
-      else if (onIntercept){
+      else if (onIntercept) {
         interceptedResult = onIntercept({
           currentParams: args,
           request,
-          status: request.status
+          status: request.status,
         })
         if (interceptedResult) {
           resolve(requestToApi({
             ...interceptedResult,
-            onIntercept: undefined
+            onIntercept: undefined,
           }))
-        } else handleError(request, request, reject);
+        }
+        else handleError(request, request, reject)
       }
-      else 
-      handleError(request, request, reject);
+      else
+        handleError(request, request, reject)
     }
   }
 
@@ -102,40 +102,39 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
     ))
   }
 
-  const sendRequest = () => {
-    return new Promise((resolve, reject) => {
-      try {
-        const request = new XMLHttpRequest()
-        request.timeout = timeout
-        if (request.upload) {
-          request.upload.onerror = error => handleError(error, request, resolve)
-          request.upload.onload = () => returnData(request, resolve, reject, true)
-          request.upload.onprogress = onProgress
-          request.upload.ontimeout = () => handleTimeout(request, reject)
-        }
-  
-        request.onerror = error => handleError(error, request, resolve)
-        request.onprogress = onProgress
-        request.onreadystatechange = () => returnData(request, resolve, reject)
-        request.ontimeout = () => handleTimeout(request, reject)
-  
-        request.open(method === 'FORM_DATA' ? 'POST' : method, route)
-        setHeaders(request)
-        request.send(
-          method === 'FORM_DATA'
-            ? formData
-            : method === 'DELETE' || method === 'GET' || method === 'HEAD' || method === 'PUT'
-              ? null
-              : JSON.stringify({ ...body }),
-        )
+  const sendRequest = () => new Promise((resolve, reject) => {
+    try {
+      const request = new XMLHttpRequest()
+      request.timeout = timeout
+      if (request.upload) {
+        request.upload.onerror = error => handleError(error, request, resolve)
+        request.upload.onload = () => returnData(request, resolve, reject, true)
+        request.upload.onprogress = onProgress
+        request.upload.ontimeout = () => handleTimeout(request, reject)
       }
-      catch (request) {
-        handleError(request, request, reject)
-      }
-    })
-  }
 
-  return sendRequest();
+      request.onerror = error => handleError(error, request, resolve)
+      request.onprogress = onProgress
+      request.onreadystatechange = () => returnData(request, resolve, reject)
+      request.ontimeout = () => handleTimeout(request, reject)
+
+      request.open(method === 'FORM_DATA' ? 'POST' : method, route)
+      setHeaders(request)
+      request.send(
+        method === 'FORM_DATA'
+          ? formData
+          : method === 'DELETE' || method === 'GET' || method === 'HEAD' || method === 'PUT'
+            ? null
+            : JSON.stringify({ ...body }),
+      )
+    }
+    catch (request) {
+      handleError(request, request, reject)
+    }
+  })
+
+
+  return sendRequest()
 }
 
 export default requestToApi

@@ -1,17 +1,18 @@
 /* @flow */
+/* eslint-disable no-use-before-define */
 
 import PropTypes from 'prop-types'
 
 // FLOW
 
-export type OnInterceptFn = (InterceptedData) => ?RequestToApi;
+export type Interceptor = (InterceptedData) => ?RequestToApi;
 export type Context = {
   rdfApi: string,
   rdfHeaders: Object,
   rdfLoader: React$Node,
   rdfStore: Object,
   rdfTimeout: number,
-  rdfOnIntercept: ?OnInterceptFn
+  rdfOnIntercept: ?Interceptor
 }
 
 export type ErrorContent = {
@@ -72,7 +73,7 @@ export type Props = {
   onLoad?: Function,
   onProgress?: (Progress) => void,
   onTimeout?: Function,
-  onIntercept?: OnInterceptFn,
+  onIntercept?: Interceptor,
   params?: Object,
   path?: string,
   refetchKey?: any,
@@ -88,7 +89,7 @@ export type RequestToApi = {
   method: Method,
   onProgress?: (Progress) => void,
   onTimeout?: Function,
-  onIntercept?: ?OnInterceptFn,
+  onIntercept?: ?Interceptor,
   params?: Object,
   url: string,
   timeout?: number,
@@ -111,7 +112,7 @@ export type ProviderProps = {
   children: React$Node,
   headers?: Object,
   loader?: React$Node,
-  onIntercept?: OnInterceptFn,
+  onIntercept?: Interceptor,
   store?: Store,
   timeout?: number,
 }
