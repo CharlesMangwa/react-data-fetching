@@ -1,6 +1,6 @@
 {
   "name": "react-data-fetching",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Declarative data fetching for React",
   "repository": "CharlesMangwa/react-data-fetching",
   "license": "MIT",
