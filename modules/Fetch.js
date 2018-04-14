@@ -108,8 +108,10 @@ class Fetch extends Component<Props> {
     else if (
       nextProps.path !== path ||
       nextProps.refetchKey !== refetchKey
-    )
+    ) {
+      this._isLoaded = false
       this._fetchData(nextProps, nextContext)
+    }
   }
 
   componentWillUnmount() {
