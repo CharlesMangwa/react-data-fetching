@@ -76,6 +76,7 @@ export type Props = {
   onIntercept?: Interceptor,
   params?: Object,
   path?: string,
+  refetch?: any,
   refetchKey?: any,
   render?: React$StatelessFunctionalComponent<?ReturnedData | Error>,
   resultOnly?: boolean,

@@ -67,72 +67,81 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
           status: request.status,
         })
         if (interceptedResult) {
-          resolve(requestToApi({
-            ...interceptedResult,
-            onIntercept: undefined,
-          }))
+          resolve(
+            requestToApi({
+              ...interceptedResult,
+              onIntercept: undefined,
+            }),
+          )
         }
         else handleError(request, request, reject)
       }
-      else
-        handleError(request, request, reject)
+      else handleError(request, request, reject)
     }
   }
 
   const setHeaders = (request: XMLHttpRequest): void => {
     Object.entries(defaultHeaders).map(defaultHeader =>
-      request.setRequestHeader(defaultHeader[0], String(defaultHeader[1])))
+      request.setRequestHeader(defaultHeader[0], String(defaultHeader[1])),
+    )
     if (headers && Object.keys(headers).length > 0) {
       Object.entries(headers).map(header =>
-        request.setRequestHeader(header[0], String(header[1])))
+        request.setRequestHeader(header[0], String(header[1])),
+      )
     }
   }
 
   if (method === 'FORM_DATA' && Object.entries(body).length > 0) {
     Object.entries(body).map(
       // $FlowFixMe
-      entry => formData.append(entry[0], entry[1]))
+      entry => formData.append(entry[0], entry[1]),
+    )
   }
 
   if (params && Object.keys(params).length > 0) {
-    Object.entries(params).map((param, index) => (
-      index === 0
-        ? (route = `${route}?${param[0]}=${String(param[1])}`)
-        : (route = `${route}&${param[0]}=${String(param[1])}`)
-    ))
+    Object.entries(params).map(
+      (param, index) =>
+        (index === 0
+          ? (route = `${route}?${param[0]}=${String(param[1])}`)
+          : (route = `${route}&${param[0]}=${String(param[1])}`)),
+    )
   }
 
-  const sendRequest = () => new Promise((resolve, reject) => {
-    try {
-      const request = new XMLHttpRequest()
-      request.timeout = timeout
-      if (request.upload) {
-        request.upload.onerror = error => handleError(error, request, resolve)
-        request.upload.onload = () => returnData(request, resolve, reject, true)
-        request.upload.onprogress = onProgress
-        request.upload.ontimeout = () => handleTimeout(request, reject)
+  const sendRequest = () =>
+    new Promise((resolve, reject) => {
+      try {
+        const request = new XMLHttpRequest()
+        request.timeout = timeout
+        if (request.upload) {
+          request.upload.onerror = error => handleError(error, request, resolve)
+          request.upload.onload = () =>
+            returnData(request, resolve, reject, true)
+          request.upload.onprogress = onProgress
+          request.upload.ontimeout = () => handleTimeout(request, reject)
+        }
+
+        request.onerror = error => handleError(error, request, resolve)
+        request.onprogress = onProgress
+        request.onreadystatechange = () => returnData(request, resolve, reject)
+        request.ontimeout = () => handleTimeout(request, reject)
+
+        request.open(method === 'FORM_DATA' ? 'POST' : method, route)
+        setHeaders(request)
+        request.send(
+          method === 'FORM_DATA'
+            ? formData
+            : method === 'DELETE' ||
+              method === 'GET' ||
+              method === 'HEAD' ||
+              method === 'PUT'
+              ? null
+              : JSON.stringify({ ...body }),
+        )
       }
-
-      request.onerror = error => handleError(error, request, resolve)
-      request.onprogress = onProgress
-      request.onreadystatechange = () => returnData(request, resolve, reject)
-      request.ontimeout = () => handleTimeout(request, reject)
-
-      request.open(method === 'FORM_DATA' ? 'POST' : method, route)
-      setHeaders(request)
-      request.send(
-        method === 'FORM_DATA'
-          ? formData
-          : method === 'DELETE' || method === 'GET' || method === 'HEAD' || method === 'PUT'
-            ? null
-            : JSON.stringify({ ...body }),
-      )
-    }
-    catch (request) {
-      handleError(request, request, reject)
-    }
-  })
-
+      catch (request) {
+        handleError(request, request, reject)
+      }
+    })
 
   return sendRequest()
 }

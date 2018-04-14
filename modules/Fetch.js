@@ -8,7 +8,7 @@ import requestToApi from './requestToApi'
 import {
   type Context,
   type ErrorContent,
-  type Error,
+  type Error as ErrorType,
   type Props,
   type ReturnedData,
   methodShape,
@@ -17,7 +17,7 @@ import {
 const isEmptyChildren = children => Children.count(children) === 0
 
 class Fetch extends Component<Props> {
-  _data: ?ReturnedData | Error = undefined
+  _data: ?ReturnedData | ErrorType = undefined
   _didCallOnLoad = false
   _isLoaded = false
   _isUnmounted = false
@@ -35,6 +35,7 @@ class Fetch extends Component<Props> {
     onTimeout: PropTypes.func,
     params: PropTypes.object,
     path: PropTypes.string,
+    refetch: PropTypes.any,
     refetchKey: PropTypes.any,
     render: PropTypes.func,
     resultOnly: PropTypes.bool,
@@ -64,6 +65,7 @@ class Fetch extends Component<Props> {
     onTimeout: undefined,
     params: {},
     path: undefined,
+    refetch: false,
     refetchKey: false,
     render: undefined,
     resultOnly: false,
@@ -90,7 +92,7 @@ class Fetch extends Component<Props> {
   }
 
   componentWillReceiveProps(nextProps: Props, nextContext: Context) {
-    const { onLoad, path, refetchKey } = this.props
+    const { onLoad, path, refetch, refetchKey } = this.props
 
     this._validateProps(nextProps, nextContext)
 
@@ -107,6 +109,7 @@ class Fetch extends Component<Props> {
     }
     else if (
       nextProps.path !== path ||
+      nextProps.refetch !== refetch ||
       nextProps.refetchKey !== refetchKey
     ) {
       this._isLoaded = false
@@ -152,15 +155,10 @@ class Fetch extends Component<Props> {
     if (path) route = `${context.rdfApi || ''}${path}`
     else route = url
 
-    if (context.rdfTimeout && timeout === -1)
-      timeoutValue = context.rdfTimeout
-    else if (!context.rdfTimeout && timeout)
-      timeoutValue = Math.max(0, timeout)
-    else if (context.rdfTimeout && timeout) {
-      timeoutValue = timeout === -1
-        ? context.rdfTimeout
-        : timeout
-    }
+    if (context.rdfTimeout && timeout === -1) timeoutValue = context.rdfTimeout
+    else if (!context.rdfTimeout && timeout) timeoutValue = Math.max(0, timeout)
+    else if (context.rdfTimeout && timeout)
+      timeoutValue = timeout === -1 ? context.rdfTimeout : timeout
 
     try {
       const apiResponse = await requestToApi({
@@ -215,41 +213,38 @@ class Fetch extends Component<Props> {
     }
   }
 
-  _printError = (error: ErrorContent): string => (
-    error.response && JSON.stringify(error.response).length
+  _printError = (error: ErrorContent): string =>
+    (error.response && JSON.stringify(error.response).length
       ? typeof error.response === 'string'
         ? error.response
         : typeof error.response === 'object'
-          ? JSON.stringify(error.response)
-          : `${error.response}. Sorry <Fetch> couldn't turned this into a readable string. `
-            + 'Check error.content.request to see what happened.'
+          ? JSON.stringify(error.response, null, 2)
+          : `${
+            error.response
+          }. Sorry <Fetch> couldn't turned this into a readable string. ` +
+            'Check error.content.request to see what happened.'
       : error.request._response
         ? typeof error.request._response === 'string'
           ? error.request._response
           : typeof error.request._response === 'object'
-            ? JSON.stringify(error.request._response)
-            : `${String(error.request._response)}. Sorry <Fetch> couldn't turned this into a readable string. `
-              + 'Check error.content.request to see what happened.'
-        : " .Sorry <Fetch> couldn't turned this into a readable string. "
-            + 'Check error.content.request to see what happened.'
-  )
+            ? JSON.stringify(error.request._response, null, 2)
+            : `${String(
+              error.request._response,
+            )}. Sorry <Fetch> couldn't turned this into a readable string. ` +
+              'Check error.content.request to see what happened.'
+        : " .Sorry <Fetch> couldn't turned this into a readable string. " +
+          'Check error.content.request to see what happened.')
 
   _renderLoader = (): React$Node => {
     const { rdfLoader } = this.context
     const { loader } = this.props
 
-    if (rdfLoader && !loader) {
-      return typeof rdfLoader === 'function'
-        ? rdfLoader() : rdfLoader
-    }
-    else if (!rdfLoader && loader) {
-      return typeof loader === 'function'
-        ? loader() : loader
-    }
-    else if (rdfLoader && loader) {
-      return typeof loader === 'function'
-        ? loader() : loader
-    }
+    if (rdfLoader && !loader)
+      return typeof rdfLoader === 'function' ? rdfLoader() : rdfLoader
+    else if (!rdfLoader && loader)
+      return typeof loader === 'function' ? loader() : loader
+    else if (rdfLoader && loader)
+      return typeof loader === 'function' ? loader() : loader
 
     return null
   }
@@ -272,53 +267,67 @@ class Fetch extends Component<Props> {
       onTimeout,
       onFetch,
       path,
+      refetch,
       render,
       timeout,
       url,
     } = props
 
-    invariant(
-      path || url,
-      'You must provide a `url` or a `path` to <Fetch>',
-    )
+    invariant(path || url, 'You must provide a `url` or a `path` to <Fetch>')
 
     if (path) {
       invariant(
         path && rdfApi,
-        'You must implement <ConnectedFetch> at the root of your '
-          + 'app and provide an `api` in order to use `path`',
+        'You must implement <ConnectedFetch> at the root of your ' +
+          'app and provide an `api` in order to use `path`',
       )
     }
 
     if (path === 'store') {
       invariant(
         path && rdfStore,
-        'You must implement <ConnectedFetch> at the root of your '
-          + 'app and provide a `store` in order to use `path="store"`',
+        'You must implement <ConnectedFetch> at the root of your ' +
+          'app and provide a `store` in order to use `path="store"`',
       )
     }
 
     if (onTimeout) {
       invariant(
         (typeof timeout === 'number' && timeout >= 0) ||
-        (typeof rdfTimeout === 'number' && rdfTimeout >= 0),
-        'You must provide a `timeout` number in ms to <Fetch> or <ConnectedFetch> '
-          + 'in order to use `onTimeout`',
+          (typeof rdfTimeout === 'number' && rdfTimeout >= 0),
+        'You must provide a `timeout` number in ms to <Fetch> or ' +
+          '<ConnectedFetch> in order to use `onTimeout`',
       )
     }
 
     invariant(
       children || component || render || onFetch,
-      'You must provide at least one of the following '
-        + 'to <Fetch>: children, `component`, `onFetch`, `render`',
+      'You must provide at least one of the following ' +
+        'to <Fetch>: children, `component`, `onFetch`, `render`',
     )
+
+    if (
+      typeof refetch !== 'undefined' &&
+      process.env.NODE_ENV !== 'production'
+    ) {
+      const message =
+        '`refetch` is deprecated and will be removed ' +
+        'in the next major version. ' +
+        'Please use `refetchKey` instead.'
+
+      if (typeof console !== 'undefined')
+        console.error(message)
+
+      try {
+        throw new Error(message)
+      } catch (x) {} // eslint-disable-line
+    }
   }
 
   render(): React$Node {
     const { children, component, render } = this.props
 
-    if (!this._isLoaded && !this._isUnmounted)
-      return this._renderLoader()
+    if (!this._isLoaded && !this._isUnmounted) return this._renderLoader()
 
     if (this._isLoaded && !this._isUnmounted) {
       if (component) return createElement(component, this._data)
@@ -327,8 +336,7 @@ class Fetch extends Component<Props> {
 
       if (typeof children === 'function') return children(this._data)
 
-      if (children && !isEmptyChildren(children))
-        return Children.only(children)
+      if (children && !isEmptyChildren(children)) return Children.only(children)
     }
 
     return null

@@ -40,6 +40,7 @@ const getPlugins = (env) => {
       ],
       plugins: [
         'external-helpers',
+        'dev-expression',
         ['transform-runtime', {
           helpers: false,
           polyfill: false,

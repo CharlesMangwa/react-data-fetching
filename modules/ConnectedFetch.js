@@ -4,7 +4,12 @@ import { Children, Component } from 'react'
 import PropTypes from 'prop-types'
 import invariant from 'invariant'
 
-import { type ProviderProps, type Store, type Interceptor, storeShape } from './types'
+import {
+  type ProviderProps,
+  type Store,
+  type Interceptor,
+  storeShape,
+} from './types'
 
 const createConnectedFetch = (): Class<*> => {
   class ConnectedFetch extends Component<ProviderProps> {
