@@ -2,3 +2,4 @@
 * [Fetch](Fetch.md)
 * [ConnectedFetch](ConnectedFetch.md)
 * [requestToApi](requestToApi.md)
+* [Changelog](https://github.com/CharlesMangwa/react-data-fetching/releases)

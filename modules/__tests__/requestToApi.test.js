@@ -128,7 +128,7 @@ describe('requestToApi', () => {
     expect(onIntercept).toBeCalled();
   })
 
-  it('rejects when `onIntercept` returns `null` or is `undefined`', () => {
+  it('rejects when `onIntercept` is `undefined` or returns `null`', () => {
     const mockFailingXHR = {
       getAllResponseHeaders: jest.fn(),
       onload: jest.fn(),
