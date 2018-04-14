@@ -5,9 +5,9 @@ import PropTypes from 'prop-types'
 import invariant from 'invariant'
 
 import {
+  type Interceptor,
   type ProviderProps,
   type Store,
-  type Interceptor,
   storeShape,
 } from './types'
 
@@ -36,9 +36,9 @@ const createConnectedFetch = (): Class<*> => {
       children: PropTypes.element.isRequired,
       headers: PropTypes.object,
       loader: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
+      onIntercept: PropTypes.func,
       store: storeShape,
       timeout: PropTypes.number,
-      onIntercept: PropTypes.func,
     }
 
     static contextTypes = {
@@ -87,6 +87,10 @@ const createConnectedFetch = (): Class<*> => {
       invariant(
         this.rdfLoader === nextProps.loader,
         '<ConnectedFetch> does not support changing `loader` on the fly.',
+      )
+      invariant(
+        this.rdfInterceptor === nextProps.onIntercept,
+        '<ConnectedFetch> does not support changing `onIntercept` on the fly.',
       )
       invariant(
         this.rdfStore === nextProps.store,

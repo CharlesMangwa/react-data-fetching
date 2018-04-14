@@ -5,7 +5,8 @@ import PropTypes from 'prop-types'
 
 // FLOW
 
-export type Interceptor = (InterceptedData) => ?RequestToApi;
+export type Interceptor = InterceptedData => ?RequestToApi
+
 export type Context = {
   rdfApi: string,
   rdfHeaders: Object,
@@ -70,10 +71,10 @@ export type Props = {
   method: Method,
   onError?: (?ReturnedData | Error) => void,
   onFetch?: (?ReturnedData | Error) => void,
-  onLoad?: Function,
-  onProgress?: (Progress) => void,
-  onTimeout?: Function,
   onIntercept?: Interceptor,
+  onLoad?: Function,
+  onProgress?: Progress => void,
+  onTimeout?: Function,
   params?: Object,
   path?: string,
   refetch?: any,
@@ -88,9 +89,9 @@ export type RequestToApi = {
   body?: Object,
   headers?: Object,
   method: Method,
-  onProgress?: (Progress) => void,
-  onTimeout?: Function,
+  onProgress?: Progress => void,
   onIntercept?: ?Interceptor,
+  onTimeout?: Function,
   params?: Object,
   url: string,
   timeout?: number,
@@ -99,7 +100,7 @@ export type RequestToApi = {
 export type InterceptedData = {
   currentParams: RequestToApi,
   request: XMLHttpRequest,
-  status: number
+  status: number,
 }
 
 export type Store = {

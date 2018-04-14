@@ -18,6 +18,7 @@ const App = () => (
       api="https://my-app.com/api/v1"
       headers={{ Cache-Control: 'public' }}
       loader={<p>♻️ Loading…</p>}
+      // onIntercept={() => interceptor} /* Uncomment to manually set `onIntercept` value (see #Props.onIntercept) */
       timeout={5000} /* Any unresolved request will automatically be aborted after 5s */
       // store={{ networkState: 'online' }} /* Uncomment to manually set `store` value (see #Props.store) */
     >
@@ -56,6 +57,12 @@ A mandatory prop used to render your app. Basically, you'll just have to wrap yo
 
 A component (or a function returning one) render every time a `<Fetch>` is loading data. The typical use case for this prop would be when you have a common loader for your whole app. Instead of using `<Fetch>`'s `loader` prop, you'll just have to do it once here and that's it: you'll have the same beautiful spinner in your whole app!
 
+### onIntercept
+
+**Type: `InterceptedData => ?RequestToApi`**
+
+Called when the request resolves with an error, right before rejecting the failing response (provided to [`onError`](Fetch.md#onerror)). See [Interceptor](Fetch.md#interceptor) for more details.
+
 ### store
 
 **Type: `Object`**
@@ -72,7 +79,7 @@ Value in ms after which you'll want the library to abort any request you'll send
 
 ### Duplicated props
 
-You'll notice that `<ConnectedFetch>` and `<Fetch>` have a few props in common: `headers`, `loader`, `timeout`. You could ask then: "OK, but what if I use a `loader` in `<ConnectedFetch>`, but want a special one in a specific `<Fetch>` ?". Well, it would be a very good question!
+You'll notice that `<ConnectedFetch>` and `<Fetch>` have a few props in common: `headers`, `loader`, `onIntercept`, `timeout`. You could ask then: "OK, but what if I use a `loader` in `<ConnectedFetch>`, but want a special one in a specific `<Fetch>` ?". Well, it would be a very good question!
 
 !>React Data Fetching will always apply the prop coming from a `<Fetch>` over the same one coming from `<ConnectedFetch>`.
 

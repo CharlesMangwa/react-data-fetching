@@ -38,7 +38,7 @@ export default class MyComponent extends Component {
     }
     /**
      * You could also do something here to change isRefetchingData
-     * or isLoadingMore from your state is you want to use `refetch`.
+     * or isLoadingMore from your state is you want to use `refetchKey`.
      * You can see an example here: https://goo.gl/wq8iMU.
     */
   }
@@ -136,6 +136,13 @@ Called when the response has been received. But beware: seeing this function bei
 
 The tradeoff is that you can't use `onFetch` to render a component, see `children`, `component` or `render` to do so. Nothing stops you from using `component`, `render` or `children` to render your component, plus `onFetch` to save your data in the same `<Fetch>` for instance.
 
+### onIntercept
+
+**Type: `InterceptedData => ?RequestToApi`**
+
+Called when the request resolves with an error, right before rejecting the failing response (provided to [`onError`](Fetch.md#onerror)). See the [Interceptor](Fetch.md#interceptor) section below for more details.
+
+
 ### onLoad
 
 **Type: `Function`**
@@ -166,11 +173,11 @@ Works exactly like `body`, but is used whenever you need to pass parameters to y
 
 Only available if you've configured `<ConnectedFetch>` in your app, and provided an `api` (see [`<ConnectedFetch>` docs](ConnectedFetch.md#path) for more details). Then, `path` allows you to write your URL in a more convenient way. Instead of writing `url="https://my-app.com/api/v1/news/latest"`, given that `<ConnectedFetch>` propagates your `api` URL `https://my-app.com/api/v1` inside every `<Fetch>` instances, you can just write `path="/news/latest"`, and React Data Fetching will automatically construct the corresponding URL.
 
-### refetch
+### refetchKey
 
 **Type: `any`**
 
-Follows the same principle as [`extraData`](https://facebook.github.io/react-native/docs/flatlist.html#extradata) from React Native's FlatList component. This prop tells `<Fetch>` to re-render. This can be used inside a pull-to-refresh function, or to implement a pagination system for instance. You can pass `any` value here, the only requirement for it to operate as expected is to make sure that the value you passed will change over time. Otherwise, there will be no re-render.
+If `refetchKey` changes, then React Data Fetching will fetch again. Similar to how in React, if the `key` changes, then the component gets unmounted & remounted. This can be used inside a pull-to-refresh function, or to implement a pagination system for instance. You can pass `any` value here, the only requirement for it to operate as expected is to make sure that the value you passed will change over time. Otherwise, there will be no refetching.
 
 ### render
 
@@ -227,6 +234,106 @@ type Error = {
   src="images/error.png"
   width="900"
 />
+
+### Interceptor
+
+```js
+export type InterceptedData = {
+  currentParams: RequestToApi,
+  request: XMLHttpRequest,
+  status: number,
+}
+
+type Interceptor = InterceptedData => ?RequestToApi
+```
+
+`Object` provided to `onIntercept` prop when the request resolves when an error. Thus, if `onIntercept` is defined, it will be called right before React Data Fetching rejects the response (which will throw an error and fire `onError`).
+
+This means that `onIntercept` is the perfect place to catch and handle any error received from your API, before `<ConnectedFetch>` & `<Fetch>` consume the response. `onIntercept` receives as an argument an `InterceptedData` and lets you play with it. However it expects a `return`-ed value:
+- It can be a `RequestToApi` object, which will let React Data Fetching know that you want to make a new request based on this new object. Thus, the previous failing request will be automatically aborted and no error will be thrown.
+- You can also return `null`, which means that you don't want to make any new request. By returning so, React Data Fetching will then throw the received response and fire `onError` if you provided it.
+
+
+One of the most common use case for this will be tokens refreshing. Let's say you have an `accessToken` with a 30-minute lifetime and make a call when your `accessToken` isn't valid anymore: we don't want your UX to be deteriorated because of that! So here's how you could handle this case by refreshing your `accessToken` thanks to `onIntercept` and your `refreshToken`:
+
+```jsx
+/* @flow */
+
+import React, { Component } from 'react'
+import {
+  Fetch,
+  requestToApi,
+  type InterceptedData,
+  type RequestToApi,
+} from 'react-data-fetching'
+
+import Root from './src'
+
+type Tokens = {
+  accessToken: string,
+  refreshToken: string,
+}
+
+type Props = {
+  tokens: Tokens,
+  saveNewTokens: Tokens => void,
+}
+
+class App extends Component<Props> {
+  // ...
+  _onIntercept = async (data: InterceptedData): ?RequestToApi => {
+    const { saveNewTokens, tokens } = this.props
+    let output: ?RequestToApi = null
+
+    if (data && data.status === 401) {
+      try {
+        const newTokens = await requestToApi({
+          url: 'https://mysite.com/api/v1/auth/refreshToken',
+          method: 'POST',
+          body: { refreshToken: tokens.refreshToken },
+        })
+        if (newTokens) {
+          saveNewTokens(newTokens)
+          /** Given that `InterceptedData` provides the `currentParams`
+           * initially passed to `requestToApi()`, we can simply reuse
+           * these params and cherry-pick those we want to change
+           */
+          output = {
+            ...data.currentParams,
+            body: {
+              ...data.currentParams.body,
+              accessToken: newTokens.accessToken,
+            }
+          }
+        }
+      }
+      catch (error) {
+        // Handle the error
+      }
+    }
+    /** As stated by the types, the output will either be
+     * `null`, so RDF won't do anything, or a `RequestToApi`
+     * object, thus RDF will just have to directly make a new
+     * call with the new config provided by `output` and send the
+     * final result as a `ReturnedData` to the props that need it.
+     */
+    return output
+  }
+
+  render() {
+     <Fetch
+        // ...
+        onIntercept={this._onIntercept} 
+     />
+  }
+}
+
+// ...
+
+```
+
+For the record: this is the 1st feature requested and implemented by a member of the community! 😃🍾 The full story behind it is [right there](https://github.com/CharlesMangwa/react-data-fetching/issues/8)!
+
 
 ### Method
 
