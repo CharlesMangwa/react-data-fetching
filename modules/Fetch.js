@@ -65,8 +65,8 @@ class Fetch extends Component<Props> {
     onTimeout: undefined,
     params: {},
     path: undefined,
-    refetch: false,
-    refetchKey: false,
+    refetch: undefined,
+    refetchKey: undefined,
     render: undefined,
     resultOnly: false,
     url: undefined,
@@ -129,6 +129,7 @@ class Fetch extends Component<Props> {
     if (this.props.onLoad !== nextProps.onLoad) return true
     if (this.props.path !== nextProps.path) return true
     if (this.props.params !== nextProps.params) return true
+    if (this.props.refetch !== nextProps.refetch) return true
     if (this.props.refetchKey !== nextProps.refetchKey) return true
     if (this.props.render !== nextProps.render) return true
     if (this._isLoaded) return true
@@ -306,21 +307,20 @@ class Fetch extends Component<Props> {
         'to <Fetch>: children, `component`, `onFetch`, `render`',
     )
 
-    if (
-      typeof refetch !== 'undefined' &&
-      process.env.NODE_ENV !== 'production'
-    ) {
+    if (typeof refetch !== 'undefined') {
       const message =
         '`refetch` is deprecated and will be removed ' +
         'in the next major version. ' +
         'Please use `refetchKey` instead.'
 
-      if (typeof console !== 'undefined')
-        console.error(message)
+      if (process.env.NODE_ENV !== 'production') {
+        if (typeof console !== 'undefined')
+          console.error(message)
 
-      try {
-        throw new Error(message)
-      } catch (x) {} // eslint-disable-line
+        try {
+          throw new Error(message)
+        } catch (x) {} // eslint-disable-line
+      }
     }
   }
 
