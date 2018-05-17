@@ -1,4 +1,4 @@
-# ConnectedFetch
+# FetchProvider
 
 A provider which helps you share parameters among your `<Fetch>` instances.
 
@@ -7,14 +7,14 @@ A provider which helps you share parameters among your `<Fetch>` instances.
 ```jsx
 import React from 'react'
 import { Provider } from 'react-redux'
-import { ConnectedFetch } from 'react-data-fetching'
+import { FetchProvider } from 'react-data-fetching'
 
 import Root from './app'
 import store from './store'
 
 const App = () => (
   <Provider store={store}>
-    <ConnectedFetch
+    <FetchProvider
       api="https://my-app.com/api/v1"
       headers={{ Cache-Control: 'public' }}
       loader={<p>♻️ Loading…</p>}
@@ -23,7 +23,7 @@ const App = () => (
       // store={{ networkState: 'online' }} /* Uncomment to manually set `store` value (see #Props.store) */
     >
       <Root />
-    </ConnectedFetch>
+    </FetchProvider>
   </Provider>
 )
 
@@ -37,13 +37,13 @@ export default App
 
 **Type: `string`**
 
-A mandatory prop used to create the final URL `<Fetch>` will use. By setting this prop, you can switch from using `url` inside `<Fetch>` to using `path`, with only what comes after `api` in your URL. For instance, the following URL "https://my-app.com/api/v1/users" will become `api="https://my-app.com/api/v1"` (goes inside `<ConnectedFetch>`) and `path="/users"` (goes inside `<Fetch>`).
+A mandatory prop used to create the final URL `<Fetch>` will use. By setting this prop, you can switch from using `url` inside `<Fetch>` to using `path`, with only what comes after `api` in your URL. For instance, the following URL "https://my-app.com/api/v1/users" will become `api="https://my-app.com/api/v1"` (goes inside `<FetchProvider>`) and `path="/users"` (goes inside `<Fetch>`).
 
 ### children
 
 **Type: `React$Node`**
 
-A mandatory prop used to render your app. Basically, you'll just have to wrap your whole app inside `<ConnectedFetch>` like in the example above.
+A mandatory prop used to render your app. Basically, you'll just have to wrap your whole app inside `<FetchProvider>` like in the example above.
 
 ### headers
 
@@ -67,7 +67,7 @@ Called when the request resolves with an error, right before rejecting the faili
 
 **Type: `Object`**
 
-Object containing a store you want to propagate inside your [`ReturnedData`](Fetch.md#returneddata). `store` can be used if you want to get access to more data in your component than what you get from your request. This could be either a value you explicitly passed or if you've implemented `<ConnectedFetch>` by wrapping it inside `<Provider>` from Redux: React Data Fetching will automatically send your Redux's store inside `data.store` (see [`ReturnedData`](Fetch.md#returneddata) for more details). This means that you won't even have to precise `store={...}` as React Data Fetching will know that `<ConnectedFetch>` is inside Redux's `<Provider>`, and will do the job for you!
+Object containing a store you want to propagate inside your [`ReturnedData`](Fetch.md#returneddata). `store` can be used if you want to get access to more data in your component than what you get from your request. This could be either a value you explicitly passed or if you've implemented `<FetchProvider>` by wrapping it inside `<Provider>` from Redux: React Data Fetching will automatically send your Redux's store inside `data.store` (see [`ReturnedData`](Fetch.md#returneddata) for more details). This means that you won't even have to precise `store={...}` as React Data Fetching will know that `<FetchProvider>` is inside Redux's `<Provider>`, and will do the job for you!
 
 ### timeout
 
@@ -79,11 +79,11 @@ Value in ms after which you'll want the library to abort any request you'll send
 
 ### Duplicated props
 
-You'll notice that `<ConnectedFetch>` and `<Fetch>` have a few props in common: `headers`, `loader`, `onIntercept`, `timeout`. You could ask then: "OK, but what if I use a `loader` in `<ConnectedFetch>`, but want a special one in a specific `<Fetch>` ?". Well, it would be a very good question!
+You'll notice that `<FetchProvider>` and `<Fetch>` have a few props in common: `headers`, `loader`, `onIntercept`, `timeout`. You could ask then: "OK, but what if I use a `loader` in `<FetchProvider>`, but want a special one in a specific `<Fetch>` ?". Well, it would be a very good question!
 
-!>React Data Fetching will always apply the prop coming from a `<Fetch>` over the same one coming from `<ConnectedFetch>`.
+!>React Data Fetching will always apply the prop coming from a `<Fetch>` over the same one coming from `<FetchProvider>`.
 
-This allows you to share general parameters, but still have fine-grained control on specific `<Fetch>` instances. The only exception is `headers` where the library will simply merge both `<ConnectedFetch>` and `<Fetch>` headers, so make sure to Don't Repeat Yourself™!
+This allows you to share general parameters, but still have fine-grained control on specific `<Fetch>` instances. The only exception is `headers` where the library will simply merge both `<FetchProvider>` and `<Fetch>` headers, so make sure to Don't Repeat Yourself™!
 
 ### Store propagation
 

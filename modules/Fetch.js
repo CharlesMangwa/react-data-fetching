@@ -156,8 +156,10 @@ class Fetch extends Component<Props> {
     if (path) route = `${context.rdfApi || ''}${path}`
     else route = url
 
-    if (context.rdfTimeout && timeout === -1) timeoutValue = context.rdfTimeout
-    else if (!context.rdfTimeout && timeout) timeoutValue = Math.max(0, timeout)
+    if (context.rdfTimeout && timeout === -1)
+      timeoutValue = context.rdfTimeout
+    else if (!context.rdfTimeout && timeout)
+      timeoutValue = Math.max(0, timeout)
     else if (context.rdfTimeout && timeout)
       timeoutValue = timeout === -1 ? context.rdfTimeout : timeout
 
@@ -194,7 +196,7 @@ class Fetch extends Component<Props> {
         if (process.env.NODE_ENV !== 'production') {
           invariant(
             !error,
-            `<Fetch> tried to call the route "${String(route)}" ` +
+            `<Fetch /> tried to call the route "${String(route)}" ` +
               `with "${String(method).toUpperCase()}" method ` +
               'but resolved with the following error: %s\n',
             this._printError(error),
@@ -204,7 +206,7 @@ class Fetch extends Component<Props> {
     }
   }
 
-  _handleData = (result: ReturnedData): void => {
+  _handleData = (result: ReturnedData) => {
     if (!this._isUnmounted) {
       this._isLoaded = true
       this.props.resultOnly
@@ -222,7 +224,7 @@ class Fetch extends Component<Props> {
           ? JSON.stringify(error.response, null, 2)
           : `${
             error.response
-          }. Sorry <Fetch> couldn't turned this into a readable string. ` +
+          }. Sorry <Fetch /> couldn't turned this into a readable string. ` +
             'Check error.content.request to see what happened.'
       : error.request._response
         ? typeof error.request._response === 'string'
@@ -231,9 +233,9 @@ class Fetch extends Component<Props> {
             ? JSON.stringify(error.request._response, null, 2)
             : `${String(
               error.request._response,
-            )}. Sorry <Fetch> couldn't turned this into a readable string. ` +
+            )}. Sorry <Fetch /> couldn't turned this into a readable string. ` +
               'Check error.content.request to see what happened.'
-        : " .Sorry <Fetch> couldn't turned this into a readable string. " +
+        : " .Sorry <Fetch /> couldn't turned this into a readable string. " +
           'Check error.content.request to see what happened.')
 
   _renderLoader = (): React$Node => {
@@ -250,7 +252,7 @@ class Fetch extends Component<Props> {
     return null
   }
 
-  _returnData = (result: ReturnedData): void => {
+  _returnData = (result: ReturnedData) => {
     const { onError, onFetch } = this.props
 
     if (onFetch) onFetch(this._data)
@@ -260,7 +262,7 @@ class Fetch extends Component<Props> {
     if (!this._isUnmounted) this.forceUpdate()
   }
 
-  _validateProps = (props: Props, context: Context): void => {
+  _validateProps = (props: Props, context: Context) => {
     const { rdfApi, rdfStore, rdfTimeout } = context
     const {
       children,
@@ -274,12 +276,12 @@ class Fetch extends Component<Props> {
       url,
     } = props
 
-    invariant(path || url, 'You must provide a `url` or a `path` to <Fetch>')
+    invariant(path || url, 'You must provide a `url` or a `path` to <Fetch />')
 
     if (path) {
       invariant(
         path && rdfApi,
-        'You must implement <ConnectedFetch> at the root of your ' +
+        'You must implement <FetchProvider> at the root of your ' +
           'app and provide an `api` in order to use `path`',
       )
     }
@@ -287,7 +289,7 @@ class Fetch extends Component<Props> {
     if (path === 'store') {
       invariant(
         path && rdfStore,
-        'You must implement <ConnectedFetch> at the root of your ' +
+        'You must implement <FetchProvider> at the root of your ' +
           'app and provide a `store` in order to use `path="store"`',
       )
     }
@@ -296,15 +298,15 @@ class Fetch extends Component<Props> {
       invariant(
         (typeof timeout === 'number' && timeout >= 0) ||
           (typeof rdfTimeout === 'number' && rdfTimeout >= 0),
-        'You must provide a `timeout` number in ms to <Fetch> or ' +
-          '<ConnectedFetch> in order to use `onTimeout`',
+        'You must provide a `timeout` number in ms to <Fetch /> or ' +
+          '<FetchProvider> in order to use `onTimeout`',
       )
     }
 
     invariant(
       children || component || render || onFetch,
       'You must provide at least one of the following ' +
-        'to <Fetch>: children, `component`, `onFetch`, `render`',
+        'to <Fetch />: children, `component`, `onFetch`, `render`',
     )
 
     if (typeof refetch !== 'undefined') {
@@ -324,7 +326,7 @@ class Fetch extends Component<Props> {
     }
   }
 
-  render(): React$Node {
+  render() {
     const { children, component, render } = this.props
 
     if (!this._isLoaded && !this._isUnmounted) return this._renderLoader()

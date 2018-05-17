@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`A <FetchProvider> renders component children correctly 1`] = `null`;

@@ -1,5 +1,5 @@
 * [Getting started](README.md)
 * [Fetch](Fetch.md)
-* [ConnectedFetch](ConnectedFetch.md)
+* [FetchProvider](FetchProvider.md)
 * [requestToApi](requestToApi.md)
 * [Changelog](https://github.com/CharlesMangwa/react-data-fetching/releases)

@@ -11,8 +11,8 @@ import {
   storeShape,
 } from './types'
 
-const createConnectedFetch = (): Class<*> => {
-  class ConnectedFetch extends Component<ProviderProps> {
+const createFetchProvider = (): Class<*> => {
+  class FetchProvider extends Component<ProviderProps> {
     rdfApi = this.props.api
     rdfHeaders: ?Object = this.props.headers
     rdfInterceptor: ?Interceptor = this.props.onIntercept
@@ -54,23 +54,6 @@ const createConnectedFetch = (): Class<*> => {
       rdfTimeout: PropTypes.number,
     }
 
-    componentDidMount() {
-      const message =
-        '`<ConnectedFetch />` is deprecated and will be removed ' +
-        'in the next major version. ' +
-        'Please use `<FetchProvider />` instead.'
-
-      if (process.env.NODE_ENV !== 'production') {
-        if (typeof console !== 'undefined') console.error(message)
-
-        try {
-          throw new Error(message)
-        } catch (x) {} // eslint-disable-line
-      }
-    }
-
-    componentWillReceiveProps = () => null
-
     getChildContext() {
       return {
         rdfApi: this.rdfApi || '',
@@ -82,43 +65,45 @@ const createConnectedFetch = (): Class<*> => {
       }
     }
 
+    componentWillReceiveProps = (): null => null
+
     render() {
       return Children.only(this.props.children)
     }
   }
 
   if (process.env.NODE_ENV !== 'production') {
-    ConnectedFetch.prototype.componentWillReceiveProps = (
+    FetchProvider.prototype.componentWillReceiveProps = (
       nextProps: ProviderProps,
     ): void => {
       invariant(
         this.rdfApi === nextProps.api,
-        '<ConnectedFetch> does not support changing `api` on the fly.',
+        '<FetchProvider> does not support changing `api` on the fly.',
       )
       invariant(
         this.rdfHeaders === nextProps.headers,
-        '<ConnectedFetch> does not support changing `headers` on the fly.',
+        '<FetchProvider> does not support changing `headers` on the fly.',
       )
       invariant(
         this.rdfLoader === nextProps.loader,
-        '<ConnectedFetch> does not support changing `loader` on the fly.',
+        '<FetchProvider> does not support changing `loader` on the fly.',
       )
       invariant(
         this.rdfInterceptor === nextProps.onIntercept,
-        '<ConnectedFetch> does not support changing `onIntercept` on the fly.',
+        '<FetchProvider> does not support changing `onIntercept` on the fly.',
       )
       invariant(
         this.rdfStore === nextProps.store,
-        '<ConnectedFetch> does not support changing `store` on the fly.',
+        '<FetchProvider> does not support changing `store` on the fly.',
       )
       invariant(
         this.rdfTimeout === nextProps.timeout,
-        '<ConnectedFetch> does not support changing `timeout` on the fly.',
+        '<FetchProvider> does not support changing `timeout` on the fly.',
       )
     }
   }
 
-  return ConnectedFetch
+  return FetchProvider
 }
 
-export default createConnectedFetch()
+export default createFetchProvider()

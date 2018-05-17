@@ -23,13 +23,13 @@
   </a>
   <a href="https://www.npmjs.com/package/react-data-fetching">
     <img
-      alt="version: 0.2.1"
+      alt="version: 0.2.2"
       src="https://img.shields.io/npm/v/react-data-fetching.svg"
     />
   </a>
   <img 
     alt="gzip size"
-    src="https://img.shields.io/badge/gzip%20size-6.3%20kB-brightgreen.svg"
+    src="https://img.shields.io/badge/gzip%20size-6.35%20kB-brightgreen.svg"
   />
   <img
     alt="module formats: umd, cjs, esm"
@@ -104,7 +104,7 @@ export default class App extends Component {
 }
 ```
 
-The package gives  access to `<Fetch>`, `<ConnectedFetch>` and `requestToApi()`. To have an in-depth explanation of how to use them, how they work and even more, head to this post: [Introducing React Data Fetching 🎣](https://medium.com/@CharlesMangwa/introducing-react-data-fetching-2140a1d36cc8).
+The package gives  access to `<Fetch>`, `<FetchProvider>` and `requestToApi()`. To have an in-depth explanation of how to use them, how they work and even more, head to this post: [Introducing React Data Fetching 🎣](https://medium.com/@CharlesMangwa/introducing-react-data-fetching-2140a1d36cc8).
 
 ## About
 

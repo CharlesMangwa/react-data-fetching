@@ -30,7 +30,7 @@ export default class MyComponent extends Component {
 
   /**
    * Notice: You won't have `store` if you haven't
-   * implemented it through <ConnectedFetch>
+   * implemented it through <FetchProvider>
   */
   _saveData = ({ data, isOK, store }) => {
     if (isOK) {
@@ -94,7 +94,7 @@ as this will cause an infinite loop: you start rendering, call `setState`, that 
 
 **Type: `Object`**
 
-Useful when you need to pass headers to your request. See [`<ConnectedFetch>`](ConnectedFetch.md#headers) if you have `headers` you want to share among all your `<Fetch>` instances.
+Useful when you need to pass headers to your request. See [`<FetchProvider>`](FetchProvider.md#headers) if you have `headers` you want to share among all your `<Fetch>` instances.
 
 ### component
 
@@ -112,7 +112,7 @@ The common use case for `component` would be to render a custom component that n
 
 **Type: `React$Node`**
 
-Called as soon as `<Fetch>` is rendering and starts fetching data. Just like `children`, it could be a component or a FaCC, but no argument is passed to the former this time. See [`<ConnectedFetch>` docs](ConnectedFetch.md#loader) if you have a `loader` you want to display in all your `<Fetch>` instances.
+Called as soon as `<Fetch>` is rendering and starts fetching data. Just like `children`, it could be a component or a FaCC, but no argument is passed to the former this time. See [`<FetchProvider>` docs](FetchProvider.md#loader) if you have a `loader` you want to display in all your `<Fetch>` instances.
 
 ### method
 
@@ -171,7 +171,7 @@ Works exactly like `body`, but is used whenever you need to pass parameters to y
 
 **Type: `string`**
 
-Only available if you've configured `<ConnectedFetch>` in your app, and provided an `api` (see [`<ConnectedFetch>` docs](ConnectedFetch.md#path) for more details). Then, `path` allows you to write your URL in a more convenient way. Instead of writing `url="https://my-app.com/api/v1/news/latest"`, given that `<ConnectedFetch>` propagates your `api` URL `https://my-app.com/api/v1` inside every `<Fetch>` instances, you can just write `path="/news/latest"`, and React Data Fetching will automatically construct the corresponding URL.
+Only available if you've configured `<FetchProvider>` in your app, and provided an `api` (see [`<FetchProvider>` docs](FetchProvider.md#path) for more details). Then, `path` allows you to write your URL in a more convenient way. Instead of writing `url="https://my-app.com/api/v1/news/latest"`, given that `<FetchProvider>` propagates your `api` URL `https://my-app.com/api/v1` inside every `<Fetch>` instances, you can just write `path="/news/latest"`, and React Data Fetching will automatically construct the corresponding URL.
 
 ### refetchKey
 
@@ -199,13 +199,13 @@ Defines if you want to received the whole [`ReturnedData`](Fetch.md#returneddata
 
 **Type: `number`**
 
-Value in ms after which you'll want the library to abort the request. It's defaulted to `0`, which means there is no timeout. See [`<ConnectedFetch>` docs](ConnectedFetch.md#timeout) if you have a `timeout` value you want to share among all your `<Fetch>` instances.
+Value in ms after which you'll want the library to abort the request. It's defaulted to `0`, which means there is no timeout. See [`<FetchProvider>` docs](FetchProvider.md#timeout) if you have a `timeout` value you want to share among all your `<Fetch>` instances.
 
 ### url
 
 **Type: `string`**
 
-String used to make your request. Here you passed the complete string of the URL you're trying to call. See [`<ConnectedFetch>` docs](ConnectedFetch.md#url) and `path` if you have an `api` you want to dispatch in all your `<Fetch>` instances, in order to have a cleaner way to write your URLs.
+String used to make your request. Here you passed the complete string of the URL you're trying to call. See [`<FetchProvider>` docs](FetchProvider.md#url) and `path` if you have an `api` you want to dispatch in all your `<Fetch>` instances, in order to have a cleaner way to write your URLs.
 
 ## Related types
 
@@ -249,7 +249,7 @@ type Interceptor = InterceptedData => ?RequestToApi
 
 `Object` provided to `onIntercept` prop when the request resolves when an error. Thus, if `onIntercept` is defined, it will be called right before React Data Fetching rejects the response (which will throw an error and fire `onError`).
 
-This means that `onIntercept` is the perfect place to catch and handle any error received from your API, before `<ConnectedFetch>` & `<Fetch>` consume the response. `onIntercept` receives as an argument an `InterceptedData` and lets you play with it. However it expects a `return`-ed value:
+This means that `onIntercept` is the perfect place to catch and handle any error received from your API, before `<FetchProvider>` & `<Fetch>` consume the response. `onIntercept` receives as an argument an `InterceptedData` and lets you play with it. However it expects a `return`-ed value:
 - It can be a `RequestToApi` object, which will let React Data Fetching know that you want to make a new request based on this new object. Thus, the previous failing request will be automatically aborted and no error will be thrown.
 - You can also return `null`, which means that you don't want to make any new request. By returning so, React Data Fetching will then throw the received response and fire `onError` if you provided it.
 
@@ -424,4 +424,4 @@ type ReturnedData = {
 
 - **data**, if everything went well and you're inside `children` (FaCC not a component), `component`, `onFetch` & `render`
 - **error**, if you caught an error and are inside `children` (FaCC not a component), `component`, `onFetch` & `render`
-- **store**, if you've configured `ConnectedFetch` and call `path="redux"` inside `<Fetch>`: everywhere (`children`, `component`, `onError`, `onFetch` & `render`)
+- **store**, if you've configured `FetchProvider` and call `path="redux"` inside `<Fetch>`: everywhere (`children`, `component`, `onError`, `onFetch` & `render`)
