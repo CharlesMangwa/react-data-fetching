@@ -111,7 +111,7 @@ export default class App extends Component {
 }
 ```
 
-The package gives  access to `<Fetch>`, `<ConnectedFetch>` and `requestToApi()`. To have an in-depth explanation of how to use them, how they work and even more, head to this post: [Introducing 🎣 React Data Fetching](https://medium.com/@CharlesMangwa/introducing-react-data-fetching-2140a1d36cc8).
+The package gives  access to `<Fetch>`, `<ConnectedFetch>` and `requestToApi()`. To have an in-depth explanation of how to use them, how they work and even more, head to this post: [Introducing React Data Fetching 🎣](https://medium.com/@CharlesMangwa/introducing-react-data-fetching-2140a1d36cc8).
 
 ## Docs
 
@@ -126,6 +126,7 @@ Want to submit a PR but don't know where to start? Here is a list of features yo
 - [ ] Add the ability to make several calls at once / manage a queue ⛓
 - [ ] Implement a caching (and/or normalization) system (through React.Suspense?) 📥
 - [ ] Add GraphQL support? ✨ 
+- [ ] Add an `/example` folder for newcomers & contributors 📂
 - [ ] What else?
 
 ## About

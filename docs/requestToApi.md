@@ -16,8 +16,8 @@ export default class Auth extends Component {
   _onSignUp = async () => {
     const apiResponse = await requestToApi({
       url: 'https://my-app.com/api/v1/users',
-      body: {{ email: 'midoriya@shonen.com' },
-      headers: {{ Cache-Control: 'no-cache' },
+      body: {{ email: 'midoriya@shonen.com' }},
+      headers: {{ Cache-Control: 'no-cache' }},
       method: 'POST',
       onTimeout: () => console.log('⏱️ Timeout!'),
       onProgress: (progression) => ('♻️ Progressing...', progression),
