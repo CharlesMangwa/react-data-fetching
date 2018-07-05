@@ -1,9 +1,9 @@
-import React, { Component } from "react";
-import Fetch from "../../modules/Fetch";
+import React, { Component } from "react"
+import Fetch from "../../modules/Fetch"
 
-require("babel-polyfill");
+require("babel-polyfill")
 
-const Loader = () => "Loading...";
+const Loader = () => "Loading..."
 
 class App extends Component {
   render() {
@@ -15,9 +15,10 @@ class App extends Component {
         <Fetch
           loader={<Loader />} // Replace this with your lovely handcrafted loader
           url="https://api.github.com/users/octocat"
-          timeout={5000}
         >
-          {({ data }) => (
+          {({ data, error }) => error
+          ? <div>Fetch failed</div>
+          : (
             <div>
               <h3>Username</h3>
               <p>{data.name}</p>
@@ -25,8 +26,8 @@ class App extends Component {
           )}
         </Fetch>
       </div>
-    );
+    )
   }
 }
 
-export default App;
+export default App

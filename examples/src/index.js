@@ -1,5 +1,5 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import Basic from './Basic';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import FetchDataExample from './FetchDataExample'
 
-ReactDOM.render(<Basic />, document.getElementById('app'));
+ReactDOM.render(<FetchDataExample />, document.getElementById('app'))

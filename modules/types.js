@@ -119,6 +119,65 @@ export type ProviderProps = {
   timeout?: number,
 }
 
+// FetchData specific
+
+export type DataState = {
+  INIT: string,
+  LOADING: string,
+  FAILURE: string,
+  SUCCESS: string
+}
+
+export type DataCallback = {
+  INIT?: Function,
+  LOADING?: Function,
+  FAILURE?: Function,
+  SUCCESS?: Function,
+}
+
+export type DataHandler = {
+  type: string,
+  data: any,
+  cata: DataCallback => React$Node
+}
+
+export type DataType = {
+  init: void => DataHandler,
+  loading: void => DataHandler,
+  failure: any => DataHandler,
+  success: any => DataHandler
+}
+
+export type FetchDataOptions = {
+  headers?: Object,
+  method: Method,
+  refetchKey?: any,
+  timeout?: number,
+  lazy?: boolean,
+  params: any
+}
+
+export type FetchDataSubscribe = {
+  onWillMount?: Function,
+  onDidMount?: Function,
+  onSuccess?: Function,
+  onFailure?: Function,
+  onLoading?: Function,
+  onProgress?: Function,
+  onTimeout?: Function,
+  onIntercept?: Function
+}
+
+export type FetchDataProps = {
+  body?: Object,
+  children?: React$StatelessFunctionalComponent<?ReturnedData | Error>,
+  subscribe: FetchDataSubscribe,
+  render?: React$StatelessFunctionalComponent<?ReturnedData | Error>,
+  url?: string,
+  options: FetchDataOptions,
+  fetch?: Function
+}
+
 // PROPTYPES
 export const methodShape = PropTypes.oneOf([
   'DELETE',
