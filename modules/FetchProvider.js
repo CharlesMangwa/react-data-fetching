@@ -14,12 +14,18 @@ import {
 const createFetchProvider = (): Class<*> => {
   class FetchProvider extends Component<ProviderProps> {
     rdfApi = this.props.api
+
     rdfHeaders: ?Object = this.props.headers
+
     rdfInterceptor: ?Interceptor = this.props.onIntercept
+
     rdfLoader: ?React$Node = this.props.loader
-    rdfStore: ?Store = this.context && this.context.store
-      ? this.context.store.getState()
-      : this.props.store
+
+    rdfStore: ?Store =
+      this.context && this.context.store
+        ? this.context.store.getState()
+        : this.props.store
+
     rdfTimeout: ?number = this.props.timeout
 
     static defaultProps = {
@@ -65,7 +71,7 @@ const createFetchProvider = (): Class<*> => {
       }
     }
 
-    componentWillReceiveProps = (): null => null
+    componentDidUpdate = (): null => null
 
     render() {
       return Children.only(this.props.children)
@@ -73,32 +79,32 @@ const createFetchProvider = (): Class<*> => {
   }
 
   if (process.env.NODE_ENV !== 'production') {
-    FetchProvider.prototype.componentWillReceiveProps = (
-      nextProps: ProviderProps,
+    FetchProvider.prototype.componentDidUpdate = (
+      nextProps: ProviderProps
     ): void => {
       invariant(
         this.rdfApi === nextProps.api,
-        '<FetchProvider> does not support changing `api` on the fly.',
+        '<FetchProvider> does not support changing `api` on the fly.'
       )
       invariant(
         this.rdfHeaders === nextProps.headers,
-        '<FetchProvider> does not support changing `headers` on the fly.',
+        '<FetchProvider> does not support changing `headers` on the fly.'
       )
       invariant(
         this.rdfLoader === nextProps.loader,
-        '<FetchProvider> does not support changing `loader` on the fly.',
+        '<FetchProvider> does not support changing `loader` on the fly.'
       )
       invariant(
         this.rdfInterceptor === nextProps.onIntercept,
-        '<FetchProvider> does not support changing `onIntercept` on the fly.',
+        '<FetchProvider> does not support changing `onIntercept` on the fly.'
       )
       invariant(
         this.rdfStore === nextProps.store,
-        '<FetchProvider> does not support changing `store` on the fly.',
+        '<FetchProvider> does not support changing `store` on the fly.'
       )
       invariant(
         this.rdfTimeout === nextProps.timeout,
-        '<FetchProvider> does not support changing `timeout` on the fly.',
+        '<FetchProvider> does not support changing `timeout` on the fly.'
       )
     }
   }

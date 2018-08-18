@@ -7,7 +7,7 @@ import type { Context } from '../../types'
 
 const getElementWithContent = (
   context: Context,
-  children: Class<*>,
+  children: Class<*>
 ): React$Element<*> => {
   class Element extends React.Component<*> {
     static childContextTypes = Object.keys(context).reduce((obj, key) => {
@@ -16,7 +16,7 @@ const getElementWithContent = (
     }, {})
 
     getChildContext = () => context
-    
+
     render() {
       return children
     }

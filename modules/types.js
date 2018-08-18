@@ -28,14 +28,14 @@ export type Error = {
 }
 
 export type Method =
-  'DELETE'
-| 'FORM_DATA'
-| 'GET'
-| 'HEAD'
-| 'PATCH'
-| 'POST'
-| 'PUT'
-| 'TRACE'
+  | 'DELETE'
+  | 'FORM_DATA'
+  | 'GET'
+  | 'HEAD'
+  | 'PATCH'
+  | 'POST'
+  | 'PUT'
+  | 'TRACE'
 
 export type DefaultProps = {
   body: Object,

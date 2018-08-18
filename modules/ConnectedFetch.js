@@ -14,12 +14,18 @@ import {
 const createConnectedFetch = (): Class<*> => {
   class ConnectedFetch extends Component<ProviderProps> {
     rdfApi = this.props.api
+
     rdfHeaders: ?Object = this.props.headers
+
     rdfInterceptor: ?Interceptor = this.props.onIntercept
+
     rdfLoader: ?React$Node = this.props.loader
-    rdfStore: ?Store = this.context && this.context.store
-      ? this.context.store.getState()
-      : this.props.store
+
+    rdfStore: ?Store =
+      this.context && this.context.store
+        ? this.context.store.getState()
+        : this.props.store
+
     rdfTimeout: ?number = this.props.timeout
 
     static defaultProps = {
@@ -89,31 +95,31 @@ const createConnectedFetch = (): Class<*> => {
 
   if (process.env.NODE_ENV !== 'production') {
     ConnectedFetch.prototype.componentWillReceiveProps = (
-      nextProps: ProviderProps,
+      nextProps: ProviderProps
     ): void => {
       invariant(
         this.rdfApi === nextProps.api,
-        '<ConnectedFetch> does not support changing `api` on the fly.',
+        '<ConnectedFetch> does not support changing `api` on the fly.'
       )
       invariant(
         this.rdfHeaders === nextProps.headers,
-        '<ConnectedFetch> does not support changing `headers` on the fly.',
+        '<ConnectedFetch> does not support changing `headers` on the fly.'
       )
       invariant(
         this.rdfLoader === nextProps.loader,
-        '<ConnectedFetch> does not support changing `loader` on the fly.',
+        '<ConnectedFetch> does not support changing `loader` on the fly.'
       )
       invariant(
         this.rdfInterceptor === nextProps.onIntercept,
-        '<ConnectedFetch> does not support changing `onIntercept` on the fly.',
+        '<ConnectedFetch> does not support changing `onIntercept` on the fly.'
       )
       invariant(
         this.rdfStore === nextProps.store,
-        '<ConnectedFetch> does not support changing `store` on the fly.',
+        '<ConnectedFetch> does not support changing `store` on the fly.'
       )
       invariant(
         this.rdfTimeout === nextProps.timeout,
-        '<ConnectedFetch> does not support changing `timeout` on the fly.',
+        '<ConnectedFetch> does not support changing `timeout` on the fly.'
       )
     }
   }

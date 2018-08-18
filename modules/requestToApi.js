@@ -27,7 +27,7 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
   const handleError = async (
     error: Event | XMLHttpRequest,
     request: XMLHttpRequest,
-    reject: Function,
+    reject: Function
   ): Promise<void> => {
     reject({
       response: request.response,
@@ -45,7 +45,7 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
     request: XMLHttpRequest,
     resolve: Function,
     reject: Function,
-    isUpload?: boolean,
+    isUpload?: boolean
   ): Promise<void> => {
     if (request.readyState === 4 || isUpload) {
       const isOK = request.status >= 200 && request.status <= 299
@@ -59,8 +59,7 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
           status: request.status,
         }
         resolve(response)
-      }
-      else if (onIntercept) {
+      } else if (onIntercept) {
         interceptedResult = onIntercept({
           currentParams: args,
           request,
@@ -71,22 +70,20 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
             requestToApi({
               ...interceptedResult,
               onIntercept: undefined,
-            }),
+            })
           )
-        }
-        else handleError(request, request, reject)
-      }
-      else handleError(request, request, reject)
+        } else handleError(request, request, reject)
+      } else handleError(request, request, reject)
     }
   }
 
   const setHeaders = (request: XMLHttpRequest): void => {
     Object.entries(defaultHeaders).map(defaultHeader =>
-      request.setRequestHeader(defaultHeader[0], String(defaultHeader[1])),
+      request.setRequestHeader(defaultHeader[0], String(defaultHeader[1]))
     )
     if (headers && Object.keys(headers).length > 0) {
       Object.entries(headers).map(header =>
-        request.setRequestHeader(header[0], String(header[1])),
+        request.setRequestHeader(header[0], String(header[1]))
       )
     }
   }
@@ -94,16 +91,16 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
   if (method === 'FORM_DATA' && Object.entries(body).length > 0) {
     Object.entries(body).map(
       // $FlowFixMe
-      entry => formData.append(entry[0], entry[1]),
+      entry => formData.append(entry[0], entry[1])
     )
   }
 
   if (params && Object.keys(params).length > 0) {
     Object.entries(params).map(
       (param, index) =>
-        (index === 0
+        index === 0
           ? (route = `${route}?${param[0]}=${String(param[1])}`)
-          : (route = `${route}&${param[0]}=${String(param[1])}`)),
+          : (route = `${route}&${param[0]}=${String(param[1])}`)
     )
   }
 
@@ -135,10 +132,9 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
               method === 'HEAD' ||
               method === 'PUT'
               ? null
-              : JSON.stringify({ ...body }),
+              : JSON.stringify({ ...body })
         )
-      }
-      catch (request) {
+      } catch (request) {
         handleError(request, request, reject)
       }
     })

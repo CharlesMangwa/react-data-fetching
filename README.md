@@ -34,26 +34,25 @@
   </a>
   <img 
     alt="gzip size"
-    src="https://img.shields.io/badge/gzip%20size-6.35%20kB-brightgreen.svg"
+    src="https://img.shields.io/badge/gzip%20size-6.93%20kB-brightgreen.svg"
   />
-  <img
-    alt="module formats: umd, cjs, esm"
-    src="https://img.shields.io/badge/module%20formats-umd%2C%20cjs%2C%20esm-green.svg"
-  />
-  <a href="https://github.com/CharlesMangwa/react-data-fetching/pulls">
+  <a href="https://github.com/prettier/prettier">
     <img
-      alt="PRs welcome"
-      src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"
+      alt="code style"
+      src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg"
     />
   </a>
+  <img
+    alt="module formats: umd, cjs, esm"
+    src="https://img.shields.io/badge/module%20formats-umd%2C%20cjs%2C%20esm-7020f5.svg"
+  />
 </div>
 
 #
 
 `react-data-fetching` provides a very intuitive way to perform any REST API call without hassle, through a single React component. It also helps you take care of timeouts, loading states, errors handling, data saving, uploading/downloading progress, etc. Fetching data while letting the user know what's going on has never been that easy!
 
-The package is really lightweight (~6 kB gzipped) and has been built from the ground up with universal apps in mind: you can use it wherever React is rendering - meaning it works seamlessly with React (web) & React Native!
-
+The package is really lightweight (~7 kB gzipped) and has been built from the ground up with universal apps in mind: you can use it wherever React is rendering - meaning it works seamlessly with React (web) & React Native!
 
 ## Installation
 
@@ -67,10 +66,10 @@ Then, use it as you would with anything else:
 
 ```js
 // using ES6 modules
-import { Fetch } from "react-data-fetching"
+import { Fetch } from 'react-data-fetching'
 
 // using CommonJS modules
-var Fetch = require("react-data-fetching").Fetch
+var Fetch = require('react-data-fetching').Fetch
 ```
 
 The UMD build is also available on [unpkg](https://unpkg.com):
@@ -86,24 +85,24 @@ You can find the library on `window.ReactDataFetching`.
 The following illustrates the simplest way to use `react-data-fetching`:
 
 ```jsx
-import React, { Component } from "react"
-import { Fetch } from "react-data-fetching"
+import React, { Component } from 'react'
+import { Fetch } from 'react-data-fetching'
 
-import { Loader } from './components'
+import { Loader } from './components'
 
 export default class App extends Component {
   render() {
     return (
       <Fetch
-        loader={<Loader/>} // Replace this with your lovely handcrafted loader
+        loader={<Loader />} // Replace this with your lovely handcrafted loader
         url="https://api.github.com/users/octocat"
         timeout={5000}
       >
         {({ data }) => (
-         <div>
-          <h1>Username</h1>
-          <p>{data.name}</p>
-         </div>
+          <div>
+            <h1>Username</h1>
+            <p>{data.name}</p>
+          </div>
         )}
       </Fetch>
     )
@@ -111,7 +110,7 @@ export default class App extends Component {
 }
 ```
 
-The package gives  access to `<Fetch>`, `<FetchProvider>` and `requestToApi()`. To have an in-depth explanation of how to use them, how they work and even more, head to this post: [Introducing React Data Fetching 🎣](https://medium.com/@CharlesMangwa/introducing-react-data-fetching-2140a1d36cc8).
+The package gives access to `<Fetch>`, `<FetchProvider>` and `requestToApi()`. To have an in-depth explanation of how to use them, how they work and even more, head to this post: [Introducing React Data Fetching 🎣](https://medium.com/@CharlesMangwa/introducing-react-data-fetching-2140a1d36cc8).
 
 ## Docs
 
@@ -121,12 +120,11 @@ The documentation is available here: https://charlesmangwa.github.io/react-data-
 
 Want to submit a PR but don't know where to start? Here is a list of features you could consider! This might change in the future as the API is far from being complete.
 
-- [ ] Increase code coverage 🤓
-- [ ] Implement React 16.3.0 new context API & lifecycles ⚛️
-- [ ] Add the ability to make several calls at once / manage a queue ⛓
-- [ ] Implement a caching (and/or normalization) system (through React.Suspense?) 📥
-- [ ] Add GraphQL support? ✨ 
-- [ ] Add an `/example` folder for newcomers & contributors 📂
+- [x] Add compatibility to React 16.3.0+ lifecycles ⚛️
+- [ ] Implement React 16.3.0+ new context API ⚛️
+- [ ] Add the ability to run multiple fetches serially or in parallel ⛓
+- [ ] Implement a caching system (through React's Suspense?) 📥
+- [ ] Add an `/examples` folder for newcomers & contributors 📂
 - [ ] What else?
 
 ## About

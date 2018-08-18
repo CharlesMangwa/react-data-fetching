@@ -24,13 +24,17 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       - run:
+          name: Running Prettier
+          command: yarn run lint-staged
+
+      - run:
           name: Running Linter
-          command: yarn lint
+          command: yarn run lint
 
       - run:
           name: Running Flow
-          command: yarn flow
+          command: yarn run flow
 
       - run:
           name: Running Tests
-          command: yarn test:ci
+          command: yarn run test
