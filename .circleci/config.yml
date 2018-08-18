@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 jobs:
   build:
     docker:
@@ -11,12 +11,12 @@ jobs:
 
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "package.json" }}
-          - v1-dependencies-
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
 
       - run:
           name: Installing Packages
-          command: yarn install
+          command: yarn --ignore-engines install
 
       - save_cache:
           paths:
@@ -32,6 +32,5 @@ jobs:
           command: yarn flow
 
       - run:
-         name: Running Tests
-         command: yarn test:ci
-
+          name: Running Tests
+          command: yarn test:ci

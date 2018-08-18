@@ -16,12 +16,12 @@ export default class Auth extends Component {
   _onSignUp = async () => {
     const apiResponse = await requestToApi({
       url: 'https://my-app.com/api/v1/users',
-      body: {{ email: 'midoriya@shonen.com' }},
-      headers: {{ Cache-Control: 'no-cache' }},
+      body: { email: 'midoriya@shonen.com' },
+      headers: { Cache-Control: 'no-cache' },
       method: 'POST',
       onTimeout: () => console.log('⏱️ Timeout!'),
       onProgress: (progression) => ('♻️ Progressing...', progression),
-      // params: {{ page: 5, start: 0, limit: 20 }},
+      // params: { page: 5, start: 0, limit: 20 },
       timeout: 2500,
     })
 
