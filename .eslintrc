@@ -37,6 +37,7 @@
     "object-curly-newline": ["error", { "consistent": true }],
     "react/destructuring-assignment": 0,
     "react/forbid-prop-types": 0,
+    "react/jsx-filename-extension": 0,
     "react/no-typos": 0,
     "react/sort-comp": 0,
     "semi": [2, "never"]

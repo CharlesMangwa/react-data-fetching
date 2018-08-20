@@ -3,7 +3,6 @@ import TestRenderer from 'react-test-renderer'
 import ShallowRenderer from 'react-test-renderer/shallow'
 
 import { FetchProvider, Fetch } from '../index'
-import getElementWithContent from './__helpers__'
 
 describe('A <FetchProvider>', () => {
   let fn
@@ -28,9 +27,11 @@ describe('A <FetchProvider>', () => {
   it('renders component children correctly', () => {
     const component = TestRenderer.create(
       <FetchProvider
-        api="https://api.github.com"
-        headers={{
-          'X-Nyan-Token': 'superNyan',
+        value={{
+          api: 'https://api.github.com',
+          headers: {
+            'X-Nyan-Token': 'superNyan',
+          },
         }}
       >
         <Fetch path="/users/octocat">
@@ -42,50 +43,21 @@ describe('A <FetchProvider>', () => {
     expect(tree).toMatchSnapshot()
   })
 
-  it('constructs URL correctly through `api`', () => {
-    const expectedContext = {
-      rdfApi: 'https://api.nyan.com',
+  it('propagates `store` correctly', () => {
+    const context = { api: 'https://api.github.com', store: { cats: 42 } }
+    const expectedData = {
+      data: { cats: 42 },
+      isOK: true,
     }
-    const expectedUrl = 'https://api.nyan.com/cats/meowssages'
-
-    const wrapper = getElementWithContent(
-      expectedContext,
-      <Fetch resultOnly path="/cats/meowssages" render={() => null} />
-    )
+    const onFetch = data => (receivedData = data || null)
+    let receivedData
 
     const component = TestRenderer.create(
-      <FetchProvider api="https://api.nyan.com">{wrapper}</FetchProvider>
+      <FetchProvider value={context}>
+        <Fetch path="store" onFetch={onFetch} />
+      </FetchProvider>
     )
 
-    const instance = component.getInstance()
-    const children = component.root.props.children
-    const receivedUrl = instance.rdfApi + children.props.path
-
-    expect(receivedUrl).toEqual(expectedUrl)
+    expect(receivedData).toMatchObject(expectedData)
   })
-
-  // @TODO: Refactor with new context API
-  // it('propagates `store` correctly', () => {
-  //   let receivedData
-  //   const expectedData = {
-  //     data: { cats: 42 },
-  //     isOK: true,
-  //   }
-  //   const expectedContext = {
-  //     rdfStore: { cats: 42 },
-  //   }
-
-  //   const wrapper = getElementWithContent(
-  //     expectedContext,
-  //     <Fetch path="store" onFetch={data => (receivedData = data || null)} />
-  //   )
-
-  //   const component = TestRenderer.create(
-  //     <FetchProvider api="https://api.github.com" store={{ cats: 42 }}>
-  //       {wrapper}
-  //     </FetchProvider>
-  //   )
-
-  //   expect(receivedData).toMatchObject(expectedData)
-  // })
 })

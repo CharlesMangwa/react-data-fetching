@@ -1,5 +1,5 @@
 <div align="center">
-  <strong>Declarative data fetching for React 🎣 </strong>
+  <strong>Declarative data fetching for React 🎣</strong>
   <br />
   <br />
   <a href="https://circleci.com/gh/CharlesMangwa/react-data-fetching">

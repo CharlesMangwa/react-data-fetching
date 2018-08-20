@@ -3,7 +3,7 @@ import TestRenderer from 'react-test-renderer'
 import ShallowRenderer from 'react-test-renderer/shallow'
 
 import { Fetch, FetchProvider } from '../index'
-import getElementWithContent from './__helpers__'
+import { Fetch as TestFetch } from '../Fetch'
 
 describe('A <Fetch>', () => {
   let fn
@@ -25,32 +25,32 @@ describe('A <Fetch>', () => {
 
   afterEach(() => jest.clearAllMocks())
 
-  it('throws when it is not rendered in the context of a <ConnectedFetch>', () => {
+  it('throws when it is not rendered in the context of a <FetchProvider>', () => {
     expect(() =>
-      renderer.render(<Fetch path="store">{() => null}</Fetch>)
+      renderer.render(<TestFetch path="store">{() => null}</TestFetch>)
     ).toThrow()
   })
 
   it('throws when no url nor path is passed', () => {
-    expect(() => renderer.render(<Fetch>{() => null}</Fetch>)).toThrow()
+    expect(() => renderer.render(<TestFetch>{() => null}</TestFetch>)).toThrow()
   })
 
   it('throws when onTimeout is passed, but no timeout', () => {
     expect(() =>
       renderer.render(
-        <Fetch
+        <TestFetch
           url="https://api.github.com/users/octocat"
           onTimeout={() => fn()}
         >
           {() => null}
-        </Fetch>
+        </TestFetch>
       )
     ).toThrow()
   })
 
   it('throws when no children, component, onFetch, render prop is passed', () => {
     expect(() =>
-      renderer.render(<Fetch url="https://api.github.com/users/octocat" />)
+      renderer.render(<TestFetch url="https://api.github.com/users/octocat" />)
     ).toThrow()
   })
 
@@ -79,25 +79,25 @@ describe('A <Fetch>', () => {
 
   it('re-renders only when necessary', () => {
     const component = TestRenderer.create(
-      <Fetch url="https://api.github.com/users/octocat">
+      <TestFetch url="https://api.github.com/users/octocat">
         <div />
-      </Fetch>
+      </TestFetch>
     )
 
     const instance = component.getInstance()
     const spy = jest.spyOn(instance, '_fetchData')
 
     component.update(
-      <Fetch url="https://api.github.com/users/octocat">
+      <TestFetch url="https://api.github.com/users/octocat">
         <div />
-      </Fetch>
+      </TestFetch>
     )
     expect(spy).not.toHaveBeenCalled()
 
     component.update(
-      <Fetch url="https://api.github.com/users/octocat" refetchKey>
+      <TestFetch url="https://api.github.com/users/octocat" refetchKey>
         <div />
-      </Fetch>
+      </TestFetch>
     )
 
     expect(spy).toHaveBeenCalled()
@@ -105,7 +105,7 @@ describe('A <Fetch>', () => {
 
   it('calls onLoad when passed', () => {
     renderer.render(
-      <Fetch
+      <TestFetch
         onLoad={fn}
         url="https://api.github.com/users/octocat"
         render={() => null}
@@ -117,7 +117,7 @@ describe('A <Fetch>', () => {
 
   it('calls loader when passed', () => {
     renderer.render(
-      <Fetch
+      <TestFetch
         loader={fn}
         url="https://api.github.com/users/octocat"
         render={() => null}
@@ -127,31 +127,24 @@ describe('A <Fetch>', () => {
     expect(fn).toHaveBeenCalled()
   })
 
-  // @TODO: Refactor with new context API
-  // it('returns data only if `resultOnly` is passed', () => {
-  //   let receivedData
-  //   const expectedData = {
-  //     cats: 42,
-  //   }
-  //   const expectedContext = {
-  //     rdfStore: { cats: 42 },
-  //   }
+  it('propagates `store` correctly', () => {
+    const context = { api: 'https://api.github.com', store: { cats: 42 } }
+    const expectedData = {
+      cats: 42,
+    }
+    const onFetch = data => (receivedData = data || null)
+    let receivedData
 
-  //   const wrapper = getElementWithContent(
-  //     expectedContext,
-  //     <Fetch
-  //       resultOnly
-  //       path="store"
-  //       onFetch={data => (receivedData = data || null)}
-  //     />
-  //   )
+    const component = TestRenderer.create(
+      <FetchProvider value={context}>
+        <Fetch
+          resultOnly
+          path="store"
+          onFetch={data => (receivedData = data || null)}
+        />
+      </FetchProvider>
+    )
 
-  //   const component = TestRenderer.create(
-  //     <FetchProvider api="https://api.github.com" store={{ cats: 42 }}>
-  //       {wrapper}
-  //     </FetchProvider>
-  //   )
-
-  //   expect(receivedData).toMatchObject(expectedData)
-  // })
+    expect(receivedData).toMatchObject(expectedData)
+  })
 })

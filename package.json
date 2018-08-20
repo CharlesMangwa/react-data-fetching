@@ -60,6 +60,7 @@
   },
   "dependencies": {
     "babel-runtime": "^6.26.0",
+    "create-react-context": "^0.2.2",
     "invariant": "^2.2.4",
     "prop-types": "^15.6.2",
     "react-lifecycles-compat": "^3.0.4"
@@ -86,7 +87,7 @@
     "eslint-plugin-jsx-a11y": "^6.1.1",
     "eslint-plugin-prettier": "^2.6.2",
     "eslint-plugin-react": "7.11.1",
-    "flow-bin": "0.63.1",
+    "flow-bin": "0.79.1",
     "glow": "^1.0.2",
     "gzip-size": "^5.0.0",
     "husky": "^0.14.3",

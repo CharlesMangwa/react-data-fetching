@@ -11,7 +11,7 @@
 <br />
 
 <div align="center">
-  <strong>Declarative data fetching for React 🎣 </strong>
+  <strong>Declarative data fetching for React 🎣</strong>
   <br />
   <br />
   <a href="https://circleci.com/gh/CharlesMangwa/react-data-fetching">
@@ -34,7 +34,7 @@
   </a>
   <img 
     alt="gzip size"
-    src="https://img.shields.io/badge/gzip%20size-6.93%20kB-brightgreen.svg"
+    src="https://img.shields.io/badge/gzip%20size-7.55%20kB-brightgreen.svg"
   />
   <a href="https://github.com/prettier/prettier">
     <img
@@ -121,10 +121,10 @@ The documentation is available here: https://charlesmangwa.github.io/react-data-
 Want to submit a PR but don't know where to start? Here is a list of features you could consider! This might change in the future as the API is far from being complete.
 
 - [x] Add compatibility to React 16.3.0+ lifecycles ⚛️
-- [ ] Implement React 16.3.0+ new context API ⚛️
+- [x] Implement React 16.3.0+ new context API ⚛️
+- [ ] Add an `/examples` folder for newcomers & contributors 📂
 - [ ] Add the ability to run multiple fetches serially or in parallel ⛓
 - [ ] Implement a caching system (through React's Suspense?) 📥
-- [ ] Add an `/examples` folder for newcomers & contributors 📂
 - [ ] What else?
 
 ## About
