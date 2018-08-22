@@ -168,4 +168,27 @@ describe('requestToApi', () => {
     })
     expect(onIntercept).toBeCalled()
   })
+
+  it('should pass the nested params correctly to the api', () => {
+    const request = requestToApi({
+      url: 'https://api.github.com/users',
+      method: 'GET',
+      params: {
+        obj1: {
+          start: 0,
+          limit: 20,
+        },
+        obj2: 'hello world',
+      },
+    })
+    mockXHR.onreadystatechange()
+    expect(mockXHR.open).toHaveBeenCalledWith(
+      'GET',
+      'https://api.github.com/users?obj1={"start":0,"limit":20}&obj2="hello world"'
+    )
+    request.then(result => {
+      const response = result.data[0]
+      expect(response.ok).toBeTruthy()
+    })
+  })
 })
