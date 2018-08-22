@@ -99,8 +99,8 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
     Object.entries(params).map(
       (param, index) =>
         index === 0
-          ? (route = `${route}?${param[0]}=${String(param[1])}`)
-          : (route = `${route}&${param[0]}=${String(param[1])}`)
+          ? (route = `${route}?${param[0]}=${JSON.stringify(param[1])}`)
+          : (route = `${route}&${param[0]}=${JSON.stringify(param[1])}`)
     )
   }
 
