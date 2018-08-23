@@ -5,7 +5,7 @@ import ShallowRenderer from 'react-test-renderer/shallow'
 import { Fetch, FetchProvider } from '../index'
 import { Fetch as TestFetch } from '../Fetch'
 
-describe('A <Fetch>', () => {
+describe('A <Fetch />', () => {
   let fn
   let renderer
 
@@ -25,17 +25,20 @@ describe('A <Fetch>', () => {
 
   afterEach(() => jest.clearAllMocks())
 
-  it('throws when it is not rendered in the context of a <FetchProvider>', () => {
+  it('should throw when it is not rendered in the context of a <FetchProvider>', () => {
+    expect.assertions(1)
     expect(() =>
       renderer.render(<TestFetch path="store">{() => null}</TestFetch>)
     ).toThrow()
   })
 
-  it('throws when no url nor path is passed', () => {
+  it('should throw when no `url` nor `path` is passed', () => {
+    expect.assertions(1)
     expect(() => renderer.render(<TestFetch>{() => null}</TestFetch>)).toThrow()
   })
 
-  it('throws when onTimeout is passed, but no timeout', () => {
+  it('should throw when `onTimeout` is passed, but no `timeout`', () => {
+    expect.assertions(1)
     expect(() =>
       renderer.render(
         <TestFetch
@@ -48,13 +51,15 @@ describe('A <Fetch>', () => {
     ).toThrow()
   })
 
-  it('throws when no children, component, onFetch, render prop is passed', () => {
+  it('should throw when no `children`, `component`, `onFetch`, `render` prop is passed', () => {
+    expect.assertions(1)
     expect(() =>
       renderer.render(<TestFetch url="https://api.github.com/users/octocat" />)
     ).toThrow()
   })
 
-  it('renders component children correctly', () => {
+  it('should render component `children` correctly', () => {
+    expect.assertions(1)
     const component = TestRenderer.create(
       <Fetch url="https://api.github.com/users/octocat">
         <div />
@@ -64,7 +69,8 @@ describe('A <Fetch>', () => {
     expect(tree).toMatchSnapshot()
   })
 
-  it('renders & calls function children correctly', () => {
+  it('should render & call function children correctly', () => {
+    expect.assertions(1)
     const component = TestRenderer.create(
       <Fetch url="https://api.github.com/users/octocat">
         {() => fn() || null}
@@ -77,22 +83,51 @@ describe('A <Fetch>', () => {
     expect(fn).toHaveBeenCalled()
   })
 
-  it('re-renders only when necessary', () => {
+  it('should re-render only when necessary', () => {
+    expect.assertions(4)
+    const render = () => null
+    const params = { page: 1 }
+
     const component = TestRenderer.create(
-      <TestFetch url="https://api.github.com/users/octocat">
-        <div />
+      <TestFetch
+        url="https://api.github.com/users/octocat"
+        cancel={false}
+        loader={render}
+        onError={fn}
+        onFetch={fn}
+        onLoad={fn}
+        path={undefined}
+        params={params}
+        refetchKey={false}
+        render={undefined}
+      >
+        {render}
       </TestFetch>
     )
 
     const instance = component.getInstance()
-    const spy = jest.spyOn(instance, '_fetchData')
+    const spy1 = jest.spyOn(instance, '_fetchData')
+    const spy2 = jest.spyOn(instance, 'shouldComponentUpdate')
 
     component.update(
-      <TestFetch url="https://api.github.com/users/octocat">
-        <div />
+      <TestFetch
+        url="https://api.github.com/users/octocat"
+        cancel={false}
+        loader={render}
+        onError={fn}
+        onFetch={fn}
+        onLoad={fn}
+        path={undefined}
+        params={params}
+        refetchKey={false}
+        render={undefined}
+      >
+        {render}
       </TestFetch>
     )
-    expect(spy).not.toHaveBeenCalled()
+
+    expect(spy1).not.toHaveBeenCalled()
+    expect(spy2).toHaveReturnedWith(false)
 
     component.update(
       <TestFetch url="https://api.github.com/users/octocat" refetchKey>
@@ -100,10 +135,12 @@ describe('A <Fetch>', () => {
       </TestFetch>
     )
 
-    expect(spy).toHaveBeenCalled()
+    expect(spy1).toHaveBeenCalled()
+    expect(spy2).toHaveReturnedWith(true)
   })
 
-  it('calls onLoad when passed', () => {
+  it('should call `onLoad` when passed', () => {
+    expect.assertions(1)
     renderer.render(
       <TestFetch
         onLoad={fn}
@@ -115,7 +152,8 @@ describe('A <Fetch>', () => {
     expect(fn).toHaveBeenCalled()
   })
 
-  it('calls loader when passed', () => {
+  it('should call `loader` when passed', () => {
+    expect.assertions(1)
     renderer.render(
       <TestFetch
         loader={fn}
@@ -127,7 +165,8 @@ describe('A <Fetch>', () => {
     expect(fn).toHaveBeenCalled()
   })
 
-  it('propagates `store` correctly', () => {
+  it('should propagate `store` correctly', () => {
+    expect.assertions(1)
     const context = { api: 'https://api.github.com', store: { cats: 42 } }
     const expectedData = {
       cats: 42,

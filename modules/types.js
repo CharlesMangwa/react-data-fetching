@@ -38,7 +38,6 @@ export type Method =
   | 'TRACE'
 
 export type ReturnedData = {|
-  cancel?: boolean,
   data?: ?Object,
   error?: Error,
   isOK?: boolean,
@@ -73,6 +72,7 @@ export type Props = {|
 
 export type RequestToApi = {|
   body?: Object,
+  cancel?: boolean,
   headers?: Object,
   method: Method,
   onProgress?: ProgressEvent => void,

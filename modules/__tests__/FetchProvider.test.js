@@ -4,7 +4,7 @@ import ShallowRenderer from 'react-test-renderer/shallow'
 
 import { FetchProvider, Fetch } from '../index'
 
-describe('A <FetchProvider>', () => {
+describe('A <FetchProvider />', () => {
   let fn
   let renderer
 
@@ -24,7 +24,7 @@ describe('A <FetchProvider>', () => {
 
   afterEach(() => jest.clearAllMocks())
 
-  it('renders component children correctly', () => {
+  it('should render component children correctly', () => {
     const component = TestRenderer.create(
       <FetchProvider
         value={{
@@ -43,7 +43,7 @@ describe('A <FetchProvider>', () => {
     expect(tree).toMatchSnapshot()
   })
 
-  it('propagates `store` correctly', () => {
+  it('should propagate `store` correctly', () => {
     const context = { api: 'https://api.github.com', store: { cats: 42 } }
     const expectedData = {
       data: { cats: 42 },

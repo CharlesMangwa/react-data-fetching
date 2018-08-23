@@ -7,6 +7,7 @@ describe('requestToApi', () => {
     onload: jest.fn(),
     open: jest.fn(),
     onreadystatechange: jest.fn(),
+    ontimeout: jest.fn(),
     readyState: 4,
     responseText: JSON.stringify([{ ok: true, username: 'Octocat' }]),
     send: jest.fn(),
@@ -21,9 +22,10 @@ describe('requestToApi', () => {
 
   afterEach(() => {
     window.XMLHttpRequest = oldXMLHttpRequest
+    jest.clearAllMocks()
   })
 
-  it('fetches data correctly', () => {
+  it('should fetch data correctly', () => {
     expect.assertions(1)
     const request = requestToApi({
       url: 'https://api.github.com/users/4',
@@ -36,7 +38,7 @@ describe('requestToApi', () => {
     })
   })
 
-  it('performs correctly with FORM_DATA method', () => {
+  it('should perform correctly with FORM_DATA method', () => {
     expect.assertions(1)
     const request = requestToApi({
       url: 'https://api.github.com/users',
@@ -52,7 +54,7 @@ describe('requestToApi', () => {
     })
   })
 
-  it('performs correctly with GET parameters', () => {
+  it('should perform correctly with GET parameters', () => {
     expect.assertions(1)
     const request = requestToApi({
       url: 'https://api.github.com/users',
@@ -69,7 +71,7 @@ describe('requestToApi', () => {
     })
   })
 
-  it('calls `onIntercept` when the request failed with a status 401', () => {
+  it('should call `onIntercept` when the request failed with a status 401 & retrieve successfully', () => {
     const mockFailingXHR = {
       getAllResponseHeaders: jest.fn(),
       onload: jest.fn(),
@@ -133,7 +135,7 @@ describe('requestToApi', () => {
     expect(onIntercept).toBeCalled()
   })
 
-  it('rejects when `onIntercept` is `undefined` or returns `null`', () => {
+  it('should reject when `onIntercept` is `undefined` or returns `null`', () => {
     const mockFailingXHR = {
       getAllResponseHeaders: jest.fn(),
       onload: jest.fn(),
@@ -148,9 +150,7 @@ describe('requestToApi', () => {
       setRequestHeader: jest.fn(),
     }
     window.XMLHttpRequest = jest.fn(() => mockFailingXHR)
-    const onIntercept = jest.fn(({ currentParams, request, status }) => {
-      return null
-    })
+    const onIntercept = jest.fn(({ currentParams, request, status }) => null)
     const request = requestToApi({
       url: 'https://api.github.com/users',
       method: 'GET',
@@ -170,7 +170,23 @@ describe('requestToApi', () => {
     expect(onIntercept).toBeCalled()
   })
 
-  it('passes the nested params correctly to the api', () => {
+  it("should call `onTimeout` when it's provided & the threshold have been reached", () => {
+    expect.assertions(1)
+    const fn = jest.fn()
+    const request = requestToApi({
+      url: 'https://api.github.com/users/4',
+      method: 'GET',
+      onTimeout: fn,
+      timeout: 0.1,
+    })
+
+    mockXHR.onreadystatechange()
+    mockXHR.ontimeout()
+
+    expect(fn).toHaveBeenCalled()
+  })
+
+  it('should build final URL from nested `params` objects', () => {
     expect.assertions(2)
     const request = requestToApi({
       url: 'https://api.github.com/users',
@@ -194,17 +210,20 @@ describe('requestToApi', () => {
     })
   })
 
-  it('cancels the current request when `cancel` is set to `true`', () => {
+  it('should perform correctly with GET parameters', () => {
     expect.assertions(1)
     const request = requestToApi({
-      url: 'https://api.github.com/users/4',
+      url: 'https://api.github.com/users',
       method: 'GET',
-      cancel: true,
+      params: {
+        start: 0,
+        limit: 20,
+      },
     })
-
     mockXHR.onreadystatechange()
-    mockXHR.send()
-
-    expect(mockXHR.abort).toHaveBeenCalled()
+    request.then(result => {
+      const response = result.data[0]
+      expect(response.ok).toBeTruthy()
+    })
   })
 })
