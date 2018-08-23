@@ -30,6 +30,7 @@ class Fetch extends Component<Props> {
 
   static propTypes = {
     body: PropTypes.object,
+    cancel: PropTypes.bool,
     children: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
     component: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
     context: contextShape,
@@ -51,6 +52,7 @@ class Fetch extends Component<Props> {
 
   static defaultProps = {
     body: {},
+    cancel: false,
     children: undefined,
     component: undefined,
     context: {},
@@ -114,6 +116,7 @@ class Fetch extends Component<Props> {
   }
 
   shouldComponentUpdate(nextProps: Props) {
+    if (this.props.cancel !== nextProps.cancel) return true
     if (this.props.children !== nextProps.children) return true
     if (this.props.loader !== nextProps.loader) return true
     if (this.props.onError !== nextProps.onError) return true
@@ -131,6 +134,7 @@ class Fetch extends Component<Props> {
   _fetchData = async (props: Props): Promise<void> => {
     const {
       body,
+      cancel,
       context,
       headers,
       method,
@@ -157,6 +161,7 @@ class Fetch extends Component<Props> {
       const apiResponse = await requestToApi({
         url: route || '',
         body: { ...body },
+        cancel,
         headers: { ...context.headers, ...headers },
         method,
         onTimeout,

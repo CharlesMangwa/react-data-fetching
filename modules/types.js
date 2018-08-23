@@ -37,13 +37,8 @@ export type Method =
   | 'PUT'
   | 'TRACE'
 
-export type DefaultProps = {|
-  body: Object,
-  method: Method,
-  params: Object,
-|}
-
 export type ReturnedData = {|
+  cancel?: boolean,
   data?: ?Object,
   error?: Error,
   isOK?: boolean,
@@ -54,6 +49,7 @@ export type ReturnedData = {|
 
 export type Props = {|
   body?: Object,
+  cancel?: boolean,
   children?: React$StatelessFunctionalComponent<?ReturnedData | Error>,
   component?: React$ComponentType<?ReturnedData | Error>,
   context: Context,

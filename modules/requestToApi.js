@@ -6,6 +6,7 @@ import type { RequestToApi } from './types'
 const requestToApi = (args: RequestToApi): Promise<any> => {
   const {
     body,
+    cancel,
     headers,
     method,
     onProgress = () => null,
@@ -45,8 +46,18 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
     request: XMLHttpRequest,
     resolve: Function,
     reject: Function,
-    isUpload?: boolean
+    isUpload?: boolean,
+    isCancel?: boolean
   ): Promise<void> => {
+    if (isCancel) {
+      const response = {
+        data: { cancelled: true },
+        isOK: true,
+        request,
+        status: request.status,
+      }
+      resolve(response)
+    }
     if (request.readyState === 4 || isUpload) {
       const isOK = request.status >= 200 && request.status <= 299
       if (isOK) {
@@ -124,6 +135,7 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
 
         request.open(method === 'FORM_DATA' ? 'POST' : method, route)
         setHeaders(request)
+        if (cancel) returnData(request, resolve, reject, false, true)
         request.send(
           method === 'FORM_DATA'
             ? formData
@@ -134,6 +146,7 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
               ? null
               : JSON.stringify({ ...body })
         )
+        if (cancel) request.abort()
       } catch (request) {
         handleError(request, request, reject)
       }

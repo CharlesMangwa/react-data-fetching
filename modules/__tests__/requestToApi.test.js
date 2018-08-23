@@ -2,6 +2,7 @@ import requestToApi from '../requestToApi'
 
 describe('requestToApi', () => {
   const mockXHR = {
+    abort: jest.fn(),
     getAllResponseHeaders: jest.fn(),
     onload: jest.fn(),
     open: jest.fn(),
@@ -169,7 +170,8 @@ describe('requestToApi', () => {
     expect(onIntercept).toBeCalled()
   })
 
-  it('should pass the nested params correctly to the api', () => {
+  it('passes the nested params correctly to the api', () => {
+    expect.assertions(2)
     const request = requestToApi({
       url: 'https://api.github.com/users',
       method: 'GET',
@@ -190,5 +192,19 @@ describe('requestToApi', () => {
       const response = result.data[0]
       expect(response.ok).toBeTruthy()
     })
+  })
+
+  it('cancels the current request when `cancel` is set to `true`', () => {
+    expect.assertions(1)
+    const request = requestToApi({
+      url: 'https://api.github.com/users/4',
+      method: 'GET',
+      cancel: true,
+    })
+
+    mockXHR.onreadystatechange()
+    mockXHR.send()
+
+    expect(mockXHR.abort).toHaveBeenCalled()
   })
 })
