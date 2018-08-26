@@ -61,10 +61,14 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
     if (request.readyState === 4 || isUpload) {
       const isOK = request.status >= 200 && request.status <= 299
       if (isOK) {
+        let data
+        try {
+          if (request.responseText) data = JSON.parse(request.responseText)
+        } catch (err) {
+          data = request.responseText
+        }
         const response = {
-          data: request.responseText
-            ? await JSON.parse(request.responseText)
-            : undefined,
+          data,
           isOK,
           request,
           status: request.status,
