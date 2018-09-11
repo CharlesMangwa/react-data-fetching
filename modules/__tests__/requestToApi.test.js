@@ -226,4 +226,31 @@ describe('requestToApi', () => {
       expect(response.ok).toBeTruthy()
     })
   })
+
+  it('should return the response in correct format when response is not json', () => {
+    expect.assertions(2)
+
+    const modifiedMockXHR = {
+      ...mockXHR,
+      responseText: 'some string',
+    }
+
+    window.XMLHttpRequest = jest.fn(() => modifiedMockXHR)
+
+    const request = requestToApi({
+      url: 'https://api.github.com/users',
+      method: 'GET',
+      params: {
+        start: 0,
+        limit: 20,
+      },
+    })
+
+    modifiedMockXHR.onreadystatechange()
+    request.then(result => {
+      const response = result.data[0]
+      expect(result.data).toEqual('some string')
+      expect(response.ok).toBeTruthy()
+    })
+  })
 })
