@@ -123,7 +123,6 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
     new Promise((resolve, reject) => {
       try {
         const request = new XMLHttpRequest()
-        request.timeout = timeout
         if (request.upload) {
           request.upload.onerror = error => handleError(error, request, resolve)
           request.upload.onload = () =>
@@ -138,6 +137,7 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
         request.ontimeout = () => handleTimeout(request, reject)
 
         request.open(method === 'FORM_DATA' ? 'POST' : method, route)
+        request.timeout = timeout
         setHeaders(request)
         if (cancel) returnData(request, resolve, reject, false, true)
         request.send(
