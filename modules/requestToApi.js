@@ -58,7 +58,7 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
       }
       resolve(response)
     }
-    if (request.readyState === 4 || isUpload) {
+    if (request.readyState === 4) {
       const isOK = request.status >= 200 && request.status <= 299
       if (isOK) {
         let data
