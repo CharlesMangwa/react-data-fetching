@@ -17,7 +17,7 @@
   <a href="https://circleci.com/gh/CharlesMangwa/react-data-fetching">
     <img
       alt="build: CircleCI"
-      src="https://circleci.com/gh/CharlesMangwa/react-data-fetching.svg?style=shield&circle-token=ec4d3afecb3cd2d7fd6712b2a6b2f576b9dfb08f"
+      src="https://circleci.com/gh/CharlesMangwa/react-data-fetching.svg?style=shield"
     />
   </a>
   <a href="https://coveralls.io/github/CharlesMangwa/react-data-fetching?branch=master">
