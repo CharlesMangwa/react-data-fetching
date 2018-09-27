@@ -34,7 +34,7 @@
   </a>
   <img 
     alt="gzip size"
-    src="https://img.shields.io/badge/gzip%20size-6.28%20kB-brightgreen.svg"
+    src="https://img.shields.io/badge/gzip%20size-6.19%20kB-brightgreen.svg"
   />
   <a href="https://github.com/prettier/prettier">
     <img
