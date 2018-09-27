@@ -1,8 +1,9 @@
 {
   "name": "react-data-fetching",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Declarative data fetching for React",
   "repository": "CharlesMangwa/react-data-fetching",
+  "homepage": "https://charlesmangwa.github.io/react-data-fetching",
   "license": "MIT",
   "author": "Charles Mangwa",
   "files": [
@@ -16,7 +17,7 @@
   "scripts": {
     "build": "node ./scripts/build.js",
     "clean": "git clean -fdX .",
-    "flow": "glow --show-all-errors",
+    "flow": "flow --show-all-errors",
     "jest": "jest --verbose --coverage",
     "lint": "eslint . --fix",
     "test": "yarn jest && cat ./modules/__tests__/__coverage__/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
@@ -53,17 +54,16 @@
       "lcov"
     ],
     "rootDir": ".",
-    "testRegex": "./modules/__tests__/.*.test.js$"
+    "testRegex": "./modules/__tests__/.*.spec.js$"
   },
   "peerDependencies": {
     "react": ">=15 || ^16"
   },
   "dependencies": {
     "babel-runtime": "^6.26.0",
-    "create-react-context": "^0.2.2",
+    "create-react-context": "^0.2.3",
     "invariant": "^2.2.4",
-    "prop-types": "^15.6.2",
-    "react-lifecycles-compat": "^3.0.4"
+    "prop-types": "^15.6.2"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -87,8 +87,7 @@
     "eslint-plugin-jsx-a11y": "^6.1.1",
     "eslint-plugin-prettier": "^2.6.2",
     "eslint-plugin-react": "7.11.1",
-    "flow-bin": "0.79.1",
-    "glow": "^1.0.2",
+    "flow-bin": "0.81.0",
     "gzip-size": "^5.0.0",
     "husky": "^0.14.3",
     "jest": "^23.5.0",

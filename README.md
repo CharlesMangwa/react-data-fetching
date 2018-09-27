@@ -28,13 +28,13 @@
   </a>
   <a href="https://www.npmjs.com/package/react-data-fetching">
     <img
-      alt="version: 0.2.3"
+      alt="version: 0.2.4"
       src="https://img.shields.io/npm/v/react-data-fetching.svg"
     />
   </a>
   <img 
     alt="gzip size"
-    src="https://img.shields.io/badge/gzip%20size-6.36%20kB-brightgreen.svg"
+    src="https://img.shields.io/badge/gzip%20size-6.28%20kB-brightgreen.svg"
   />
   <a href="https://github.com/prettier/prettier">
     <img

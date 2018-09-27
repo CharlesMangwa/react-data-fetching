@@ -28,7 +28,6 @@ const App = () => (
 )
 
 export default App
-
 ```
 
 ## Props
@@ -87,4 +86,4 @@ This allows you to share general parameters, but still have fine-grained control
 
 ### Store propagation
 
-As seen above, *for now*, React Data Fetching can share your Redux store all by itself. This is a feature which is nice to have, was possible to implement without spending too much time on it, but could possibly disappear/be modified in the (near?) future. However, you will always be able to at least manually pass a variable you want to be shared through `data.store`.
+As seen above, _for now_, React Data Fetching can share your Redux store all by itself. This is a feature which is nice to have, was possible to implement without spending too much time on it, but could possibly disappear/be modified in the (near?) future. However, you will always be able to at least manually pass a variable you want to be shared through `data.store`.

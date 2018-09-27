@@ -6,7 +6,6 @@ import type { RequestToApi } from './types'
 const requestToApi = (args: RequestToApi): Promise<any> => {
   const {
     body,
-    cancel,
     headers,
     method,
     onProgress = () => null,
@@ -45,26 +44,19 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
   const returnData = async (
     request: XMLHttpRequest,
     resolve: Function,
-    reject: Function,
-    isUpload?: boolean,
-    isCancel?: boolean
+    reject: Function
   ): Promise<void> => {
-    if (isCancel) {
-      const response = {
-        data: { cancelled: true },
-        isOK: true,
-        request,
-        status: request.status,
-      }
-      resolve(response)
-    }
-    if (request.readyState === 4 || isUpload) {
+    if (request.readyState === 4) {
       const isOK = request.status >= 200 && request.status <= 299
       if (isOK) {
+        let data
+        try {
+          if (request.responseText) data = JSON.parse(request.responseText)
+        } catch (err) {
+          data = request.responseText
+        }
         const response = {
-          data: request.responseText
-            ? await JSON.parse(request.responseText)
-            : undefined,
+          data,
           isOK,
           request,
           status: request.status,
@@ -119,11 +111,9 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
     new Promise((resolve, reject) => {
       try {
         const request = new XMLHttpRequest()
-        request.timeout = timeout
         if (request.upload) {
           request.upload.onerror = error => handleError(error, request, resolve)
-          request.upload.onload = () =>
-            returnData(request, resolve, reject, true)
+          request.upload.onload = () => returnData(request, resolve, reject)
           request.upload.onprogress = onProgress
           request.upload.ontimeout = () => handleTimeout(request, reject)
         }
@@ -134,8 +124,8 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
         request.ontimeout = () => handleTimeout(request, reject)
 
         request.open(method === 'FORM_DATA' ? 'POST' : method, route)
+        request.timeout = timeout
         setHeaders(request)
-        if (cancel) returnData(request, resolve, reject, false, true)
         request.send(
           method === 'FORM_DATA'
             ? formData
@@ -146,7 +136,6 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
               ? null
               : JSON.stringify({ ...body })
         )
-        if (cancel) request.abort()
       } catch (request) {
         handleError(request, request, reject)
       }
