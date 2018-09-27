@@ -54,6 +54,8 @@
 
 The package is really lightweight (~6 kB gzipped) and has been built from the ground up with universal apps in mind: you can use it wherever React is rendering - meaning it works seamlessly with React (web) & React Native!
 
+ℹ️ You can already try the next major version under the [/next](https://github.com/CharlesMangwa/react-data-fetching/tree/next) branch!
+
 ## Installation
 
 Using [Yarn](https://yarnpkg.com/):
