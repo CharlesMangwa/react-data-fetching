@@ -3,7 +3,7 @@
   "version": "0.2.4",
   "description": "Declarative data fetching for React",
   "repository": "CharlesMangwa/react-data-fetching",
-  "homepage": "https://charlesmangwa.github.io/react-data-fetching",
+  "homepage": "https://react-data-fetching.now.sh",
   "license": "MIT",
   "author": "Charles Mangwa",
   "files": [

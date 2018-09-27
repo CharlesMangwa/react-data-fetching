@@ -114,7 +114,7 @@ The package gives access to `<Fetch>`, `<FetchProvider>` and `requestToApi()`. T
 
 ## Docs
 
-The documentation is available here: https://charlesmangwa.github.io/react-data-fetching.
+The documentation is available here: https://react-data-fetching.now.sh.
 
 ## Todo
 
