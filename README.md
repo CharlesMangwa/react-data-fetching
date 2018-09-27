@@ -29,7 +29,7 @@
   <a href="https://www.npmjs.com/package/react-data-fetching">
     <img
       alt="version: next"
-      src="https://img.shields.io/npm/v/react-data-fetching.svg"
+      src="https://img.shields.io/badge/npm-next-orange.svg"
     />
   </a>
   <img 
@@ -52,14 +52,14 @@
 
 `react-data-fetching` provides a very intuitive way to perform any REST API call without hassle, through a single React component. It also helps you take care of timeouts, loading states, errors handling, data saving, uploading/downloading progress, etc. Fetching data while letting the user know what's going on has never been that easy!
 
-The package is really lightweight (~7 kB gzipped) and has been built from the ground up with universal apps in mind: you can use it wherever React is rendering - meaning it works seamlessly with React (web) & React Native!
+The package is quite lightweight (~7 kB gzipped) and has been built from the ground up with universal apps in mind: you can use it wherever React is rendering - meaning it works seamlessly with React (web) & React Native!
 
 ## Installation
 
 Using [Yarn](https://yarnpkg.com/):
 
 ```shell
-$ yarn add react-data-fetching
+$ yarn add react-data-fetching@next
 ```
 
 Then, use it as you would with anything else:

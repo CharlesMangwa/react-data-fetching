@@ -17,7 +17,7 @@
   <a href="https://www.npmjs.com/package/react-data-fetching">
     <img
       alt="version: next"
-      src="https://img.shields.io/npm/v/react-data-fetching.svg"
+      src="https://img.shields.io/badge/npm-next-orange.svg"
     />
   </a>
   <img 
