@@ -46,7 +46,6 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
     request: XMLHttpRequest,
     resolve: Function,
     reject: Function,
-    isUpload?: boolean,
     isCancel?: boolean
   ): Promise<void> => {
     if (isCancel) {
@@ -58,7 +57,7 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
       }
       resolve(response)
     }
-    if (request.readyState === 4 || isUpload) {
+    if (request.readyState === 4) {
       const isOK = request.status >= 200 && request.status <= 299
       if (isOK) {
         const response = {
@@ -119,11 +118,9 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
     new Promise((resolve, reject) => {
       try {
         const request = new XMLHttpRequest()
-        request.timeout = timeout
         if (request.upload) {
           request.upload.onerror = error => handleError(error, request, resolve)
-          request.upload.onload = () =>
-            returnData(request, resolve, reject, true)
+          request.upload.onload = () => returnData(request, resolve, reject)
           request.upload.onprogress = onProgress
           request.upload.ontimeout = () => handleTimeout(request, reject)
         }
@@ -134,8 +131,9 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
         request.ontimeout = () => handleTimeout(request, reject)
 
         request.open(method === 'FORM_DATA' ? 'POST' : method, route)
+        request.timeout = timeout
         setHeaders(request)
-        if (cancel) returnData(request, resolve, reject, false, true)
+        if (cancel) returnData(request, resolve, reject, true)
         request.send(
           method === 'FORM_DATA'
             ? formData

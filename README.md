@@ -28,13 +28,13 @@
   </a>
   <a href="https://www.npmjs.com/package/react-data-fetching">
     <img
-      alt="version: 0.2.3"
+      alt="version: 0.2.4"
       src="https://img.shields.io/npm/v/react-data-fetching.svg"
     />
   </a>
   <img 
     alt="gzip size"
-    src="https://img.shields.io/badge/gzip%20size-6.36%20kB-brightgreen.svg"
+    src="https://img.shields.io/badge/gzip%20size-7.58%20kB-brightgreen.svg"
   />
   <a href="https://github.com/prettier/prettier">
     <img
@@ -52,7 +52,7 @@
 
 `react-data-fetching` provides a very intuitive way to perform any REST API call without hassle, through a single React component. It also helps you take care of timeouts, loading states, errors handling, data saving, uploading/downloading progress, etc. Fetching data while letting the user know what's going on has never been that easy!
 
-The package is really lightweight (~6 kB gzipped) and has been built from the ground up with universal apps in mind: you can use it wherever React is rendering - meaning it works seamlessly with React (web) & React Native!
+The package is really lightweight (~7 kB gzipped) and has been built from the ground up with universal apps in mind: you can use it wherever React is rendering - meaning it works seamlessly with React (web) & React Native!
 
 ## Installation
 
@@ -114,7 +114,7 @@ The package gives access to `<Fetch>`, `<FetchProvider>` and `requestToApi()`. T
 
 ## Docs
 
-The documentation is available here: https://charlesmangwa.github.io/react-data-fetching.
+The documentation is available here: https://react-data-fetching.now.sh.
 
 ## Todo
 
