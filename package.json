@@ -1,6 +1,6 @@
 {
   "name": "react-data-fetching",
-  "version": "0.2.4",
+  "version": "1.0.0-beta.1",
   "description": "Declarative data fetching for React",
   "repository": "CharlesMangwa/react-data-fetching",
   "homepage": "https://react-data-fetching.now.sh",
