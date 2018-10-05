@@ -23,39 +23,49 @@ const getPlugins = env => {
       babelrc: false,
       presets: [
         [
-          'env',
+          '@babel/preset-env',
           {
             loose: true,
             modules: false,
             targets: {
               node: 'current',
-              browser: '> 1%, last 2 versions',
+              browsers: '> 1%, last 2 versions',
             },
           },
         ],
-        'stage-1',
-        'flow',
-        'react',
+        '@babel/preset-flow',
+        '@babel/preset-react',
       ],
       plugins: [
-        'external-helpers',
         'dev-expression',
+        ['@babel/plugin-transform-runtime', { helpers: false }],
+        '@babel/plugin-syntax-dynamic-import',
+        '@babel/plugin-syntax-import-meta',
+        '@babel/plugin-proposal-class-properties',
+        '@babel/plugin-proposal-json-strings',
         [
-          'transform-runtime',
+          '@babel/plugin-proposal-decorators',
           {
-            helpers: false,
-            polyfill: false,
-            regenerator: true,
+            legacy: true,
           },
         ],
+        '@babel/plugin-proposal-function-sent',
+        '@babel/plugin-proposal-export-namespace-from',
+        '@babel/plugin-proposal-numeric-separator',
+        '@babel/plugin-proposal-throw-expressions',
+        '@babel/plugin-proposal-export-default-from',
+        '@babel/plugin-proposal-logical-assignment-operators',
+        '@babel/plugin-proposal-optional-chaining',
+        [
+          '@babel/plugin-proposal-pipeline-operator',
+          {
+            proposal: 'minimal',
+          },
+        ],
+        '@babel/plugin-proposal-nullish-coalescing-operator',
+        '@babel/plugin-proposal-do-expressions',
       ].concat(
-        env === 'production'
-          ? [
-              'dev-expression',
-              'transform-react-remove-prop-types',
-              'transform-flow-strip-types',
-            ]
-          : []
+        env === 'production' ? ['transform-react-remove-prop-types'] : []
       ),
     }),
     commonjs({
