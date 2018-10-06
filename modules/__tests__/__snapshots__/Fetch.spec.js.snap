@@ -1,3 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`A <Fetch /> should render component \`children\` correctly 1`] = `null`;
+
+exports[`A <Fetch /> should render component \`children\` correctly 2`] = `null`;

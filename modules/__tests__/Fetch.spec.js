@@ -25,37 +25,15 @@ describe('A <Fetch />', () => {
 
   afterEach(() => jest.clearAllMocks())
 
-  it('should throw when it is not rendered in the context of a <FetchProvider>', () => {
+  it('should render component `children` correctly', () => {
     expect.assertions(1)
-    expect(() =>
-      renderer.render(<TestFetch path="store">{() => null}</TestFetch>)
-    ).toThrow()
-  })
-
-  it('should throw when no `url` nor `path` is passed', () => {
-    expect.assertions(1)
-    expect(() => renderer.render(<TestFetch>{() => null}</TestFetch>)).toThrow()
-  })
-
-  it('should throw when `onTimeout` is passed, but no `timeout`', () => {
-    expect.assertions(1)
-    expect(() =>
-      renderer.render(
-        <TestFetch
-          url="https://api.github.com/users/octocat"
-          onTimeout={() => fn()}
-        >
-          {() => null}
-        </TestFetch>
-      )
-    ).toThrow()
-  })
-
-  it('should throw when no `children`, `component`, `onFetch`, `render` prop is passed', () => {
-    expect.assertions(1)
-    expect(() =>
-      renderer.render(<TestFetch url="https://api.github.com/users/octocat" />)
-    ).toThrow()
+    const component = TestRenderer.create(
+      <Fetch url="https://api.github.com/users/octocat">
+        <div />
+      </Fetch>
+    )
+    const tree = component.toJSON()
+    expect(tree).toMatchSnapshot()
   })
 
   it('should render component `children` correctly', () => {
@@ -185,5 +163,38 @@ describe('A <Fetch />', () => {
     )
 
     expect(receivedData).toMatchObject(expectedData)
+  })
+
+  it('should throw when it is not rendered in the context of a <FetchProvider>', () => {
+    expect.assertions(1)
+    expect(() =>
+      renderer.render(<TestFetch path="store">{() => null}</TestFetch>)
+    ).toThrow()
+  })
+
+  it('should throw when no `url` nor `path` is passed', () => {
+    expect.assertions(1)
+    expect(() => renderer.render(<TestFetch>{() => null}</TestFetch>)).toThrow()
+  })
+
+  it('should throw when `onTimeout` is passed, but no `timeout`', () => {
+    expect.assertions(1)
+    expect(() =>
+      renderer.render(
+        <TestFetch
+          url="https://api.github.com/users/octocat"
+          onTimeout={() => fn()}
+        >
+          {() => null}
+        </TestFetch>
+      )
+    ).toThrow()
+  })
+
+  it('should throw when no `children`, `component`, `onFetch`, `render` prop is passed', () => {
+    expect.assertions(1)
+    expect(() =>
+      renderer.render(<TestFetch url="https://api.github.com/users/octocat" />)
+    ).toThrow()
   })
 })

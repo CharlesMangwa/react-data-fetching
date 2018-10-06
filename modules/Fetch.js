@@ -72,6 +72,7 @@ class Fetch extends Component<Props> {
     timeout: -1,
   }
 
+  // @TODO: Move this to cdM to be StrictMode compliant
   UNSAFE_componentWillMount() {
     this._validateProps(this.props)
     if (this.props.onLoad && !this._didCallOnLoad) {
@@ -210,29 +211,14 @@ class Fetch extends Component<Props> {
     }
   }
 
-  // @TODO: Refactor `error.request._response`
   _printError = (error: ErrorContent): string =>
     error.response && JSON.stringify(error.response).length
       ? typeof error.response === 'string'
         ? error.response
         : typeof error.response === 'object'
           ? JSON.stringify(error.response, null, 2)
-          : `${
-              error.response
-            }. Sorry <Fetch /> couldn't turned this into a readable string. ` +
-            'Check error.content.request to see what happened.'
-      : // $FlowFixMe
-        error.request._response
-        ? typeof error.request._response === 'string'
-          ? error.request._response
-          : typeof error.request._response === 'object'
-            ? JSON.stringify(error.request._response, null, 2)
-            : `${String(
-                error.request._response
-              )}. Sorry <Fetch /> couldn't turned this into a readable string. ` +
-              'Check error.content.request to see what happened.'
-        : " .Sorry <Fetch /> couldn't turned this into a readable string. " +
-          'Check error.content.request to see what happened.'
+          : `${error.response}. 'Check error.content to see what happened.`
+      : 'Check error.content to see what happened.'
 
   _renderLoader = (): React$Node => {
     const { context, loader } = this.props
