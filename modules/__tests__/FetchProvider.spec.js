@@ -25,6 +25,7 @@ describe('A <FetchProvider />', () => {
   afterEach(() => jest.clearAllMocks())
 
   it('should render component children correctly', () => {
+    expect.assertions(1)
     const component = TestRenderer.create(
       <FetchProvider
         value={{
@@ -44,6 +45,7 @@ describe('A <FetchProvider />', () => {
   })
 
   it('should propagate `store` correctly', () => {
+    expect.assertions(1)
     const context = { api: 'https://api.github.com', store: { cats: 42 } }
     const expectedData = {
       data: { cats: 42 },

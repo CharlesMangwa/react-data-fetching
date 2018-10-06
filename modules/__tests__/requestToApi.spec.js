@@ -72,6 +72,7 @@ describe('requestToApi', () => {
   })
 
   it('should call `onIntercept` when the request failed with a status 401 & retrieve successfully', () => {
+    expect.assertions(2)
     const mockFailingXHR = {
       getAllResponseHeaders: jest.fn(),
       onload: jest.fn(),
@@ -136,6 +137,7 @@ describe('requestToApi', () => {
   })
 
   it('should reject when `onIntercept` is `undefined` or returns `null`', () => {
+    expect.assertions(2)
     const mockFailingXHR = {
       getAllResponseHeaders: jest.fn(),
       onload: jest.fn(),

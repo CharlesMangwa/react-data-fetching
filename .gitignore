@@ -6,6 +6,7 @@ coverage
 cjs
 esm
 umd
+.tgz
 
 # NODE
 node_modules
