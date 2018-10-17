@@ -5,10 +5,10 @@ A function which against all odds: sends a request to an API!
 ## Example
 
 ```jsx
-import React, { Component, Fragment } from 'react'
+import React, { Component, Fragment } from 'react'
 import { requestToApi } from 'react-data-fetching'
 
-import { Button } from './components
+import { Button } from './components
 
 export default class Auth extends Component {
   state = { accountCreated: false }
@@ -16,12 +16,12 @@ export default class Auth extends Component {
   _onSignUp = async () => {
     const apiResponse = await requestToApi({
       url: 'https://my-app.com/api/v1/users',
-      body: {{ email: 'midoriya@shonen.com' },
-      headers: {{ Cache-Control: 'no-cache' },
+      body: { email: 'midoriya@shonen.com' },
+      headers: { Cache-Control: 'no-cache' },
       method: 'POST',
       onTimeout: () => console.log('⏱️ Timeout!'),
       onProgress: (progression) => ('♻️ Progressing...', progression),
-      // params: {{ page: 5, start: 0, limit: 20 }},
+      // params: { page: 5, start: 0, limit: 20 },
       timeout: 2500,
     })
 
@@ -49,7 +49,7 @@ type RequestToApi = {
   body?: Object,
   headers?: Object,
   method: Method,
-  onProgress?: (Progress) => void,
+  onProgress?: Progress => void,
   onTimeout?: Function,
   params?: Object,
   url: string,

@@ -1,11 +1,16 @@
 /* @flow */
+/* eslint-disable no-use-before-define */
 
 import PropTypes from 'prop-types'
 
 // FLOW
+
+export type Interceptor = InterceptedData => ?RequestToApi
+
 export type Context = {
   rdfApi: string,
   rdfHeaders: Object,
+  rdfInterceptor: ?Interceptor,
   rdfLoader: React$Node,
   rdfStore: Object,
   rdfTimeout: number,
@@ -23,14 +28,14 @@ export type Error = {
 }
 
 export type Method =
-  'DELETE'
-| 'FORM_DATA'
-| 'GET'
-| 'HEAD'
-| 'PATCH'
-| 'POST'
-| 'PUT'
-| 'TRACE'
+  | 'DELETE'
+  | 'FORM_DATA'
+  | 'GET'
+  | 'HEAD'
+  | 'PATCH'
+  | 'POST'
+  | 'PUT'
+  | 'TRACE'
 
 export type DefaultProps = {
   body: Object,
@@ -66,12 +71,14 @@ export type Props = {
   method: Method,
   onError?: (?ReturnedData | Error) => void,
   onFetch?: (?ReturnedData | Error) => void,
+  onIntercept?: Interceptor,
   onLoad?: Function,
-  onProgress?: (Progress) => void,
+  onProgress?: Progress => void,
   onTimeout?: Function,
   params?: Object,
   path?: string,
   refetch?: any,
+  refetchKey?: any,
   render?: React$StatelessFunctionalComponent<?ReturnedData | Error>,
   resultOnly?: boolean,
   timeout?: number,
@@ -82,11 +89,18 @@ export type RequestToApi = {
   body?: Object,
   headers?: Object,
   method: Method,
-  onProgress?: (Progress) => void,
+  onProgress?: Progress => void,
+  onIntercept?: ?Interceptor,
   onTimeout?: Function,
   params?: Object,
   url: string,
   timeout?: number,
+}
+
+export type InterceptedData = {
+  currentParams: RequestToApi,
+  request: XMLHttpRequest,
+  status: number,
 }
 
 export type Store = {
@@ -100,6 +114,7 @@ export type ProviderProps = {
   children: React$Node,
   headers?: Object,
   loader?: React$Node,
+  onIntercept?: Interceptor,
   store?: Store,
   timeout?: number,
 }

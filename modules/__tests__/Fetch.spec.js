@@ -2,7 +2,7 @@ import React from 'react'
 import TestRenderer from 'react-test-renderer'
 import ShallowRenderer from 'react-test-renderer/shallow'
 
-import {  ConnectedFetch, Fetch } from '../index'
+import { ConnectedFetch, Fetch } from '../index'
 import getElementWithContent from './__helpers__'
 
 describe('A <Fetch>', () => {
@@ -17,7 +17,7 @@ describe('A <Fetch>', () => {
           ok: true,
           json: () => {
             return { ok: true }
-          }
+          },
         })
       })
       return p
@@ -28,7 +28,7 @@ describe('A <Fetch>', () => {
 
   it('throws when it is not rendered in the context of a <ConnectedFetch>', () => {
     expect(() =>
-      renderer.render(<Fetch path="store">{() => null}</Fetch>),
+      renderer.render(<Fetch path="store">{() => null}</Fetch>)
     ).toThrow()
   })
 
@@ -44,13 +44,14 @@ describe('A <Fetch>', () => {
           onTimeout={() => fn()}
         >
           {() => null}
-        </Fetch>),
+        </Fetch>
+      )
     ).toThrow()
   })
 
   it('throws when no children, component, onFetch, render prop is passed', () => {
     expect(() =>
-      renderer.render(<Fetch url="https://api.github.com/users/octocat" />),
+      renderer.render(<Fetch url="https://api.github.com/users/octocat" />)
     ).toThrow()
   })
 
@@ -58,7 +59,7 @@ describe('A <Fetch>', () => {
     const component = TestRenderer.create(
       <Fetch url="https://api.github.com/users/octocat">
         <div />
-      </Fetch>,
+      </Fetch>
     )
     const tree = component.toJSON()
     expect(tree).toMatchSnapshot()
@@ -68,7 +69,7 @@ describe('A <Fetch>', () => {
     const component = TestRenderer.create(
       <Fetch url="https://api.github.com/users/octocat">
         {() => fn() || null}
-      </Fetch>,
+      </Fetch>
     )
 
     const instance = component.root
@@ -77,11 +78,11 @@ describe('A <Fetch>', () => {
     expect(fn).toHaveBeenCalled()
   })
 
-  it("re-renders only when necessary", () => {
+  it('re-renders only when necessary', () => {
     const component = TestRenderer.create(
       <Fetch url="https://api.github.com/users/octocat">
         <div />
-      </Fetch>,
+      </Fetch>
     )
 
     const instance = component.getInstance()
@@ -90,14 +91,14 @@ describe('A <Fetch>', () => {
     component.update(
       <Fetch url="https://api.github.com/users/octocat">
         <div />
-      </Fetch>,
+      </Fetch>
     )
     expect(spy).not.toHaveBeenCalled()
 
     component.update(
-      <Fetch url="https://api.github.com/users/octocat" refetch>
+      <Fetch url="https://api.github.com/users/octocat" refetchKey>
         <div />
-      </Fetch>,
+      </Fetch>
     )
 
     expect(spy).toHaveBeenCalled()
@@ -142,16 +143,13 @@ describe('A <Fetch>', () => {
         resultOnly
         path="store"
         onFetch={data => (receivedData = data || null)}
-      />,
+      />
     )
 
     const component = TestRenderer.create(
-      <ConnectedFetch
-        api="https://api.github.com"
-        store={{ cats: 42 }}
-      >
+      <ConnectedFetch api="https://api.github.com" store={{ cats: 42 }}>
         {wrapper}
-      </ConnectedFetch>,
+      </ConnectedFetch>
     )
 
     expect(receivedData).toMatchObject(expectedData)

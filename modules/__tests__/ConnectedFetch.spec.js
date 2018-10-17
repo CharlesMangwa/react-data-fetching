@@ -6,7 +6,8 @@ import { ConnectedFetch, Fetch } from '../index'
 import getElementWithContent from './__helpers__'
 
 describe('A <ConnectedFetch>', () => {
-  let fn, renderer
+  let fn
+  let renderer
 
   beforeEach(() => {
     fn = jest.fn()
@@ -15,9 +16,7 @@ describe('A <ConnectedFetch>', () => {
       const p = new Promise((resolve, reject) => {
         resolve({
           ok: true,
-          json: () => {
-            return { ok: true }
-          }
+          json: () => ({ ok: true }),
         })
       })
       return p
@@ -37,12 +36,12 @@ describe('A <ConnectedFetch>', () => {
         <Fetch path="/users/octocat">
           <div />
         </Fetch>
-      </ConnectedFetch>,
+      </ConnectedFetch>
     )
     const tree = component.toJSON()
     expect(tree).toMatchSnapshot()
   })
-  
+
   it('constructs URL correctly through `api`', () => {
     const expectedContext = {
       rdfApi: 'https://api.nyan.com',
@@ -51,17 +50,11 @@ describe('A <ConnectedFetch>', () => {
 
     const wrapper = getElementWithContent(
       expectedContext,
-      <Fetch
-        resultOnly
-        path="/cats/meowssages"
-        render={() => null}
-      />,
+      <Fetch resultOnly path="/cats/meowssages" render={() => null} />
     )
 
     const component = TestRenderer.create(
-      <ConnectedFetch api="https://api.nyan.com">
-        {wrapper}
-      </ConnectedFetch>,
+      <ConnectedFetch api="https://api.nyan.com">{wrapper}</ConnectedFetch>
     )
 
     const instance = component.getInstance()
@@ -83,19 +76,13 @@ describe('A <ConnectedFetch>', () => {
 
     const wrapper = getElementWithContent(
       expectedContext,
-      <Fetch
-        path="store"
-        onFetch={data => (receivedData = data || null)}
-      />,
+      <Fetch path="store" onFetch={data => (receivedData = data || null)} />
     )
 
     const component = TestRenderer.create(
-      <ConnectedFetch
-        api="https://api.github.com"
-        store={{ cats: 42 }}
-      >
+      <ConnectedFetch api="https://api.github.com" store={{ cats: 42 }}>
         {wrapper}
-      </ConnectedFetch>,
+      </ConnectedFetch>
     )
 
     expect(receivedData).toMatchObject(expectedData)

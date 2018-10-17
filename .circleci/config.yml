@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 jobs:
   build:
     docker:
@@ -11,12 +11,12 @@ jobs:
 
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "package.json" }}
-          - v1-dependencies-
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
 
       - run:
           name: Installing Packages
-          command: yarn install
+          command: yarn --ignore-engines install
 
       - save_cache:
           paths:
@@ -24,14 +24,17 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       - run:
+          name: Running Prettier
+          command: yarn run lint-staged
+
+      - run:
           name: Running Linter
-          command: yarn lint
+          command: yarn run lint
 
       - run:
           name: Running Flow
-          command: yarn flow
+          command: yarn run flow
 
       - run:
-         name: Running Tests
-         command: yarn test:ci
-
+          name: Running Tests
+          command: yarn run test
