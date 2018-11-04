@@ -264,22 +264,28 @@ class Fetch extends Component<Props> {
       timeout,
       url,
     } = props
+    const urlPathErrorStatements = 'You must provide a `url` or a `path` to <Fetch>'
+    const connectedFetchErrorBase = 'You must implement <ConnectedFetch> at the root of your '
+    const apiPathError = 'app and provide an `api` in order to use `path`'
+    const apiStoreError = 'app and provide a `store` in order to use `path="store"`'
 
-    invariant(path || url, 'You must provide a `url` or a `path` to <Fetch />')
+    invariant(
+      path || url,
+      urlPathErrorStatements,
+    )
+
 
     if (path) {
       invariant(
         path && rdfApi,
-        'You must implement <FetchProvider> at the root of your ' +
-          'app and provide an `api` in order to use `path`'
+        `${connectedFetchErrorBase} ${apiPathError}`,
       )
     }
 
     if (path === 'store') {
       invariant(
-        path && rdfStore,
-        'You must implement <FetchProvider> at the root of your ' +
-          'app and provide a `store` in order to use `path="store"`'
+        path && rdfStore
+        `${connectedFetchErrorBase} ${apiStoreError}`,
       )
     }
 
