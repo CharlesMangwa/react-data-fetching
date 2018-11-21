@@ -15,6 +15,7 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
     onIntercept,
     url,
     timeout = 0,
+    disableDefaultHeaders,
   } = args
   const defaultHeaders = {
     Accept: 'application/json;charset=UTF-8',
@@ -88,9 +89,11 @@ const requestToApi = (args: RequestToApi): Promise<any> => {
   }
 
   const setHeaders = (request: XMLHttpRequest): void => {
-    Object.entries(defaultHeaders).map(defaultHeader =>
-      request.setRequestHeader(defaultHeader[0], String(defaultHeader[1]))
-    )
+    if (!disableDefaultHeaders) {
+      Object.entries(defaultHeaders).map(defaultHeader =>
+        request.setRequestHeader(defaultHeader[0], String(defaultHeader[1]))
+      )
+    }
     if (headers && Object.keys(headers).length > 0) {
       Object.entries(headers).map(header =>
         request.setRequestHeader(header[0], String(header[1]))
