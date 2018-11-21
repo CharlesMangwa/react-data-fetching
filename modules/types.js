@@ -81,6 +81,7 @@ export type RequestToApi = {|
   params?: Object,
   url: string,
   timeout?: number,
+  disableDefaultHeaders?: boolean,
 |}
 
 export type InterceptedData = {|
