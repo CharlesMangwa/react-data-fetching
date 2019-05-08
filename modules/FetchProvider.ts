@@ -1,6 +1,5 @@
 import createReactContext from "create-react-context";
 import { Interceptor } from "./types";
-import { object } from "prop-types";
 
 interface IReactContext {
   api?: string;

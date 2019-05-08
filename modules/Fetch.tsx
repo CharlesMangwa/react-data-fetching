@@ -128,7 +128,6 @@ class Fetch extends Component<Partial<IProps>> implements IDataFetcher {
         return Children.only(children);
       }
     }
-
     return null;
   }
 

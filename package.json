@@ -17,12 +17,11 @@
   "scripts": {
     "build": "node ./scripts/build.js",
     "clean": "git clean -fdX .",
-    "flow": "flow --show-all-errors",
     "jest": "jest --verbose --coverage",
     "lint": "tslint --project .",
     "test": "yarn jest && cat ./modules/__tests__/__coverage__/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
-    "prettier": "prettier --config .prettierrc --parser flow --write \"**/*.js\"",
-    "precommit": "lint-staged && yarn lint && git add . && yarn flow && yarn jest",
+    "prettier": "prettier --config .prettierrc",
+    "precommit": "lint-staged && yarn lint && git add . && yarn jest",
     "postcommit": "git update-index --again",
     "prepack": "node ./scripts/build.js"
   },
