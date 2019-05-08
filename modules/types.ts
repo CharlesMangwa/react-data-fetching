@@ -43,10 +43,14 @@ export interface IReturnedData {
   store?: object;
 }
 
+export interface IDataFetcher {
+  fetchData(): Promise<void>;
+}
+
 export interface IProps {
-  body?: {[s: string]: any};
+  body: {[s: string]: any};
   cancel?: boolean;
-  children?: React.SFC<IReturnedData | IError>;
+  children?: React.ReactNode;
   component?: React.ComponentType<IReturnedData | IError>;
   context: IContext;
   headers?: {[s: string]: string};
@@ -63,7 +67,7 @@ export interface IProps {
   refetchKey?: any;
   render?: React.SFC<IReturnedData | IError>;
   resultOnly?: boolean;
-  timeout?: number;
+  timeout: number;
   url?: string;
 }
 

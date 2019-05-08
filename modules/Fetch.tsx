@@ -6,6 +6,7 @@ import { polyfill } from "react-lifecycles-compat";
 import { Consumer } from "./FetchProvider";
 import requestToApi from "./requestToApi";
 import {
+  IDataFetcher,
   IError,
   IErrorContent,
   IProps,
@@ -14,29 +15,34 @@ import {
 } from "./types";
 import { isEmptyChildren } from "./util";
 
-class Fetch extends Component<IProps> {
+const defaultProps = {
+  body: {},
+  cancel: false,
+  children: undefined,
+  component: undefined,
+  context: {},
+  loader: undefined,
+  method: "GET" as Method,
+  onError: undefined,
+  onFetch: undefined,
+  onLoad: undefined,
+  onProgress: undefined,
+  onTimeout: undefined,
+  params: {},
+  path: undefined,
+  refetchKey: undefined,
+  render: undefined,
+  resultOnly: false,
+  timeout: -1,
+  url: undefined,
+};
 
-  public static defaultProps = {
-    body: {},
-    cancel: false,
-    children: undefined,
-    component: undefined,
-    context: {},
-    loader: undefined,
-    method: "GET" as Method,
-    onError: undefined,
-    onFetch: undefined,
-    onLoad: undefined,
-    onProgress: undefined,
-    onTimeout: undefined,
-    params: {},
-    path: undefined,
-    refetchKey: undefined,
-    render: undefined,
-    resultOnly: false,
-    timeout: -1,
-    url: undefined,
-  };
+const defaultize = (props: Partial<IProps>): IProps => ({
+  ...defaultProps,
+  ...props,
+});
+
+class Fetch extends Component<Partial<IProps>> implements IDataFetcher {
 
   private data?: IReturnedData | IError;
   private didCallOnLoad = false;
@@ -44,38 +50,39 @@ class Fetch extends Component<IProps> {
   private isUnmounted = false;
 
   public componentDidMount() {
-    if (this.props.onLoad && !this.didCallOnLoad) {
+    const { context, onLoad, path } = defaultize(this.props);
+    if (onLoad && !this.didCallOnLoad) {
       this.didCallOnLoad = true;
-      this.props.onLoad();
+      onLoad();
     }
-    if (this.props.path === "store") {
+    if (path === "store") {
       this.handleData({
-        data: this.props.context.store,
+        data: context.store,
         isOK: true,
       });
     } else {
-      this.fetchData(this.props);
+      this.fetchData();
     }
   }
 
-  public componentDidUpdate(prevProps: IProps) {
+  public componentDidUpdate(prevProps: Partial<IProps>) {
     this.validateProps(this.props);
-
-    if (this.props.onLoad && !this.didCallOnLoad) {
+    const { context, onLoad, path, refetchKey } = defaultize(this.props);
+    if (onLoad && !this.didCallOnLoad) {
       this.didCallOnLoad = true;
-      this.props.onLoad();
+      onLoad();
     }
 
-    if (this.props.refetchKey !== prevProps.refetchKey) {
-      if (this.props.path === "store") {
+    if (refetchKey !== prevProps.refetchKey) {
+      if (path === "store") {
         this.isLoaded = true;
         this.handleData({
-          data: this.props.context.store,
+          data: context.store,
           isOK: true,
         });
       } else {
         this.isLoaded = false;
-        this.fetchData(this.props);
+        this.fetchData();
       }
     }
   }
@@ -84,24 +91,26 @@ class Fetch extends Component<IProps> {
     this.isUnmounted = true;
   }
 
-  public shouldComponentUpdate(nextProps: IProps) {
-    if (this.props.cancel !== nextProps.cancel) { return true; }
-    if (this.props.children !== nextProps.children) { return true; }
-    if (this.props.loader !== nextProps.loader) { return true; }
-    if (this.props.onError !== nextProps.onError) { return true; }
-    if (this.props.onFetch !== nextProps.onFetch) { return true; }
-    if (this.props.onLoad !== nextProps.onLoad) { return true; }
-    if (this.props.path !== nextProps.path) { return true; }
-    if (this.props.params !== nextProps.params) { return true; }
-    if (this.props.refetchKey !== nextProps.refetchKey) { return true; }
-    if (this.props.render !== nextProps.render) { return true; }
+  public shouldComponentUpdate(nextProps: Partial<IProps>) {
+    const defaultized = defaultize(this.props);
+    const nextDefaultized = defaultize(nextProps);
+    if (defaultized.cancel !== nextDefaultized.cancel) { return true; }
+    if (defaultized.children !== nextDefaultized.children) { return true; }
+    if (defaultized.loader !== nextDefaultized.loader) { return true; }
+    if (defaultized.onError !== nextDefaultized.onError) { return true; }
+    if (defaultized.onFetch !== nextDefaultized.onFetch) { return true; }
+    if (defaultized.onLoad !== nextDefaultized.onLoad) { return true; }
+    if (defaultized.path !== nextDefaultized.path) { return true; }
+    if (defaultized.params !== nextDefaultized.params) { return true; }
+    if (defaultized.refetchKey !== nextDefaultized.refetchKey) { return true; }
+    if (defaultized.render !== nextDefaultized.render) { return true; }
     if (this.isLoaded) { return true; }
     if (this.data) { return true; }
     return false;
   }
 
   public render() {
-    const { children, component, render } = this.props;
+    const { children, component, render } = defaultize(this.props);
 
     if (!this.isLoaded && !this.isUnmounted) { return this.renderLoader(); }
 
@@ -123,7 +132,7 @@ class Fetch extends Component<IProps> {
     return null;
   }
 
-  private async fetchData(props: IProps): Promise<void> {
+  public async fetchData(): Promise<void> {
     const {
       body,
       cancel,
@@ -137,7 +146,7 @@ class Fetch extends Component<IProps> {
       path,
       url,
       timeout,
-    } = props;
+    } = defaultize(this.props);
     const route = path ? `${context.api || ""}${path}`  : url;
     const timeoutValue = context.timeout && timeout === -1 ?
       context.timeout :
@@ -191,9 +200,10 @@ class Fetch extends Component<IProps> {
   }
 
   private handleData(result: IReturnedData) {
+    const { resultOnly } = defaultize(this.props);
     if (!this.isUnmounted) {
       this.isLoaded = true;
-      this.props.resultOnly
+      resultOnly
         ? (this.data = result.error || result.data)
         : (this.data = result);
       this.returnData(result);
@@ -211,7 +221,7 @@ class Fetch extends Component<IProps> {
   }
 
   private renderLoader(): React.ReactNode {
-    const { context, loader } = this.props;
+    const { context, loader } = defaultize(this.props);
 
     if (context.loader && !loader) {
       return typeof context.loader === "function"
@@ -229,7 +239,7 @@ class Fetch extends Component<IProps> {
   }
 
   private returnData(result: IReturnedData) {
-    const { onError, onFetch } = this.props;
+    const { onError, onFetch } = defaultize(this.props);
 
     if (onFetch) { onFetch(this.data); }
 
@@ -238,7 +248,7 @@ class Fetch extends Component<IProps> {
     if (!this.isUnmounted) { this.forceUpdate(); }
   }
 
-  private validateProps(props: IProps) {
+  private validateProps(props: Partial<IProps>) {
     const {
       children,
       component,
@@ -249,7 +259,7 @@ class Fetch extends Component<IProps> {
       render,
       timeout,
       url,
-    } = props;
+    } = defaultize(props);
 
     invariant(path || url, "You must provide a `url` or a `path` to <Fetch />");
 
@@ -287,11 +297,11 @@ class Fetch extends Component<IProps> {
   }
 }
 
-const withContext = (
-  FetchComponent: React.ComponentType<IProps>,
-) => (props: IProps) => (
+const withContext = <P extends object>(
+  FetchComponent: React.ComponentType<P>,
+): React.FC<P & Partial<IProps>> => (props: Partial<IProps>) => (
   <Consumer>{
-    (data) => <FetchComponent {...props} context={data} />
+    (data) => <FetchComponent {...props as P} context={data} />
   }</Consumer>
 );
 

@@ -17,9 +17,6 @@ interface IMockXHR {
 const XMLHttpRequestDefautlts = {
   abort: XMLHttpRequest.prototype.abort,
   getAllResponseHeaders: XMLHttpRequest.prototype.getAllResponseHeaders,
-  onload: XMLHttpRequest.prototype.onload,
-  onreadystatechange: XMLHttpRequest.prototype.onreadystatechange,
-  ontimeout: XMLHttpRequest.prototype.ontimeout,
   open: XMLHttpRequest.prototype.open,
   send: XMLHttpRequest.prototype.send,
   setRequestHeader: XMLHttpRequest.prototype.setRequestHeader,
